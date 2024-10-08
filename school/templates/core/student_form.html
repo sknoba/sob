@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% if student %}Edit{% else %}Add{% endif %} Student</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>{% if student %}Edit{% else %}Add{% endif %} Student</h1>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}  <!-- Renders the form fields with <p> tags -->
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+
+        <a href="{% url 'student-list' %}" class="btn btn-secondary">Back to Student List</a>
+    </div>
+</body>
+</html>

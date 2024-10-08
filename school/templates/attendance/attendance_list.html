@@ -1,0 +1,13 @@
+<h2>Attendance List for {{ date }}</h2>
+<table>
+    <tr>
+        <th>Student</th>
+        <th>Status</th>
+    </tr>
+    {% for record in attendance_records %}
+    <tr>
+        <td>{{ record.student }}</td>
+        <td>{{ record.status }}</td>
+    </tr>
+    {% endfor %}
+</table>

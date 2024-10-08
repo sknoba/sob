@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ student.first_name }} {{ student.last_name }}'s Details</title>
+</head>
+<body>
+    <h1>{{ student.first_name }} {{ student.last_name }}'s Details</h1>
+    <img src="{{ student.photo.url }}" alt="Student Photo" style="max-width:200px; height:auto;">
+    <h3>Personal Details</h3>
+    <p><strong>Date of Birth:</strong> {{ student.date_of_birth }}</p>
+    <p><strong>Gender:</strong> {{ student.get_gender_display }}</p>
+    <p><strong>Student ID:</strong> {{ student.student_id }}</p>
+    <p><strong>Enrollment Date:</strong> {{ student.enrollment_date }}</p>
+
+    <h3>Address</h3>
+    <p><strong>Address Line 1:</strong> {{ student.address_line_1 }}</p>
+    <p><strong>Address Line 2:</strong> {{ student.address_line_2 }}</p>
+    <p><strong>City:</strong> {{ student.city }}</p>
+    <p><strong>State:</strong> {{ student.get_state_display }}</p>
+    <p><strong>Postal Code:</strong> {{ student.postal_code }}</p>
+    <p><strong>Country:</strong> {{ student.country }}</p>
+
+    <h3>Parent Details</h3>
+    <p><strong>Father's Name:</strong> {{ student.father_name }}</p>
+    <p><strong>Father's Phone:</strong> {{ student.father_phone }}</p>
+    <p><strong>Father's Email:</strong> {{ student.father_email }}</p>
+    
+    <p><strong>Mother's Name:</strong> {{ student.mother_name }}</p>
+    <p><strong>Mother's Phone:</strong> {{ student.mother_phone }}</p>
+    <p><strong>Mother's Email:</strong> {{ student.mother_email }}</p>
+
+    {% if student.guardian_name %}
+    <h3>Guardian Details (Optional)</h3>
+    <p><strong>Guardian's Name:</strong> {{ student.guardian_name }}</p>
+    <p><strong>Guardian's Phone:</strong> {{ student.guardian_phone }}</p>
+    <p><strong>Guardian's Email:</strong> {{ student.guardian_email }}</p>
+    <p><strong>Relation to Guardian:</strong> {{ student.relation_to_guardian }}</p>
+    {% endif %}
+</body>
+</html>
