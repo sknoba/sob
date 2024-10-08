@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Update page</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      height: 100vh;
+      width: 100%;
+      background-image: url(./bg2.jpg);
+    }
+
+    /* Sidebar styles */
+    #sidebar {
+      background-color: #1E3A8A; /* Dark blue color */
+      color: #fff;
+      width: 250px;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      transition: transform 0.3s ease, width 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center; /* Center items horizontally */
+    }
+
+    /* Collapsed state for small screens */
+    #sidebar.collapsed {
+      width: 60px; /* Reduced width for icon bar */
+      align-items: center; /* Keep icons aligned */
+    }
+
+    .sidebar-content a {
+      color: #fff;
+      text-decoration: none;
+      padding: 15px 10px;
+      display: flex;
+      align-items: center;
+      font-size: 1.1rem;
+      width: 100%;
+      transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+    }
+    
+    /* Lift the links on hover and add a shadow */
+    .sidebar-content a:hover {
+      transform: translateY(-5px); /* Slight lift effect */
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.598); /* Add subtle black shadow */
+    }
+
+
+    /* Adjust icon alignment to left */
+    .sidebar-content a i {
+      margin-right: 15px;
+      margin-left: 10px; /* Move icons slightly left */
+    }
+
+    /* Hide text when collapsed */
+    #sidebar.collapsed .sidebar-content a span {
+      display: none;
+    }
+
+    /* Main content */
+    #main-content {
+      margin-left: 250px;
+      transition: margin-left 0.3s ease;
+      padding-left: 200px;
+      padding-top: 2rem;
+    }
+
+    #sidebar.collapsed + #main-content {
+      margin-left: 60px; /* Adjusted margin for collapsed state */
+    }
+
+    /* Toggle button styles */
+    #toggle-btn {
+      padding: 15px 10px; /* Match padding with sidebar links */
+      display: flex;
+      align-items: center;
+      font-size: 1.1rem;
+      color: #fff;
+      text-decoration: none;
+      background-color: transparent; /* Make background transparent */
+      border: none; /* Remove border */
+      cursor: pointer;
+      width: 100%; /* Match width with sidebar links */
+    }
+    
+     /* User Profile adjustments */
+     .user-profile {
+      position: absolute; /* Fix to bottom */
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 10px;
+      background-color: #1E3A8A;
+      transition: transform 0.3s ease;
+    }
+
+    #sidebar.collapsed .user-profile {
+      justify-content: center;
+    }
+
+    #sidebar.active .user-profile {
+      transform: translateX(0);
+    }
+
+    /* Sidebar behavior for large screens */
+    @media (min-width: 768px) {
+        #sidebar {
+            width: 250px;
+            transform: none !important; /* Ensure sidebar always open */
+        }
+    
+        #sidebar.collapsed {
+            width: 250px;
+        }
+    
+        #main-content {
+            margin-left: 250px; /* Leave space for the open sidebar */
+        }
+    
+        #toggle-btn {
+            display: none; /* Hide toggle button on large screens */
+        }
+    
+        .sidebar-content .first-a {
+            margin-top: 3rem;
+        }
+    }
+
+    /* Adjust sidebar for small devices */
+    @media (max-width: 768px) {
+      #sidebar {
+        transform: translateX(-100%);
+        width: 250px;
+      }
+
+      /* Sidebar always visible in collapsed state */
+      #sidebar.active {
+        transform: translateX(0);
+      }
+
+      #sidebar.collapsed {
+        transform: translateX(0); /* Sidebar starts visible, but narrow */
+      }
+
+      #main-content {
+        margin-left: 60px;
+        padding-left: 10px; /* Reduced padding for smaller screens */
+      }
+
+      /* Reduce container padding/margins on small screens */
+      .container {
+        padding-left: 5px;
+        padding-right: 2px;
+      }
+
+      #sidebar.active.collapsed {
+        width: 250px; /* Expand sidebar when active */
+      }
+
+      #toggle-btn {
+        display: block;
+      }
+
+      /* Hide nav-items on small screens */
+      .nav-items {
+        display: none;
+      }
+
+      /* Show nav-items when sidebar is active */
+      #sidebar.active .nav-items {
+        display: inline;
+      }
+
+      /* Hide user-name and user-logout by default on small screens */
+      .user-name, .user-logout {
+        display: none;
+      }
+
+      /* Show user-name and user-logout when sidebar is active */
+      #sidebar.active .user-name, #sidebar.active .user-logout {
+        display: inline;
+      }
+    }
+
+    /* General hover effect on all custom cards */
+    .custom-card {
+        border-radius: 15px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+  
+      .custom-card:hover {
+        transform: translateY(-10px); /* Lift the card */
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2); /* Stronger shadow */
+      }
+  
+      /* Hover effect specific to the first card's image */
+      .card img {
+        transition: transform 0.4s ease; /* Smooth transition for image lift */
+      }
+  
+      /* When hovering on the first card */
+      .custom-card:first-of-type:hover img {
+        transform: translateY(-20px) scale(1.05); /* Lift image more and slightly scale it up */
+      }
+  </style>
+<body>
+
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar-content collapsed">
+    <!-- Toggle button as a link for consistent alignment -->
+    <a href="#" id="toggle-btn"><i class="fas fa-bars"></i></a>
+    <a href="#"><i class="fas fa-tachometer-alt first-a"></i> <span class="ms-2 first-a nav-items">Dashboard</span></a>
+    <a href="#"><i class="fas fa-user"></i> <span class="ms-2 nav-items">User</span></a>
+    <a href="./login.html"><i class="fas fa-envelope"></i> <span class="ms-2 nav-items">Log in </span></a>
+    <a href="#"><i class="fas fa-chart-line"></i> <span class="ms-2 nav-items">Analytics</span></a>
+    <a href="#"><i class="fas fa-folder"></i> <span class="ms-2 nav-items">File Manager</span></a>
+    <a href="./profile.html"><i class="fas fa-shopping-cart"></i> <span class="ms-2 nav-items">Profile</span></a>
+    <a href="#"><i class="fas fa-cog"></i> <span class="ms-2 nav-items">Settings</span></a>
+
+
+    <!-- User Profile Row at the bottom -->
+    <div class="d-flex align-items-center justify-content-between px-3 py-2 mt-auto user-profile mb-2">
+        <div class="d-flex align-items-center me-5">
+            <img
+                id="sidebar-profile-img"
+                src="/design/images/profile.png"
+                alt="Default Image"
+                class="rounded-circle"
+                style="width: 30px; height: 30px; object-fit: cover;"
+            />
+            <span class="me-4 ms-3 text-white user-name">Akash</span>
+        </div>
+        <div>
+            <i class="fas fa-sign-out-alt text-white ms-5 user-logout" style="cursor: pointer;"></i>
+        </div>
+    </div>
+  </div>
+
+ <!-- Main Content -->
+<div id="main-content">
+    <h2 class="mt-2 fw-bold text-center text-lg-start ms-sm-4" style="color:#1E3A8A;">UPDATE PROFILE INFORMATION</h2>
+    <hr class="mx-4 mb-4" style="color:#1E3A8A;">
+    <div class="container">
+      <div class="row">
+  
+        <!-- First Card -->
+        <div class="container pe-4">
+          <div class="card mb-3 shadow-sm custom-card" style="max-width: 100%; min-height: 300px; background-color:rgba(255, 255, 255, 0.475)">
+            <div class="row g-0">
+              <div class="col-md-5 d-flex justify-content-center align-items-center d-sm-flex flex-column">
+                <img src="/design/images/profile.png" id="profileImage" class="img-fluid rounded-start mb-3" alt="Profile Image" style="height: 300px; object-fit: cover; filter: drop-shadow(10px 10px 20px rgb(32, 32, 32))">
+  
+                <!-- Image Upload Option below the image -->
+                <div class="mb-4 w-100 px-3">
+                  <label for="imageUpload" class="form-label"><strong>Change Profile Image:</strong></label>
+                  <input type="file" class="form-control" id="imageUpload" accept="image/*" onchange="previewImage(event)">
+                </div>
+              </div>
+              <div class="col-md-7 d-sm-flex d-sm-justify-content-center d-sm-align-items-center">
+                <div class="card-body">
+                  <form>
+                    <h5 class="card-title mb-4 fs-1 fw-semibold" style="color:#1E3A8A;">JONY DEPTH</h5>
+                    <hr class="mb-5 fw-bold fs-1" style="color:#1E3A8A;">
+                    
+                    <div class="row">
+                      <div class="col-6 mb-3">
+                        <label for="firstName" class="form-label"><strong>First Name:</strong></label>
+                        <input type="text" class="form-control" id="firstName" value="John">
+                      </div>
+                      <div class="col-6 mb-3">
+                        <label for="lastName" class="form-label"><strong>Last Name:</strong></label>
+                        <input type="text" class="form-control" id="lastName" value="Doe">
+                      </div>
+                      <div class="col-6 mb-3">
+                        <label for="dob" class="form-label"><strong>Date of Birth:</strong></label>
+                        <input type="date" class="form-control" id="dob" value="2000-01-01">
+                      </div>
+                      <div class="col-6 mb-3">
+                        <label for="gender" class="form-label"><strong>Gender:</strong></label>
+                        <select class="form-select" id="gender">
+                          <option selected>Male</option>
+                          <option>Female</option>
+                          <option>Other</option>
+                        </select>
+                      </div>
+                      <div class="col-6 mb-3">
+                        <label for="studentID" class="form-label"><strong>Student ID:</strong></label>
+                        <input type="text" class="form-control" id="studentID" value="123456">
+                      </div>
+                      <div class="col-6 mb-3">
+                        <label for="enrollmentDate" class="form-label"><strong>Enrollment Date:</strong></label>
+                        <input type="date" class="form-control" id="enrollmentDate" value="2020-09-01">
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Second Card Row -->
+        <div class="row">
+  
+          <!-- Parent Information Card -->
+          <div class="col-md-6 mb-4">
+            <div class="card shadow-sm custom-card" style="background-color:rgba(255, 255, 255, 0.475)">
+              <div class="card-body">
+                <h4 style="color:#1E3A8A;">Parents</h4>
+                <hr class="mb-4" style="color:#1E3A8A;">
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="fatherName" class="form-label"><strong>Father's Name:</strong></label>
+                    <input type="text" class="form-control" id="fatherName" value="Michael Doe">
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="fatherPhone" class="form-label"><strong>Father's Phone:</strong></label>
+                    <input type="text" class="form-control" id="fatherPhone" value="(123) 456-7890">
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="motherName" class="form-label"><strong>Mother's Name:</strong></label>
+                    <input type="text" class="form-control" id="motherName" value="Sarah Doe">
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="motherPhone" class="form-label"><strong>Mother's Phone:</strong></label>
+                    <input type="text" class="form-control" id="motherPhone" value="(123) 987-6543">
+                  </div>
+                  <div class="col-md-12 mb-3">
+                    <label for="fatherEmail" class="form-label"><strong>Father's Email:</strong></label>
+                    <input type="email" class="form-control" id="fatherEmail" value="michael.doe@example.com">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Address Information Card -->
+          <div class="col-md-6 mb-4">
+            <div class="card shadow-sm custom-card" style="background-color:rgba(255, 255, 255, 0.475)">
+              <div class="card-body">
+                <h4 style="color:#1E3A8A;">Address</h4>
+                <hr class="mb-4" style="color:#1E3A8A;">
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="address1" class="form-label"><strong>Address Line 1:</strong></label>
+                    <input type="text" class="form-control" id="address1" value="123 Main City">
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="city" class="form-label"><strong>City:</strong></label>
+                    <input type="text" class="form-control" id="city" value="Yavatmal">
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="state" class="form-label"><strong>State:</strong></label>
+                    <input type="text" class="form-control" id="state" value="Maharashtra">
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="address2" class="form-label"><strong>Address Line 2:</strong></label>
+                    <input type="text" class="form-control" id="address2" value="Apt 4B">
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="district" class="form-label"><strong>District:</strong></label>
+                    <input type="text" class="form-control" id="district" value="Manhattan">
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="pin" class="form-label"><strong>PIN Code:</strong></label>
+                    <input type="text" class="form-control" id="pin" value="10001">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+        </div> <!-- Close row for second and third card -->
+  
+      </div>
+    </div>
+  </div>
+  
+
+
+
+
+  <!-- JS Script to Handle Toggle -->
+  <script>
+    const toggleBtn = document.getElementById('toggle-btn');
+    const sidebar = document.getElementById('sidebar');
+
+    toggleBtn.addEventListener('click', function() {
+      sidebar.classList.toggle('active');
+    });
+
+    function previewImage(event) {
+        const reader = new FileReader();
+        reader.onload = function(){
+          const output = document.getElementById('profileImage');
+          output.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+      }
+  </script>
+
+</body>
+</html>

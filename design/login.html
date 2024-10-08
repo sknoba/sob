@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    body {
+      background-color: #e9eef4; /* Soft background color */
+    }
+    .login-container {
+      display: flex;
+      min-height: 100vh;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .login-card {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+      max-width: 1200px; /* Increase width here */
+      width: 100%;
+    }
+    
+    .login-form {
+      max-width: 400px;
+    }
+    .image-section img {
+      max-width: 100%;
+      border-radius: 10px;
+    }
+    .form-check-input {
+      border-radius: 5px;
+    }
+    .login-icon {
+      font-size: 30px;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    /* Custom media query to center form between 768 and 1000px */
+    @media (min-width: 768px) and (max-width: 1000px) {
+      .login-form {
+        margin-left: 5rem; 
+      }
+    }
+  
+  </style>
+</head>
+<body>
+  <div class="container login-container">
+    <div class="login-card row">
+      <!-- Login Form -->
+      <div class="col-lg-6 d-flex flex-column justify-content-center">
+        <div class="login-form">
+          <div class="login-icon">
+            <i class="fas fa-sign-in-alt" style="color:#1E3A8A;"></i>
+          </div>
+          <h2 class="mb-4 text-center fw-bold" style="color:#1E3A8A;">Login</h2>
+          <form>
+            <div class="mb-3">
+              <label for="email" class="form-label">Email Address</label>
+              <input type="email" class="form-control" id="email" placeholder="Enter your email">
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <div class="input-group">
+                <input type="password" class="form-control" id="password" placeholder="Enter your password">
+                <button class="btn btn-outline-secondary" type="button">
+                  <i class="fas fa-eye"></i>
+                </button>
+              </div>
+            </div>
+            <div class="form-check mb-3">
+              <input class="form-check-input border-2" type="checkbox" id="keepSignedIn">
+              <label class="form-check-label" for="keepSignedIn">
+                Keep me signed in
+              </label>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 mb-3" style="background-color:#1E3A8A;">Login</button>
+            <p class="text-center">
+              <a href="#" class="small">Forgot Password?</a>
+            </p>
+          </form>
+        </div>
+      </div>
+      <!-- Image Section -->
+      <div class="col-lg-6 d-lg-block text-center image-section mt-md-5">
+        <img src="/design/images/login-thumbnel.jpg" alt="Login illustration">
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Bootstrap JS & Font Awesome -->
+  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body{
+      height: 100vh;
+      width: 100%;
+      /*background-color: #c3cbdc;
+      background-image: linear-gradient(147deg, #c3cbdc 0%, #edf1f4 74%);*/
+      background-color: #E3E7EA;
+      
+    }
+
+    /* Sidebar styles */
+    #sidebar {
+      background-color: #1E3A8A; /* Dark blue color */
+      color: #fff;
+      width: 250px;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      transition: transform 0.3s ease, width 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center; /* Center items horizontally */
+    }
+
+    /* Collapsed state for small screens */
+    #sidebar.collapsed {
+      width: 60px; /* Reduced width for icon bar */
+      align-items: center; /* Keep icons aligned */
+    }
+
+    /* Sidebar content */
+    .sidebar-content {
+      width: 100%; /* Ensure full width */
+      padding: 10px 0;
+    }
+
+    /* Sidebar items */
+    .sidebar-content a {
+      color: #fff;
+      text-decoration: none;
+      padding: 15px 10px;
+      display: flex;
+      align-items: center;
+      font-size: 1.1rem;
+      width: 100%;
+    }
+
+    /* Adjust icon alignment to left */
+    .sidebar-content a i {
+      margin-right: 15px;
+      margin-left: 10px; /* Move icons slightly left */
+    }
+
+    /* Hide text when collapsed */
+    #sidebar.collapsed .sidebar-content a span {
+      display: none;
+    }
+
+    /* Main content */
+    #main-content {
+      margin-left: 250px;
+      transition: margin-left 0.3s ease;
+      padding-left: 200px;
+      padding-top: 2rem;
+    }
+
+    #sidebar.collapsed + #main-content {
+      margin-left: 60px; /* Adjusted margin for collapsed state */
+    }
+
+    /* Toggle button styles */
+    #toggle-btn {
+      padding: 15px 10px; /* Match padding with sidebar links */
+      display: flex;
+      align-items: center;
+      font-size: 1.1rem;
+      color: #fff;
+      text-decoration: none;
+      background-color: transparent; /* Make background transparent */
+      border: none; /* Remove border */
+      cursor: pointer;
+      width: 100%; /* Match width with sidebar links */
+    }
+
+    /* Sidebar behavior for large screens */
+    @media (min-width: 768px) {
+        #sidebar {
+            width: 250px;
+            transform: none !important; /* Ensure sidebar always open */
+        }
+    
+        #sidebar.collapsed {
+            width: 250px;
+        }
+    
+        #main-content {
+            margin-left: 250px; /* Leave space for the open sidebar */
+        }
+    
+        #toggle-btn {
+            display: none; /* Hide toggle button on large screens */
+        }
+    
+        .sidebar-content .first-a {
+            margin-top: 3rem;
+        }
+    }
+
+    /* Adjust sidebar for small devices */
+    @media (max-width: 768px) {
+      #sidebar {
+        transform: translateX(-100%);
+        width: 250px;
+      }
+
+      /* Sidebar always visible in collapsed state */
+      #sidebar.active {
+        transform: translateX(0);
+      }
+
+      #sidebar.collapsed {
+        transform: translateX(0); /* Sidebar starts visible, but narrow */
+      }
+
+      #main-content {
+        margin-left: 60px;
+        padding-left: 20px;
+      }
+
+      #sidebar.active.collapsed {
+        width: 250px; /* Expand sidebar when active */
+      }
+
+      #toggle-btn {
+        display: block;
+      }
+    }
+
+    /* Profile card styles */
+    .profile-card {
+      position: relative;
+      width: 95vw; /* Full width with some padding */
+      margin: 0 auto;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: width 0.3s ease;
+    }
+
+    .cover-photo img {
+      width: 100%;
+      height: 30vw; /* Make cover photo adjust according to viewport width */
+      object-fit: cover;
+    }
+
+    .profile-info {
+      position: relative;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .profile-photo {
+      position: absolute;
+      top: -50px;
+      left: calc(50% - 50px);
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 4px solid #fff;
+      object-fit: cover;
+    }
+
+    .profile-info h2 {
+      margin-top: 60px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .profile-info p {
+      font-size: 16px;
+      color: #777;
+    }
+
+    .profile-links {
+      margin-top: 15px;
+    }
+
+    .profile-links span {
+      display: block;
+      font-size: 14px;
+      color: #555;
+      margin: 5px 0;
+    }
+
+    .profile-links i {
+      margin-right: 8px;
+    }
+    .card {
+      border-radius:0 5rem; /* This will apply border radius to all corners */
+      overflow: hidden; /* Ensure the overflow is hidden for rounded corners */
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Keep the box shadow for better appearance */
+      background-image: url(./bg2.jpg);
+    }
+
+  
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar-content collapsed">
+    <!-- Toggle button as a link for consistent alignment -->
+    <a href="#" id="toggle-btn"><i class="fas fa-bars"></i></a>
+    <a href="#"><i class="fas fa-tachometer-alt first-a"></i> <span class="ms-2 first-a">Dashboard</span></a>
+    <a href="#"><i class="fas fa-user"></i> <span class="ms-2">User</span></a>
+    <a href="#"><i class="fas fa-envelope"></i> <span class="ms-2">Messages</span></a>
+    <a href="#"><i class="fas fa-chart-line"></i> <span class="ms-2">Analytics</span></a>
+    <a href="#"><i class="fas fa-folder"></i> <span class="ms-2">File Manager</span></a>
+    <a href="#"><i class="fas fa-shopping-cart"></i> <span class="ms-2">Orders</span></a>
+    <a href="#"><i class="fas fa-cog"></i> <span class="ms-2">Settings</span></a>
+  </div>
+
+ <!-- Main Content -->
+<div id="main-content">
+  <h2 class="mt-4 fw-bold ms-4">PROFILE INFORMATION</h2>
+
+  <div class="container d-flex justify-content-center mt-5">
+    <div class="card mb-3" style="width: 80%; border: none; height: 60vh;">
+        <div class="row g-0">
+            <!-- Left section with black background and centered image -->
+            <div class="col-md-4 d-flex justify-content-center align-items-center" style="border-bottom-left-radius: 5rem;">
+                <img src="./boyProfile-removebg-preview.png" class="img-fluid mt-2" alt="Profile Image" style="height: 60vh; width: 100%; object-fit: cover; filter: drop-shadow(10px 10px 20px rgb(151, 147, 147));">
+            </div>
+
+            <!-- Right section with content -->
+            <div class="col-md-8 d-flex justify-content-center align-items-center">
+              <div class="card-body">
+                  <h5 class="card-title mb-5 fs-1" style="font-weight: bold;">Jason Walker</h5>
+                  <div class="row">
+                      <div class="col-6">
+                          <p class="card-text"><strong>Email:</strong> example@example.com</p>
+                          <p class="card-text"><strong>Location:</strong> London, United Kingdom</p>
+                          <p class="card-text"><strong>Email:</strong> example@example.com</p>
+                          <p class="card-text"><strong>Location:</strong> London, United Kingdom</p>
+                          <p class="card-text"><strong>Occupation:</strong> Web Developer</p>
+                          <p class="card-text"><strong>Class:</strong> 10th (A)</p>
+                      </div>
+                      <div class="col-6">
+                          <p class="card-text"><strong>Occupation:</strong> Web Developer</p>
+                          <p class="card-text"><strong>Class:</strong> 10th (A)</p>
+                          <p class="card-text"><strong>Occupation:</strong> Web Developer</p>
+                          <p class="card-text"><strong>Class:</strong> 10th (A)</p>
+                          <p class="card-text"><strong>Occupation:</strong> Web Developer</p>
+                          <p class="card-text"><strong>Class:</strong> 10th (A)</p>
+                      </div>
+                  </div>
+              </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</div>
+
+  <!-- JS Script to Handle Toggle -->
+  <script>
+    const toggleBtn = document.getElementById('toggle-btn');
+    const sidebar = document.getElementById('sidebar');
+
+    toggleBtn.addEventListener('click', function() {
+      sidebar.classList.toggle('active');
+    });
+  </script>
+
+</body>
+</html>
