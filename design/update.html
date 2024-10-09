@@ -210,6 +210,22 @@
       .custom-card:first-of-type:hover img {
         transform: translateY(-20px) scale(1.05); /* Lift image more and slightly scale it up */
       }
+
+       /* Add this CSS for default image size */
+       #profileImage {
+        width: 300px; /* Default width */
+        height: 300px; /* Default height */
+        object-fit: cover;
+        transition: width 0.3s, height 0.3s; /* Smooth transition for resizing */
+      }
+
+      /* Smaller size for uploaded images */
+      #profileImage.uploaded {
+        width: 150px; /* Reduced width when new image is uploaded */
+        height: 150px; /* Reduced height */
+        border-radius: 50%;
+      }
+      
   </style>
 <body>
 
@@ -231,7 +247,7 @@
         <div class="d-flex align-items-center me-5">
             <img
                 id="sidebar-profile-img"
-                src="/design/images/profile.png"
+                src="std-removebg-preview.png"
                 alt="Default Image"
                 class="rounded-circle"
                 style="width: 30px; height: 30px; object-fit: cover;"
@@ -256,12 +272,12 @@
           <div class="card mb-3 shadow-sm custom-card" style="max-width: 100%; min-height: 300px; background-color:rgba(255, 255, 255, 0.475)">
             <div class="row g-0">
               <div class="col-md-5 d-flex justify-content-center align-items-center d-sm-flex flex-column">
-                <img src="/design/images/profile.png" id="profileImage" class="img-fluid rounded-start mb-3" alt="Profile Image" style="height: 300px; object-fit: cover; filter: drop-shadow(10px 10px 20px rgb(32, 32, 32))">
+                <img src="./std-removebg-preview.png" id="profileImage" class="img-fluid" alt="Profile Image" style="object-fit: cover; filter: drop-shadow(10px 10px 20px rgb(32, 32, 32));">
   
                 <!-- Image Upload Option below the image -->
-                <div class="mb-4 w-100 px-3">
-                  <label for="imageUpload" class="form-label"><strong>Change Profile Image:</strong></label>
-                  <input type="file" class="form-control" id="imageUpload" accept="image/*" onchange="previewImage(event)">
+                <div class="mb-4 w-100 px-3 text-center">
+                  <label for="imageUpload" class="btn btn-secondary mt-5">Change Profile Image</label>
+                  <input type="file" class="form-control" id="imageUpload" accept="image/*" onchange="previewImage(event)" style="display: none;">
                 </div>
               </div>
               <div class="col-md-7 d-sm-flex d-sm-justify-content-center d-sm-align-items-center">
@@ -379,9 +395,59 @@
           </div>
   
         </div> <!-- Close row for second and third card -->
-  
+
+      <!-- New Row for Guardian Details -->
+      <div class="row">
+        <!-- Guardian Information Card - Full Width -->
+        <div class="col-md-12 mb-4">
+          <div class="card shadow-sm custom-card" style="background-color:rgba(255, 255, 255, 0.475)">
+            <div class="card-body">
+              <h4 style="color:#1E3A8A;">Guardian Details (Optional)</h4>
+              <hr class="mb-4" style="color:#1E3A8A;">
+
+              <form>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="guardian-name" class="form-label">Guardian's Name</label>
+                    <input type="text" class="form-control" id="guardian-name" value="Emily Smith">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="guardian-phone" class="form-label">Guardian's Phone</label>
+                    <input type="tel" class="form-control" id="guardian-phone" value="(123) 555-7890">
+                  </div>
+                </div>
+
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="guardian-email" class="form-label">Guardian's Email</label>
+                    <input type="email" class="form-control" id="guardian-email" value="emily.smith@example.com">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="relationship" class="form-label">Relationship to Student</label>
+                    <input type="text" class="form-control" id="relationship" value="Aunt">
+                  </div>
+                </div>
+
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="work-address" class="form-label">Work Address</label>
+                    <input type="text" class="form-control" id="work-address" value="456 Business Rd, Cityville">
+                  </div>
+                  <div class="col-md-6">
+                    <label for="nationality" class="form-label">Guardian's Nationality</label>
+                    <input type="text" class="form-control" id="nationality" value="American">
+                  </div>
+                </div>
+              </form>
+
+            </div>
+          </div>
+        </div>
+       </div>
       </div>
     </div>
+
+    <button type="submit" class="btn btn-primary ms-4 mb-4 rounded-5" style="background-color:#1E3A8A">Save Details</button>
   </div>
   
 
@@ -405,6 +471,17 @@
         };
         reader.readAsDataURL(event.target.files[0]);
       }
+
+      function previewImage(event) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            const output = document.getElementById('profileImage');
+            output.src = reader.result;
+            output.classList.add('uploaded'); // Add the class to change size
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+    
   </script>
 
 </body>
