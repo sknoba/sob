@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard page</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      height: 100vh;
+      width: 100%;
+      background-color: #E2E8F0;
+    }
+
+    /* Sidebar styles */
+    #sidebar {
+      background-color: #1E3A8A; /* Dark blue color */
+      color: #fff;
+      width: 250px;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      transition: transform 0.3s ease, width 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center; /* Center items horizontally */
+    }
+
+    /* Collapsed state for small screens */
+    #sidebar.collapsed {
+      width: 60px; /* Reduced width for icon bar */
+      align-items: center; /* Keep icons aligned */
+    }
+
+    .sidebar-content a {
+      color: #fff;
+      text-decoration: none;
+      padding: 15px 10px;
+      display: flex;
+      align-items: center;
+      font-size: 1.1rem;
+      width: 100%;
+      transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition */
+    }
+    
+    /* Lift the links on hover and add a shadow */
+    .sidebar-content a:hover {
+      transform: translateY(-5px); /* Slight lift effect */
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.598); /* Add subtle black shadow */
+    }
+
+
+    /* Adjust icon alignment to left */
+    .sidebar-content a i {
+      margin-right: 15px;
+      margin-left: 10px; /* Move icons slightly left */
+    }
+
+    /* Hide text when collapsed */
+    #sidebar.collapsed .sidebar-content a span {
+      display: none;
+    }
+
+    /* Main content */
+    #main-content {
+      margin-left: 250px;
+      transition: margin-left 0.3s ease;
+      padding-left: 200px;
+      padding-top: 2rem;
+    }
+
+    #sidebar.collapsed + #main-content {
+      margin-left: 60px; /* Adjusted margin for collapsed state */
+    }
+
+    /* Toggle button styles */
+    #toggle-btn {
+      padding: 15px 10px; /* Match padding with sidebar links */
+      display: flex;
+      align-items: center;
+      font-size: 1.1rem;
+      color: #fff;
+      text-decoration: none;
+      background-color: transparent; /* Make background transparent */
+      border: none; /* Remove border */
+      cursor: pointer;
+      width: 100%; /* Match width with sidebar links */
+    }
+    
+     /* User Profile adjustments */
+     .user-profile {
+      position: absolute; /* Fix to bottom */
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 10px;
+      background-color: #1E3A8A;
+      transition: transform 0.3s ease;
+    }
+
+    #sidebar.collapsed .user-profile {
+      justify-content: center;
+    }
+
+    #sidebar.active .user-profile {
+      transform: translateX(0);
+    }
+
+    
+
+    /* Sidebar behavior for large screens */
+    @media (min-width: 768px) {
+        #sidebar {
+            width: 250px;
+            transform: none !important; /* Ensure sidebar always open */
+        }
+    
+        #sidebar.collapsed {
+            width: 250px;
+        }
+    
+        #main-content {
+            margin-left: 250px; /* Leave space for the open sidebar */
+        }
+    
+        #toggle-btn {
+            display: none; /* Hide toggle button on large screens */
+        }
+    
+        .sidebar-content .first-a {
+            margin-top: 3rem;
+        }
+    }
+
+    /* Adjust sidebar for small devices */
+    @media (max-width: 768px) {
+      #sidebar {
+        transform: translateX(-100%);
+        width: 250px;
+      }
+
+      /* Sidebar always visible in collapsed state */
+      #sidebar.active {
+        transform: translateX(0);
+      }
+
+      #sidebar.collapsed {
+        transform: translateX(0); /* Sidebar starts visible, but narrow */
+      }
+
+      #main-content {
+        margin-left: 60px;
+        padding-left: 10px; /* Reduced padding for smaller screens */
+      }
+
+      /* Reduce container padding/margins on small screens */
+      .container {
+        padding-left: 5px;
+        padding-right: 2px;
+      }
+
+      #sidebar.active.collapsed {
+        width: 250px; /* Expand sidebar when active */
+      }
+
+      #toggle-btn {
+        display: block;
+      }
+
+      /* Hide nav-items on small screens */
+      .nav-items {
+        display: none;
+      }
+
+      /* Show nav-items when sidebar is active */
+      #sidebar.active .nav-items {
+        display: inline;
+      }
+
+      /* Hide user-name and user-logout by default on small screens */
+      .user-name, .user-logout {
+        display: none;
+      }
+
+      /* Show user-name and user-logout when sidebar is active */
+      #sidebar.active .user-name, #sidebar.active .user-logout {
+        display: inline;
+      }
+    }
+    
+  </style>
+<body>
+
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar-content collapsed">
+    <!-- Toggle button as a link for consistent alignment -->
+    <a href="#" id="toggle-btn"><i class="fas fa-bars"></i></a>
+    <a href=""><i class="fas fa-tachometer-alt first-a"></i> <span class="ms-2 first-a nav-items">Dashboard</span></a>
+    <a href="#"><i class="fas fa-user"></i> <span class="ms-2 nav-items">User</span></a>
+    <a href="./login.html"><i class="fas fa-envelope"></i> <span class="ms-2 nav-items">Log in </span></a>
+    <a href="#"><i class="fas fa-chart-line"></i> <span class="ms-2 nav-items">Analytics</span></a>
+    <a href="#"><i class="fas fa-folder"></i> <span class="ms-2 nav-items">File Manager</span></a>
+    <a href="./profile.html"><i class="fas fa-shopping-cart"></i> <span class="ms-2 nav-items">Profile</span></a>
+    <a href="./setting.html"><i class="fas fa-cog"></i> <span class="ms-2 nav-items">Settings</span></a>
+
+
+        <!-- User Profile Row at the bottom -->
+        <div class="d-flex align-items-center justify-content-between px-3 py-2 mt-auto user-profile mb-2">
+            <div class="d-flex align-items-center me-5">
+                <img
+                    id="sidebar-profile-img"
+                    src="./defaultprofile.jpg"
+                    alt="Default Image"
+                    class="rounded-circle"
+                    style="width: 30px; height: 30px; object-fit: cover;"
+                />
+                <span class="me-4 ms-3 text-white user-name">Akash</span>
+            </div>
+            <div>
+                <i class="fas fa-sign-out-alt text-white ms-5 user-logout" style="cursor: pointer;"></i>
+            </div>
+        </div>
+      </div>
+
+    <!-- Main Content -->
+    <div id="main-content">
+      <h2 class="fw-bold text-center text-lg-start ms-lg-5" style="color:#1E3A8A;">Index</h2>
+      <hr class="ms-4 me-5">
+
+    </div>
+
+
+  <!-- JS Script to Handle Toggle -->
+  <script>
+    const toggleBtn = document.getElementById('toggle-btn');
+    const sidebar = document.getElementById('sidebar');
+
+    toggleBtn.addEventListener('click', function() {
+      sidebar.classList.toggle('active');
+    });     
+  </script>
+
+</body>
+</html>
