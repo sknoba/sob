@@ -1,0 +1,22 @@
+Standard list<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Standard List</title>
+</head>
+<body>
+    <h1>Standard List</h1>
+    <a href="{% url 'standard-create' %}">Add New Standard</a>
+    <ul>
+        {% for standard in standards %}
+            <li>
+                <a href="{% url 'standard-detail' standard.pk %}">
+                    {{ standard.name }}{{ standard.alias }}
+                </a>
+                (<a href="{% url 'standard-update' standard.pk %}">Edit</a>)
+                (<a href="{% url 'standard-delete' standard.pk %}">Delete</a>)
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

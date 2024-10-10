@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ teacher.first_name }} {{ teacher.last_name }}'s Details</title>
+</head>
+<body>
+    <h1>{{ teacher.first_name }} {{ teacher.last_name }}'s Details</h1>
+    <h3>Personal Details</h3>
+    <p><strong>Date of Birth:</strong> {{ teacher.date_of_birth }}</p>
+    <p><strong>Gender:</strong> {{ teacher.get_gender_display }}</p>
+    <p><strong>teacher ID:</strong> {{ teacher.teacher_id }}</p>
+    <p><strong>Enrollment Date:</strong> {{ teacher.joining_date }}</p>
+    <p><strong>Eduation Date:</strong> {{ teacher.education }}</p>
+    <p><strong>Subjects Date:</strong> {{ teacher.subjects }}</p>
+    <p><strong>Employment Type:</strong> {{ teacher.employment_type }}</p>
+
+    <h3>Address</h3>
+    <p><strong>Address Line 1:</strong> {{ teacher.address_line_1 }}</p>
+    <p><strong>Address Line 2:</strong> {{ teacher.address_line_2 }}</p>
+    <p><strong>City:</strong> {{ teacher.city }}</p>
+    <p><strong>City:</strong> {{ teacher.district }}</p>
+    <p><strong>State:</strong> {{ teacher.get_state_display }}</p>
+    <p><strong>Postal Code:</strong> {{ teacher.postal_code }}</p>
+    
+    <h3>School Details</h3>
+    
+
+
+</body>
+</html>

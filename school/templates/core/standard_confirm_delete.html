@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Standard</title>
+</head>
+<body>
+    <h1>Are you sure you want to delete {{ standard.name }} {{ standard.alias }}?</h1>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Yes, delete</button>
+        <a href="{% url 'student-list' %}">Cancel</a>
+    </form>
+</body>
+</html>

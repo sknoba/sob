@@ -47,6 +47,58 @@ INDIAN_STATES = [
     ('PY', 'Puducherry')
 ]
 
+DISTRICTS_MAHARASHTRA = [
+    ('AHMADNAGAR', 'Ahmadnagar'),
+    ('AKOLA', 'Akola'),
+    ('AMRAVATI', 'Amravati'),
+    ('AURANGABAD', 'Aurangabad'),
+    ('BULDHANA', 'Buldhana'),
+    ('CHANDRAPUR', 'Chandrapur'),
+    ('DHULE', 'Dhule'),
+    ('GADCHIROLI', 'Gadchiroli'),
+    ('GONDIA', 'Gondia'),
+    ('HINGOLI', 'Hingoli'),
+    ('JALNA', 'Jalna'),
+    ('JALGAON', 'Jalgaon'),
+    ('LATUR', 'Latur'),
+    ('NAGPUR', 'Nagpur'),
+    ('NANDURBAR', 'Nandurbar'),
+    ('NASHIK', 'Nashik'),
+    ('OSMANABAD', 'Osmanabad'),
+    ('PARBHANI', 'Parbhani'),
+    ('PUNE', 'Pune'),
+    ('RAIGAD', 'Raigad'),
+    ('RATNAGIRI', 'Ratnagiri'),
+    ('SANGLI', 'Sangli'),
+    ('SATARA', 'Satara'),
+    ('SOLAPUR', 'Solapur'),
+    ('THANE', 'Thane'),
+    ('WASHIM', 'Washim'),
+    ('YAVATMAL', 'Yavatmal'),
+]
+TALUKAS_YAVATMAL = [
+    ('YAVATMAL', 'Yavatmal'),
+    ('PUSAD', 'Pusad'),
+    ('DIGRAS', 'Digras'),
+    ('WADSA', 'Wadsa'),
+    ('MAHAGAON', 'Mahagaon'),
+    ('KELAPUR', 'Kelapur'),
+    ('RALEGAON', 'Ralegaon'),
+    ('VANI', 'Vani'),
+    ('ARNI', 'Arni'),
+    ('CHANDAI', 'Chandai'),
+]
+
+
+# Example usage in a Django model
+from django.db import models
+
+class YourModel(models.Model):
+    district = models.CharField(max_length=20, choices=DISTRICTS_MAHARASHTRA)
+
+
+
+
 class Student(models.Model):
     # Student details
     first_name = models.CharField(max_length=100)
@@ -62,7 +114,7 @@ class Student(models.Model):
     address_line_1 = models.CharField(max_length=255)
     address_line_2 = models.CharField(max_length=255, blank=True, null=True)
     city = models.CharField(max_length=100)
-    district = models.CharField(max_length=100)
+    district = models.CharField(max_length=100,)
     state = models.CharField(max_length=50, choices=INDIAN_STATES)
     pin_code = models.CharField(max_length=20, validators=[RegexValidator(r'^\d{6}$')])
 
@@ -128,7 +180,7 @@ class Teacher(models.Model):
     address_line_2 = models.CharField(max_length=255, blank=True)
     city = models.CharField(max_length=100)
     district = models.CharField(max_length=100)
-    state = models.CharField(max_length=100)
+    state = models.CharField(max_length=50, choices=INDIAN_STATES)
     pin_code = models.CharField(max_length=6, validators=[RegexValidator(r'^\d{6}$')])
     
     # Extra fields
