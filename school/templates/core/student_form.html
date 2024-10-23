@@ -1,21 +1,152 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{% if student %}Edit{% else %}Add{% endif %} Student</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body>
-    <div class="container">
-        <h1>{% if student %}Edit{% else %}Add{% endif %} Student</h1>
+{% extends "core/base.html" %}
 
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}  <!-- Renders the form fields with <p> tags -->
-            <button type="submit" class="btn btn-primary">Save</button>
-        </form>
 
-        <a href="{% url 'student-list' %}" class="btn btn-secondary">Back to Student List</a>
-    </div>
-</body>
-</html>
+
+{% block main %}
+
+<div class="col-md-9 mt-4">
+
+                
+    <div id="main-content">
+        <h2 class="fw-bold text-center text-lg-start ms-lg-4" style="color:#1E3A8A;">{% if student %}Edit{% else %}Add{% endif %} Student</h2>
+        <hr class="ms-4 me-5">
+        
+        
+        <div class="container mx-3">
+    
+            <form method="POST" novalidate>
+                {% csrf_token %}
+               
+                <div class="row">
+                    <h3>Personal Information</h3>
+                    <div class="col-6 mb-3">
+                        <label for="photo" class="form-label">First Name</label>
+                        {{ form.first_name }}
+                    </div>
+
+                    <div class="col-6 mb-3">
+                        <label for="photo" class="form-label">Last Name</label>
+                        {{ form.last_name }}
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-6 mb-3">
+                        <label for="photo" class="form-label">Date Of Birth</label>
+                        {{ form.date_of_birth }}
+                    </div>
+
+                    <div class="col-6 mb-3">
+                        <label for="photo" class="form-label">Gender</label>
+                        {{ form.gender }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <label for="photo" class="form-label">Photo</label>
+                        {{ form.photo }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <h3>Academic</h3>
+                    <div class="col-6 mb-3">
+                        <label for="photo" class="form-label">Standard</label>
+                        {{ form.standard }}
+                    </div>
+                </div>
+                <div class="row">
+                    <h3>Address</h3>
+                    <div class="col-6 mb-3">
+                        <label for="photo" class="form-label">Address Line 1 </label>
+                        {{ form.address_line_1 }}
+                    </div>
+
+                    <div class="col-6 mb-3">
+                        <label for="photo" class="form-label">Address Line 2</label>
+                        {{ form.address_line_2 }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <label for="photo" class="form-label">City</label>
+                        {{ form.city }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <label for="photo" class="form-label">District</label>
+                        {{ form.district }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <label for="photo" class="form-label">State</label>
+                        {{ form.state }}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <label for="photo" class="form-label">Pin Code</label>
+                        {{ form.pin_code }}
+                    </div>
+                </div>
+                <div class="row">
+                    <h3>Parent's Information</h3>
+                    <div class="col-6 mb-3">
+                        <div class="row">
+                            <div class="col-12">
+                                <label for="photo" class="form-label">Father Name</label>
+                                {{form.father_name}}
+                            </div>
+        
+                            <div class="col">
+                                <label for="photo" class="form-label">Father Mobile</label>
+                                {{ form.father_phone }}
+                            </div>
+                            <div class="col">
+                                <label for="photo" class="form-label">Father Email</label>
+                                {{ form.father_email }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <div class="row">
+                            <div class="col-12">
+                                <label for="photo" class="form-label">Mother Name</label>
+                                {{form.mother_name}}
+                            </div>
+        
+                            <div class="col">
+                                <label for="photo" class="form-label">Mother Mobile</label>
+                                {{ form.mother_phone }}
+                            </div>
+                            <div class="col">
+                                <label for="photo" class="form-label">Mother Email</label>
+                                {{ form.mother_email }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <h3>Guardian Information</h3>
+                    <div class="col-6 mb-3">
+                        <label for="photo" class="form-label">Guardian Name</label>
+                        {{form.guardian_name}}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <label for="photo" class="form-label">Guardian Mobile</label>
+                        {{form.guardian_phone}}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <label for="photo" class="form-label">Guardian Email</label>
+                        {{form.guardian_email}}
+                    </div>
+                    <div class="col-6 mb-3">
+                        <label for="photo" class="form-label">Guardian Relation</label>
+                        {{form.relation_to_guardian}}
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+    
+            <a href="{% url 'student-list' %}" class="btn btn-secondary">Back to Student List</a>
+        </div>
+    
+      </div>
+
+</div>  
+
+{% endblock main %}

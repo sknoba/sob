@@ -2,6 +2,8 @@ from django.urls import path
 from .views import StudentListView, StudentDetailView, StudentCreateView, StudentUpdateView, StudentDeleteView, TeacherListView, TeacherDetailView, TeacherCreateView, TeacherUpdateView, TeacherDeleteView, \
     StandardListView, StandardDetailView, StandardCreateView, StandardUpdateView, StandardDeleteView
 from . import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path("", views.dashboard, name="dashboard"),
@@ -12,7 +14,7 @@ urlpatterns = [
 
     ## Student URLs
     path('student/students/', StudentListView.as_view(), name='student-list'),
-    path('student/<int:pk>/', StudentDetailView.as_view(), name='student-detail'),
+    path('student/<int:id>/', StudentDetailView.as_view(), name='student-detail'),
     path('student/create/', StudentCreateView.as_view(), name='student-create'),
     path('student/update/<int:pk>/', StudentUpdateView.as_view(), name='student-update'),
     path('student/delete/<int:pk>/', StudentDeleteView.as_view(), name='student-delete'),
@@ -33,3 +35,5 @@ urlpatterns = [
 
     ## Subjects Urls
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

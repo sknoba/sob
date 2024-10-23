@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>{{ student.first_name }} {{ student.last_name }}'s Details</h1>
-    <img src="{{ student.photo.url }}" alt="Student Photo" style="max-width:200px; height:auto;">
+    {% comment %} <img src="{{ student.photo.url }}" alt="Student Photo" style="max-width:200px; height:auto;"> {% endcomment %}
     <h3>Personal Details</h3>
     <p><strong>Date of Birth:</strong> {{ student.date_of_birth }}</p>
     <p><strong>Gender:</strong> {{ student.get_gender_display }}</p>

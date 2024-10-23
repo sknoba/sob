@@ -3,6 +3,8 @@ from .models import Student, Teacher, Standard, Subject
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .forms import StudentForm, TeacherForm, StandardForm
+from django.http import JsonResponse
+from django.template.loader import render_to_string
 
 
 def dashboard(request):
@@ -29,14 +31,40 @@ class StudentListView(ListView):
     model = Student
     template_name = 'core/student_list.html'  # Template to render the list of students
     context_object_name = 'students'
+    paginate_by = 10
+
+
+
+    def post(self, request, *args, **kwargs):
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            class_id = request.POST.get('class_id')
+            gender = request.POST.get('gender')
+
+            students = Student.objects.all()
+            if class_id:
+                students = students.filter(standard_id=class_id)
+            if gender:
+                students = students.filter(gender=gender)
+            print(class_id)
+            print(students)
+            # Render the filtered list into HTML
+            html = render_to_string('core/partials/student_list.html', {'students': students})
+            return JsonResponse({'html': html})
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_students'] = Student.objects.all().count()
+        context['standards'] = Standard.objects.all()
+        return context
 
 
 class StudentDetailView(DetailView):
     model = Student
     template_name = 'core/student_detail.html'
     context_object_name = 'student'
-    # slug_url_kwarg = 'student_id'
-
+    slug_field = 'id'
+    slug_url_kwarg = 'id'
 
 # Create a new student (Create)
 class StudentCreateView(CreateView):
@@ -66,6 +94,11 @@ class TeacherListView(ListView):
     model = Teacher
     template_name = 'core/teacher_list.html'  # Template to render the list of students
     context_object_name = 'teachers'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_teacher'] = Teacher.objects.all().count()
+        return context
 
 
 class TeacherDetailView(DetailView):
@@ -103,6 +136,11 @@ class StandardListView(ListView):
     model = Standard
     template_name = 'core/standard_list.html'  # Template to render the list of students
     context_object_name = 'standards'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_standard'] = Standard.objects.all().count()
+        return context
 
 
 class StandardDetailView(DetailView):

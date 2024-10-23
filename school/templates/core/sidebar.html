@@ -1,0 +1,45 @@
+<nav class="col-md-2 d-none d-md-block sidebar position-fixed">
+    <div class="position-sticky">
+
+        <ul class="nav flex-column me-4 mt-5">
+            <li class="nav-item">
+                <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url "dashboard" %}">
+                    <i class="mx-2 bi bi-grid-fill"></i> Dashboard
+                </a>
+            </li>
+
+            <hr class="w-75 mx-auto">
+            <li class="nav-item">
+                <a class="nav-link {% if request.path == '/student/students/' %}active{% endif %}" href="{% url "student-list" %}">
+                    <i class="mx-2 bi bi-person-fill"></i> Students
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if request.path == '/teacher/teachers/' %}active{% endif %}" href="{% url "teacher-list" %}">
+                    <i class="mx-2 bi bi-person-fill"></i> Teachers
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if request.path == '/standard/standards/' %}active{% endif %}" href="{% url "standard-list" %}">
+                    <i class="mx-2 bi bi-chat-dots-fill"></i> ClassRooms
+                </a>
+            </li>
+            <hr class="w-75 mx-auto">
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="mx-2 bi bi-currency-rupee"></i> Fees
+                </a>
+            </li>
+            <hr class="w-75 mx-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="mx-2 bi bi-graph-up"></i> Performance
+                </a>
+            </li>
+            <hr class="w-75 mx-auto">
+        </ul>
+    </div>
+</nav>
+
+

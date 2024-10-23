@@ -1,22 +1,98 @@
-Standard list<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Standard List</title>
-</head>
-<body>
-    <h1>Standard List</h1>
-    <a href="{% url 'standard-create' %}">Add New Standard</a>
-    <ul>
-        {% for standard in standards %}
-            <li>
-                <a href="{% url 'standard-detail' standard.pk %}">
-                    {{ standard.name }}{{ standard.alias }}
+{% extends "core/base.html" %}
+{% load static %}
+{% block main %}
+{% block head %}
+<link rel="stylesheet" href="{% static "core/css/class_list.css" %}">
+{% endblock head %}
+
+
+
+<div class="container">
+    <div class="row mt-5 ">
+        <h2 class="fw-bold text-center text-lg-start" style="color:#1E3A8A;">ClassRoom List</h2>
+        <hr class="w-100">
+    
+          <div class="row align-items-center mb-3">
+              <!-- Title Section -->
+              <div class="col-md-3">
+                <div class="mb-3">
+                  <h5 class="card-title">ClassRoom List <span class="text-muted fw-normal ms-2">({{total_standard}})</span></h5>
+                </div>
+              </div>
+            
+            
+              <!-- Select Class Dropdown -->
+              <div class="offset-2 col-md-2" name="class" id="standardSelect">
+                <select class="form-select" id="class-filter">
+                  <option selected>Select Class</option>
+                {% for standard in standards %}
+                  <option value="{{ standard.id }}">{{ standard.name }}</option>
+                {% endfor %}
+                </select>
+              </div>
+            
+              <!-- Select Section Dropdown -->
+              <div class="col-md-2">
+                  <select class="form-select">
+                  <option selected>Select Section</option>
+                  <option value="A">Section A</option>
+                  <option value="B">Section B</option>
+                  <option value="C">Section C</option>
+                  </select>
+              </div>
+
+              <div class="col-md-1">
+                <button type="button" id="filter-btn"  class="btn btn-primary" style="background-color:#1E3A8A;"><i class="bi bi-funnel"></i></button>
+              </div>
+            
+              <!-- Add New Button -->
+              <div class="col-md-2">
+                <a href="{% url 'student-create' %}" class="btn btn-primary w-100" style="background-color:#1E3A8A;">
+                  <i class="bx bx-plus me-1"></i> Add New
                 </a>
-                (<a href="{% url 'standard-update' standard.pk %}">Edit</a>)
-                (<a href="{% url 'standard-delete' standard.pk %}">Delete</a>)
-            </li>
+              </div>
+            </div>
+    </div>
+
+
+    <div class="row">
+        
+        {% for standard in standards %}
+        <div class="col-md-3 col-sm-4 content-card">
+            <div class="card-big-shadow">
+                <div class="card card-just-text" data-background="color" data-color="green" data-radius="none">
+                  <div class="content">
+                    <h4 class="title mb-4"><a href="#">{{ standard.name }} ({{ standard.alias }})</a></h4>
+                    <h6 class="description"><strong>Class Teacher:</strong> Mrs. Smith<br></h6>
+                    <p class="description"><strong>Student Count:</strong> 25<br></p>
+                    <div class="d-flex  ms-2">
+                      <!-- Check Class Button -->
+                      <a href="{% url 'standard-detail' standard.pk %}" class="btn rounded-pill mt-2 me-2" style="background-color:#17B7B3; color:#fff">Check</a>
+                      <!-- Update Class Button -->
+                      <a href="{% url 'standard-update' standard.pk %}" class="btn rounded-pill mt-2" style="background-color:#FF9800; color:#fff">Update</a>
+                    </div>
+                  </div>
+                </div> <!-- end card -->
+            </div>
+        </div>
         {% endfor %}
-    </ul>
-</body>
-</html>
+    
+    </div>
+
+</div>
+                
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock main  %}
