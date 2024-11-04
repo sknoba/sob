@@ -1,0 +1,107 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block main %}
+{% block head %}
+<link rel="stylesheet" href="{% static "core/css/class_list.css" %}">
+{% endblock head %}
+
+<div id="main-content">
+  <div class="container">              
+        <div class="container mx-4 mt-4">
+
+        
+            <h2 class="fw-bold text-center text-lg-start mt-5" style="color:#1E3A8A;">Class Rooms List</h2>
+            <hr class="">
+        
+            <div class="container ">
+              <div class="row align-items-center mb-3 mt-4">
+                  <!-- Title Section -->  
+                    
+                  <div class="col-md-3">
+                    <div class="mb-3">
+                      <h5 class="card-title">ClassRooms <span class="text-muted fw-normal ms-2">({{total_standard}})</span></h5>
+                    </div>
+                  </div>  
+                </div>
+                <div class="row">
+                  {% for standard in standards %}
+                  <div class="col-md-3 col-sm-4 content-card">
+                      <div class="card-big-shadow">
+                          <div class="card card-just-text" >
+                            <div class="content py-4">
+                              <small class="text-primary">{% if standard.alias %}{{standard.alias|truncatechars:20}}{% else %}Alias Not Assign{% endif %}</small>
+                              <h4 class="title mb-4">{{ standard.name }} {% if standard.section %}({{standard.section}}){% endif %}</h4>
+                              <p class="description"><strong>Student's :</strong> {{standard.student_count}}<br></p>
+                              <p class="description">{% if standard.class_teacher %}{{standard.class_teacher.first_name}} {{standard.class_teacher.last_name |truncatechars:10}}{% else %}Not Assign{% endif %}</p>
+                              <div class="d-flex  ms-2">
+                                <!-- Check Class Button -->
+                                <a href="{% url 'standard-detail' standard.pk %}" class="btn rounded-pill mt-2 me-2" style="background-color:#17B7B3; color:#fff">Detail</a>
+                                <!-- Update Class Button -->
+                                <a href="{% url 'standard-update' standard.pk %}" class="btn rounded-pill mt-2" style="background-color:#FF9800; color:#fff">Update</a>
+                              </div>
+                            </div>
+                          </div> <!-- end card -->
+                      </div>
+                  </div>
+                  {% endfor %}
+                
+                </div>
+
+
+
+
+
+
+
+                {% if page_obj %}
+                <div class="row g-0 align-items-center pb-4">
+                    <div class="col-sm-6">
+                        <div><p class="mb-sm-0">Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} of {{ page_obj.paginator.count }} entries</p></div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="float-sm-end">
+                            <ul class="pagination mb-sm-0">
+                                      {% if page_obj.has_previous %}
+                                          <li class="page-item">
+                                              <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                                                  <span aria-hidden="true">&laquo; Previous</span>
+                                              </a>
+                                          </li>
+                                      {% else %}
+                                          <li class="page-item disabled">
+                                              <span class="page-link">&laquo; Previous</span>
+                                          </li>
+                                      {% endif %}
+    
+                                      {% for page_num in page_obj.paginator.page_range %}
+                                        {% if page_num == page_obj.number %}
+                                            <li class="page-item active">
+                                                <span class="page-link">{{ page_num }}</span>
+                                            </li>
+                                        {% else %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
+                                            </li>
+                                        {% endif %}
+                                      {% endfor %}
+                                    {% if page_obj.has_next %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                                                <span aria-hidden="true">Next &raquo;</span>
+                                            </a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item disabled">
+                                            <span class="page-link">Next &raquo;</span>
+                                        </li>
+                                    {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+          </div>
+  </div>
+</div>
+{% endblock main  %}

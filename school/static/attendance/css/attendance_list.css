@@ -1,0 +1,123 @@
+   ************* main starts ****************
+  /* Styling for the table-like structure */
+  .table-div {
+      display: flex;
+      flex-direction: column;
+      gap: 10px; /* Space between rows */
+  }
+  .table-row {
+      display: flex;
+      padding: 15px;
+      background-color: white;
+      border-radius: 8px;
+      transition: box-shadow 0.3s ease; /* Smooth transition */
+  }
+  .table-row.header {
+      font-weight: bold;
+      background-color: #f8f9fa;
+      box-shadow: none; /* No shadow on header */
+  }
+  .table-row div {
+      flex: 1;
+      text-align: start;
+  }
+  .table-row:hover {
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
+      border:1px solid rgb(58, 58, 58);
+  }
+  /* Toggle switch */
+  .form-check-input {
+      cursor: pointer;
+  }
+  /* Light green background */
+  .active-row {
+      background-color: #d4edda; /* Light green */
+  }
+  .table-row div:first-child {
+      flex: 0.5; /* Adjust width of Roll No. column */
+      text-align: center; /* Center the text */
+  }
+  .table-row:hover {
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
+      transform: translateY(-5px); /* Lift the row up slightly */
+  }
+  .custom-width {
+      width: 26%;
+  }
+  .active-border {
+      border: 1px solid rgb(5, 176, 5); /* Thin green border */
+  }
+
+  @media (max-width: 768px) {
+      .table-row div:last-child,
+      .table-row div:nth-last-child(2) {
+          justify-content: flex-end;
+          display: flex;
+      }
+
+      .table-row div:first-child {
+          text-align: start; /* Align to the start on small devices */
+      }
+
+      .name{
+          margin-left:-2rem;
+          margin-right: 1rem;
+      }
+
+      .table-row {
+          padding: 10px;
+      }      
+      
+  }
+  
+  /*  ************* main ends **************** */
+
+  /* Modal Styles */
+  .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Use fixed positioning to stick it in the corner */
+      z-index: 1; /* Sit on top */
+      top: 20px; /* Adjust the top value to move it down */
+      right: 0; /* Align to the right */
+      left: auto; /* Ensure it's not aligned to the left */
+      width: 30%; /* Adjust the width as needed */
+      height: auto; /* Adjust the height as needed */
+      overflow: auto; /* Enable scroll if needed */
+      margin-right:1rem;
+      margin-top:1rem;
+  }
+  
+
+.modal-content {
+  background-color: #e6ebef;
+  margin: 0; /* No margin, aligns with top-left */
+  padding: 20px;
+  border: 1px solid #252424;
+  width: 100%; /* Full width of the modal container */
+  border-radius: 5px;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+@media (max-width:768px)
+{
+  .modal {
+      margin-right:5rem;
+      margin-top:1rem;
+      width:60%;
+      height: 25%;
+  }
+}
+

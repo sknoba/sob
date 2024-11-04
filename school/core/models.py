@@ -7,6 +7,8 @@ from django.utils.crypto import get_random_string
 def generate_id():
     return str(uuid.uuid4())[:8].upper()
 
+def generate_sub_code():
+    return str(uuid.uuid4())[:5].upper()
 
 INDIAN_STATES = [
     ('AP', 'Andhra Pradesh'),
@@ -134,6 +136,9 @@ class Student(models.Model):
     guardian_email = models.EmailField(blank=True, null=True)
     relation_to_guardian = models.CharField(max_length=50, blank=True, null=True, help_text="Relation to the guardian, e.g. Uncle, Aunt")
 
+    def get_full_name(self):
+        return f"{self.first_name} {self.last_name}"
+
     def save(self, *args, **kwargs):
         if not self.student_id:
             # Generate a unique student_id
@@ -192,20 +197,22 @@ class Teacher(models.Model):
         return f"{self.first_name} {self.last_name} ({self.teacher_id})"
     
 
+LETTER_CHOICES = [(chr(i), chr(i)) for i in range(ord('A'), ord('Z') + 1)]
 
 class Standard(models.Model):
     name = models.CharField(max_length=50)
-    alias = models.CharField(max_length=20)
-    class_teacher = models.ForeignKey(Teacher, on_delete=models.SET_NULL, null=True, related_name='class_teacher_of')
+    section = models.CharField(max_length=1, choices=LETTER_CHOICES,null=True, blank=True)
+    alias = models.CharField(max_length=20, null=True, blank=True) 
+    class_teacher = models.ForeignKey(Teacher, on_delete=models.SET_NULL, null=True, blank=True,related_name='class_teacher_of')
     class_monitor_boy = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True, blank=True, related_name='monitor_boy_of')
     class_monitor_girl = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True, blank=True, related_name='monitor_girl_of')
 
     def __str__(self):
-        return f"{self.name} ({self.alias})"
+        return f"{self.name} {self.section or ''}"
 
 class Subject(models.Model):
     name = models.CharField(max_length=100)
-    code = models.CharField(max_length=10, unique=True)
+    code = models.CharField(max_length=10, unique=True, default=generate_sub_code)
 
     def __str__(self):
         return self.name

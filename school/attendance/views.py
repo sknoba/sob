@@ -1,36 +1,42 @@
 from django.shortcuts import render, redirect
 from django.utils import timezone
-from .models import Attendance, Student
+from .models import Attendance
+from core.models import Student, Standard
 from django.http import HttpResponse
+from django.views.generic import ListView
 
-def mark_attendance(request):
-    if request.method == 'POST':
-        date = request.POST.get('date')
-        present_students = request.POST.getlist('present_students')
-        absent_students = request.POST.getlist('absent_students')
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.shortcuts import get_object_or_404
 
-        # Mark present students
-        for student_id in present_students:
-            Attendance.objects.update_or_create(
-                student_id=student_id,
-                date=date,
-                defaults={'status': 'present'}
-            )
+class AttendanceClassList(ListView):
+    model = Standard
+    template_name = 'attendance/classes_list.html'
+    context_object_name = 'standards'
+    
 
-        # Mark absent students
-        for student_id in absent_students:
-            Attendance.objects.update_or_create(
-                student_id=student_id,
-                date=date,
-                defaults={'status': 'absent'}
-            )
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_standard'] = Standard.objects.all().count()
+        return context
 
-        return redirect('attendance_list')  # Redirect to a page showing the attendance list
+class StudentAttendanceListView(ListView):
+    model = Student
+    template_name = 'attendance/attendance_list.html'
+    context_object_name = 'students'
+    
+    def post(self, request, *args, **kwargs):
+        print(request.POST)
+        return JsonResponse({'status': 'success'})
 
-    students = Student.objects.all()
-    return render(request, 'attendance/mark_attendance.html', {'students': students})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_students'] = Student.objects.all().count()
+        context['date']= timezone.now().date()
+        return context
+    
 
-def attendance_list(request):
-    date = timezone.now().date()
-    attendance_records = Attendance.objects.filter(date=date)
-    return render(request, 'attendance/attendance_list.html', {'attendance_records': attendance_records})
+from django.contrib.admin.models import LogEntry
+def log(request):
+    logs = LogEntry.objects.all()
+    return render(request, 'attendance/log.html',)

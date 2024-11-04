@@ -43,7 +43,8 @@ body {
    }
 
 .project-list-table tr {
-    background-color: #fff
+    background-color: #fff;
+    
 }
 
 .table-nowrap td, .table-nowrap th {

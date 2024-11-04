@@ -1,45 +1,132 @@
-<nav class="col-md-2 d-none d-md-block sidebar position-fixed">
+<header class="top-header p-4  text-white d-block d-md-none d-flex justify-content-between align-items-center">
+    <button class="toggle-btn" id="toggleButton">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <!-- Profile Picture on the right -->
+  </header>
+
+<nav id="sidebar" class="sidebar-offcanvas ">
     <div class="position-sticky">
 
-        <ul class="nav flex-column me-4 mt-5">
-            <li class="nav-item">
-                <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url "dashboard" %}">
+        <ul class="nav flex-column me-3 mt-5">
+            <li class="nav-item ms-lg-3">
+                <a class="nav-link ps-4 {% if request.path == '/' %}active{% endif %}" href="{% url "dashboard" %}">
                     <i class="mx-2 bi bi-grid-fill"></i> Dashboard
                 </a>
             </li>
 
             <hr class="w-75 mx-auto">
-            <li class="nav-item">
-                <a class="nav-link {% if request.path == '/student/students/' %}active{% endif %}" href="{% url "student-list" %}">
+            <li class="nav-item ms-lg-3">
+                <a class="nav-link ps-4" href="{% url "student-list" %}">
+                    <i class="mx-2 bi bi-person-fill"></i> School
+                </a>
+            </li>
+            <li class="nav-item ms-lg-3">
+              <div class="mx-auto dropdown">
+                <div class="nav-item ps-4 dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                  <i class="mx-2 bi bi-person-fill"></i> School
+                </div>
+
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="#">Action</a></li>
+                  <li><a class="dropdown-item" href="#">Another action</a></li>
+                  <li><a class="dropdown-item" href="#">Something else here</a></li>
+                </ul>
+              </div>
+            </li>
+
+        
+            <hr class="w-75 mx-auto">
+            <li class="nav-item ms-lg-3">
+                <a class="nav-link ps-4" href="">
+                    <i class="mx-2 bi bi-person-fill"></i> Enrollment
+                </a>
+            </li>
+            <hr class="w-75 mx-auto">
+            <li class="nav-item ms-lg-3">
+                <a class="nav-link ps-4 {% if request.path == '/student/students/' %}active{% endif %}" href="{% url "student-list" %}">
                     <i class="mx-2 bi bi-person-fill"></i> Students
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link {% if request.path == '/teacher/teachers/' %}active{% endif %}" href="{% url "teacher-list" %}">
+            <li class="nav-item ms-lg-3">
+                <a class="nav-link ps-4 {% if request.path == '/teacher/teachers/' %}active{% endif %}" href="{% url "teacher-list" %}">
                     <i class="mx-2 bi bi-person-fill"></i> Teachers
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link {% if request.path == '/standard/standards/' %}active{% endif %}" href="{% url "standard-list" %}">
+            <li class="nav-item ms-lg-3">
+                <a class="nav-link ps-4 {% if request.path == '/standard/standards/' %}active{% endif %}" href="{% url "standard-list" %}">
                     <i class="mx-2 bi bi-chat-dots-fill"></i> ClassRooms
                 </a>
             </li>
             <hr class="w-75 mx-auto">
 
-            <li class="nav-item">
-                <a class="nav-link" href="#">
+            <li class="nav-item ms-lg-3">
+                <a class="nav-link ps-4" href="#">
                     <i class="mx-2 bi bi-currency-rupee"></i> Fees
                 </a>
             </li>
             <hr class="w-75 mx-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="#">
+            <li class="nav-item ms-lg-3">
+                <a class="nav-link ps-4" href="#">
                     <i class="mx-2 bi bi-graph-up"></i> Performance
                 </a>
             </li>
             <hr class="w-75 mx-auto">
+            <li class="nav-item ms-lg-3">
+              <a class="nav-link ps-4" href="#">
+                  <i class="mx-2 bi bi-graph-up"></i> Data Manage
+              </a>
+          </li>
+          <hr class="w-75 mx-auto">
         </ul>
     </div>
 </nav>
 
 
+
+
+
+{% comment %} 
+
+ <header class="top-header p-4 text-white d-block d-md-none d-flex justify-content-between align-items-center">
+    <button class="toggle-btn" id="toggleButton">
+        <i class="bi bi-layout-sidebar-inset"></i>
+    </button>
+    <!-- Profile Picture on the right -->
+    <img src="./defaultprofile.jpg" alt="Profile" class="profile-img rounded-circle" style="width: 40px;">
+  </header>
+
+
+
+     <!-- Sidebar -->
+     <nav id="sidebar" class="sidebar-offcanvas">
+        <div class="position-sticky">
+          <ul class="nav flex-column mt-5 mt-lg-5 ms-lg-3">
+            <li class="nav-item">
+              <a class="nav-link mt-3 {% if request.path == '/' %}active{% endif %}" href="{% url 'dashboard' %}">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if request.path == '/student/students/' %}active{% endif %}" href="./stu_list.html">
+                <i class="fas fa-user-graduate"></i> Students
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <i class="fas fa-chalkboard-teacher"></i> Classrooms
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <i class="fas fa-wallet"></i> Fees
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <i class="fas fa-chart-line"></i> Performance
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>  {% endcomment %}

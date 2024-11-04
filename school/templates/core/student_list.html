@@ -1,56 +1,70 @@
 {% extends "core/base.html" %}
 {% block main %}
+
 {% load static %}
-
-
-<div class="container">
-    <div class="col mt-4">                
-        <div id="main-content">
-            <h2 class="fw-bold text-center text-lg-start ms-lg-4" style="color:#1E3A8A;">Student List</h2>
+<div id="main-content">
+  <div class="container">              
+        <div class="container mx-4 mt-4">
+        
+            <h2 class="fw-bold text-center text-lg-start mt-5" style="color:#1E3A8A;">Student List</h2>
             <hr class="">
         
-            <div class="container">
-              <div class="row align-items-center mb-3">
-                  <!-- Title Section -->
+            <div class="container ">
+                <form action="" method="get">
+              <div class="row align-items-center mb-3 mt-4">
+                  <!-- Title Section -->  
+                    
                   <div class="col-md-3">
                     <div class="mb-3">
                       <h5 class="card-title">Student List <span class="text-muted fw-normal ms-2">({{total_students}})</span></h5>
                     </div>
-                  </div>
-                
+                  </div>  
+
+                 
                   <!-- Search Bar -->
-                  <div class="col-md-2">
-                    <input type="text" class="form-control" name="search" id="searchInput" placeholder="Search students...">
-                  </div>
-                
+                  <div class="col-md-2 col-5">
+                    <input type="text" class="form-control" name="search" id="searchStudent" placeholder="{% if request.GET.search %}{{request.GET.search}}{% else %}Search Student{% endif %}" >
+                  </div>    
+
                   <!-- Select Class Dropdown -->
-                  <div class="col-md-2" name="class" id="standardSelect">
-                    <select class="form-select" id="class-filter">
-                      <option selected>Select Class</option>
+                  <div class="col-md-1 col-5" id="standardSelect">
+                    <select class="form-select" id="class-filter" name="class">
+                      <option selected value="no-class">Select Class</option>
                     {% for standard in standards %}
-                      <option value="{{ standard.id }}">{{ standard.name }}</option>
+                      <option value="{{ standard.id }}">{{ standard.name }} {% if standard.section %}{{standard.section}}{% endif %}</option>
                     {% endfor %}
                     </select>
                   </div>
-                
-                  <!-- Select Section Dropdown -->
-                  <div class="col-md-2">
-                      <select class="form-select">
-                      <option selected>Select Section</option>
-                      <option value="A">Section A</option>
-                      <option value="B">Section B</option>
-                      <option value="C">Section C</option>
-                      </select>
+
+                  <div class="col-md-1 col-2 text-center">
+                    <a href="{% url 'student-list' %}" >
+                        <button type="submit" id="filter-btn"  class="btn btn-primary" style="background-color:#1E3A8A;"><i class="fa-solid fa-filter"></i></button>
+                    </a>
                   </div>
-    
-                  <div class="col-md-1">
-                    <button type="button" id="filter-btn"  class="btn btn-primary" style="background-color:#1E3A8A;"><i class="bi bi-funnel"></i></button>
+                  <div class="col-md-1 col-2">
+                    <a href="{% url 'student-list' %}" >
+                        <button type="button" id="filter-btn"  class="btn btn-primary" style="background-color:#1E3A8A;"><i class="fa-solid fa-rotate-right"></i></button>
+                    </a>
+                  </div>
+                </form>
+
+                  <div class="col-md-1 col-2 my-3 ms-2 ms-lg-0 px-0">
+                    <a href="{% url 'student-list' %}" >
+                        <button type="button" id="filter-btn"  class="btn btn-success bg-success"><i class="fa-solid fa-file-excel"></i>  Excel</button>
+                    </a>
+                  </div>
+
+                  
+                  <div class="col-md-1 col-2 my-3 px-0 ps-1">
+                    <a href="{% url 'student-list' %}" >
+                        <button type="button" id="filter-btn"  class="btn btn-danger bg-danger"><i class="fa-solid fa-file-pdf"></i> PDF</button>
+                    </a>
                   </div>
                 
                   <!-- Add New Button -->
-                  <div class="col-md-2">
+                  <div class="col-md-2 offset-lg-0 offset-1 col-6">
                     <a href="{% url 'student-create' %}" class="btn btn-primary w-100" style="background-color:#1E3A8A;">
-                      <i class="bx bx-plus me-1"></i> Add New
+                      <i class="bx bx-plus me-1"></i> New
                     </a>
                   </div>
                 </div>
@@ -98,6 +112,7 @@
                                                         <a class="dropdown-item" href="{% url "student-update" student.id %}">Update</a>
                                                         <a class="dropdown-item" href="#">View Fees</a>
                                                         <a class="dropdown-item" href="#">View Attendance</a>
+                                                        <a class="deact dropdown-item text-danger" href="#">Deactive</a>
                                                     </div>
                                                 </li>
                                             </ul>
@@ -163,11 +178,8 @@
                 </div>
                 {% endif %}
             </div>
-        
           </div>
-    
-    </div>
-    
+  </div>
 </div>
 
 
@@ -179,23 +191,7 @@
   $(document).ready(function(){
     $('#filter-btn').click(function(){
       var selectedClass = $('#class-filter').val();
-    //   var selectedGender = $('#gender-filter').val();
-
-    //   $.ajax({
-    //     url: "{% url 'student-list' %}",
-    //     type: 'POST',
-    //     data: {
-    //       'class_id': selectedClass,
-    //     //   'gender': selectedGender,
-    //       'csrfmiddlewaretoken': '{{ csrf_token }}'  // CSRF token for POST request
-    //     },
-    //     success: function(response){
-    //       $('#student-list').html(response.html);  // Update student list
-    //     }
-    //   });
     });
   }); 
 </script>
-
-
 {% endblock main %}

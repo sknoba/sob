@@ -1,9 +1,9 @@
 from django.urls import path
-from .views import StudentListView, StudentDetailView, StudentCreateView, StudentUpdateView, StudentDeleteView, TeacherListView, TeacherDetailView, TeacherCreateView, TeacherUpdateView, TeacherDeleteView, \
-    StandardListView, StandardDetailView, StandardCreateView, StandardUpdateView, StandardDeleteView
+from .views import *
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
+from .export_util import GenerateStudentPDF
 
 urlpatterns = [
     path("", views.dashboard, name="dashboard"),
@@ -11,6 +11,9 @@ urlpatterns = [
     path("reset-password/", views.reset_password, name="reset-password"),
     path("logout/", views.logout, name="logout"),
     path("profile/", views.profile, name="profile"),
+
+    ## PDF Generate URLs
+    path("pdf/<int:id>/", GenerateStudentPDF.as_view(), name="generate_pdf"),
 
     ## Student URLs
     path('student/students/', StudentListView.as_view(), name='student-list'),
@@ -37,3 +40,7 @@ urlpatterns = [
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

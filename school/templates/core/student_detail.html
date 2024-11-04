@@ -1,42 +1,506 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ student.first_name }} {{ student.last_name }}'s Details</title>
-</head>
-<body>
-    <h1>{{ student.first_name }} {{ student.last_name }}'s Details</h1>
-    {% comment %} <img src="{{ student.photo.url }}" alt="Student Photo" style="max-width:200px; height:auto;"> {% endcomment %}
-    <h3>Personal Details</h3>
-    <p><strong>Date of Birth:</strong> {{ student.date_of_birth }}</p>
-    <p><strong>Gender:</strong> {{ student.get_gender_display }}</p>
-    <p><strong>Student ID:</strong> {{ student.student_id }}</p>
-    <p><strong>Enrollment Date:</strong> {{ student.enrollment_date }}</p>
+{% extends "core/base.html" %}
+{% block main %}
+{% load static %}
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel&display=swap" rel="stylesheet">
+<style>
+#pieChart {
+    width: 300px !important;
+    height: 300px !important;
+}
+.cinzel {
+            font-family: 'Cinzel', serif;
+            font-size: 20px;
+        }
+</style>  
+{% endblock head %}
 
-    <h3>Address</h3>
-    <p><strong>Address Line 1:</strong> {{ student.address_line_1 }}</p>
-    <p><strong>Address Line 2:</strong> {{ student.address_line_2 }}</p>
-    <p><strong>City:</strong> {{ student.city }}</p>
-    <p><strong>State:</strong> {{ student.get_state_display }}</p>
-    <p><strong>District:</strong> {{ student.district }}</p>
-    <p><strong>Postal Code:</strong> {{ student.postal_code }}</p>
+<div id="main-content">
+    <div class="container">              
+      <div class="container mx-4 mt-4">
+  
+          
+              <h2 class="fw-bold text-center text-lg-start mt-5" style="color:#1E3A8A;">Student Detail</h2>
+              <hr class="">
+          
 
-    <h3>Parent Details</h3>
-    <p><strong>Father's Name:</strong> {{ student.father_name }}</p>
-    <p><strong>Father's Phone:</strong> {{ student.father_phone }}</p>
-    <p><strong>Father's Email:</strong> {{ student.father_email }}</p>
+             <!-- Card Content -->
+
+        <div class="contaienr px-3">
+          <div class="col px-2">
+            <div class="row bg-white py-3 mb-2 rounded-4">
+              <div class="col-md-3 d-flex justify-content-center align-items-center d-sm-flex ">
+                <img src="{% if student.photo %}{{student.photo.url}}{% else %}{% static "core/img/profile.png" %}{% endif %}" class="img-fluid rounded-2 border border-3 px-2 py-2 border-secondary" alt="..." style="height: 220px; width:220px; object-fit: cover; ">
+              </div>
+              <div class="col-md-6 d-sm-flex d-sm-justify-content-center d-sm-align-items-center">
+                <div class="card-body">
+                  <h5 class="card-title mb-2 fs-1 fw-semibold mt-2 text-center" style="color:#1E3A8A;">{{student.first_name}} {{student.last_name}}</h5>
+                  <p class="card-text fs-5 text-center">ID: <span class="cinzel" style="color: red;"><b>{{student.student_id}}</b></span></p>
+                  <hr class="mb-4 fw-bold fs-1" style="color:#1E3A8A;">
+                  <div class="row">
+                    <div class="col-6">
+                      <p><strong>First Name:</strong> {{student.first_name}}</p>
+                      <p><strong>Gender:</strong> {{student.get_gender_display}}</p>
+                      <p><strong>Standard:</strong> {{student.standard}}</p>
+                    </div>
+                    <div class="col-6">
+                      <p><strong>Last Name:</strong> {{student.last_name}}</p>
+                      <p><strong>Enrollment Date:</strong> {{student.enrollment_date|date:"d-M-y"}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3 d-sm-flex d-sm-justify-content-center d-sm-align-items-center">
+                <div class="card-body">
+                  <h5 class="card-title text-center mt-4"><i class="fa-solid fa-award"></i> ArchiveMent</h5>
+                  <div class="row text-center mt-4">
+                    <div class="col-6"><img src="{% static "core/img/class-first.png" %}" alt="" width="100px" height="100px"></img></div>
+                    <div class="col-6"><img src="{% static "core/img/class-first.png" %}" alt="" width="100px" height="100px"></img></div>
+                    <div class="col-6"><img src="{% static "core/img/class-second.png" %}" alt="" width="100px" height="100px"></img></div>
+                    <div class="col-6"><img src="{% static "core/img/class-second.png" %}" alt="" width="100px" height="100px"></img></div>
+                    
+                    <!-- Button trigger modal -->
+                      <button type="button" class="btn btn-outline" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <i class="fa-solid fa-angles-down"></i>
+                      </button>
+                    
+                  </div>
+                </div>
+              </div>
+              
+             </div>
+          </div>
+           <div class="row">
+                    <!-- Parent Information Card -->
+                    <div class="col-md-6 mb-4 ">
+                      <div class="card border-0">
+                        <div class="card-body">
+                          <h4 style="color:#1E3A8A;"><i class="fa-regular fa-user"></i> Parents</h4>
+                          <hr class="mb-4" style="color:#1E3A8A;">
+                          <div class="row">
+                            <div class="col-md-6 border-end">
+                              <p><strong>Father Name:</strong> {{student.father_name|capfirst}}</p>
+                              <p><strong>Phone:</strong> {{student.father_phone|default:"Not Available"}}</p>
+                              <p><strong>Email: </strong> {{student.father_email|default:"Not Available"}}</p>
+                            </div>
+                            <div class="col-md-6">
+                              <p><strong>Mother Name:</strong> {{student.mother_name|capfirst}}</p>
+                              <p><strong>Phone:</strong> {{student.mother_phone|default:"Not Available"}}</p>
+                              <p><strong>Email: </strong> {{student.mother_email|default:"Not Available"}}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Address Information Card -->
+                    <div class="col-md-6 mb-4">
+                      <div class="card border-0">
+                        <div class="card-body">
+                          <h4 style="color:#1E3A8A;"><i class="fa-regular fa-address-card"></i> Address</h4>
+                          <hr class="mb-4" style="color:#1E3A8A;">
+                          <div class="row">
+                            <div class="col-md-6 border-end">
+                              <p><strong>Address Line 1:</strong> {{student.address_line_1}}</p>
+                              <p><strong>City:</strong> {{student.city|capfirst}}</p>
+                              <p><strong>State:</strong> {{student.get_state_display}}</p>
+                            </div>
+                            <div class="col-md-6">
+                              <p><strong>Address Line 2:</strong> {{student.address_line_1}}</p>
+                              <p><strong>District:</strong> {{student.district|capfirst}}</p>
+                              <p><strong>PIN Code:</strong> {{student.pin_code}}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+           </div>
+          
+          
+          <!-- Guardian Information Card - Full Width -->
+          {% if student.guardian_name %}
+           <div class="row">
+              <div class="col-md-12 mb-4">
+                <div class="card border-0">
+                  <div class="card-body">
+                    <h4 style="color:#1E3A8A;"><i class="fa-regular fa-user"></i> Guardian Details</h4>
+                    <hr class="mb-4" style="color:#1E3A8A;">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p><strong>Guardian's Name:</strong> Emily Smith</p>
+                      </div>
+                      <div class="col-md-6">
+                        <p><strong>Guardian's Phone:</strong> (123) 555-7890</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p><strong>Guardian's Email:</strong> emily.smith@example.com</p>
+                      </div>
+                      <div class="col-md-6">
+                        <p><strong>Relationship to Student:</strong> Aunt</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p><strong>Work Address:</strong> 456 Business Rd, Cityville</p>
+                      </div>
+                      <div class="col-md-6">
+                        <p><strong>Guardian's Nationality:</strong> American</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endif %}
+
+            <!-- Fees and Attendance -->
+            <div class="row">
+              <!-- Parent Information Card -->
+              <div class="col-md-6 mb-4 ">
+                <div class="card border-0">
+                  <div class="card-body text-center">
+                    <h4 style="color:#1E3A8A;"><i class="fa-solid fa-clipboard-user"></i> Attendance</h4>
+                    <hr class="mb-4" style="color:#1E3A8A;">
+                   
+                  
+                    <div class="row">
+                      <div class="col">
+                        <canvas id="pieChart" class="mx-auto"></canvas>
+                      </div>
+                      
+                    </div>
+                    <div class="row mt-4 text-center">
+                      <div class="col-4">
+                        <div class="border border-3 py-2 border-secondary rounded">
+                          <h5 class="">Total</h5>
+                        100
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="border border-3 py-2 border-success rounded">
+                          <h5 class="">Present</h5>
+                        100
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="border border-3 py-2 border-danger rounded">
+                          <h5 class="">Absent</h5>
+                        100
+                        </div>
+                      </div>
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+
+              <!-- Fees Information Card -->
+              <div class="col-md-6 mb-4">
+                <div class="card border-0">
+                  <div class="card-body text-center">
+                    <h4 style="color:#1E3A8A;"><i class="fa-solid fa-indian-rupee-sign"></i> Fees</h4>
+                    <hr class="mb-4" style="color:#1E3A8A;">
+                    <div class="row">
+                      <div class="col-4">
+                        <div class="py-2 border border-3 border-secondary rounded">
+                          <h5 class="">Total</h5>
+                        100
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="py-2 border border-3 border-success rounded">
+                          <h5 class="">Paid</h5>
+                        100
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="py-2 border border-3 border-danger rounded">
+                          <h5 class="">Due</h5>
+                        100
+                        </div>
+                      </div>
+                  </div>
+
+                  <div class="row border border-secondary mt-5 rounded-4 mx-2">
+                    <div class="col-12">
+                      <div class="mt-4 text-center">
+                        <h5 class="">Transaction's</h5>
+                        <hr>
+                      </div>
+                      <div class="table-responsive" style="max-height: 190px; height: 190px; overflow-y: auto;">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th scope="col">#</th>
+                              <th scope="col">Invoince</th>
+                              <th scope="col">Amount</th>
+                              <th scope="col">Method</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <th scope="row">1</th>
+                              <td>EU980049</td>
+                              <td>12000</td>
+                              <td>Cash</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">2</th>
+                              <td>EU980049</td>
+                              <td>12000</td>
+                              <td>Cash</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">3</th>
+                              <td>EU980049</td>
+                              <td>12000</td>
+                              <td>Cash</td>
+                            </tr>
+                            <tr>
+                              <th scope="row">4</th>
+                              <td>EU980049</td>
+                              <td>12000</td>
+                              <td>Cash</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+
+            
+            </div>
+            </div>
+
+            
+
+           <!-- Performance -->
+           <div class="row">
+            <div class="col-md-12 mb-4">
+              <div class="card border-0">
+                <div class="card-body">
+                  <h4 style="color:#1E3A8A;"><i class="fa-solid fa-chart-column"></i> Academic Performance</h4>
+                  <hr class="mb-4" style="color:#1E3A8A;">
+                  <div class="row">
+                    <div class="col-md-7">
+                      
+
+
+                      <div class="row border border-secondary mx-2 mt-3 rounded-3">
+                        <div class="col-12">
+                          <div class="">
+                            <h5 class="mt-3 text-center">Exam's</h5>
+                            <hr>
+                          </div>
+                          <div class="table-responsive" style="max-height: 190px; height: 200px; overflow-y: auto;">
+                            <table class="table text-center">
+                              <thead>
+                                <tr>
+                                  <th scope="col">Exam</th>
+                                  <th scope="col">Hindi</th>
+                                  <th scope="col">Eng</th>
+                                  <th scope="col">Mar</th>
+                                  <th scope="col">Sci</th>
+                                  <th scope="col">So. Sci</th>
+                                  <th scope="col">Per %</th>
+
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>MA 1</td>
+                                  <td>80</td>
+                                  <td>90</td>
+                                  <td>90</td>
+                                  <td>90</td>
+                                  <td>90</td>
+                                  <td>90 %</td>
+                                </tr>
+                                <tr>
+                                  <td>PT 1</td>
+                                  <td>80</td>
+                                  <td>90</td>
+                                  <td>90</td>
+                                  <td>90</td>
+                                  <td>90</td>
+                                  <td>90 %</td>
+                                </tr>
+                                <tr>
+                                  <td>MA 2</td>
+                                  <td>80</td>
+                                  <td>90</td>
+                                  <td>90</td>
+                                  <td>90</td>
+                                  <td>90</td>
+                                  <td>90 %</td>
+                                </tr>
+                                <tr>
+                                  <td>PT 2</td>
+                                  <td>80</td>
+                                  <td>90</td>
+                                  <td>90</td>
+                                  <td>90</td>
+                                  <td>90</td>
+                                  <td>90 %</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
     
-    <p><strong>Mother's Name:</strong> {{ student.mother_name }}</p>
-    <p><strong>Mother's Phone:</strong> {{ student.mother_phone }}</p>
-    <p><strong>Mother's Email:</strong> {{ student.mother_email }}</p>
+                        </div>
+                      </div>
 
-    {% if student.guardian_name %}
-    <h3>Guardian Details (Optional)</h3>
-    <p><strong>Guardian's Name:</strong> {{ student.guardian_name }}</p>
-    <p><strong>Guardian's Phone:</strong> {{ student.guardian_phone }}</p>
-    <p><strong>Guardian's Email:</strong> {{ student.guardian_email }}</p>
-    <p><strong>Relation to Guardian:</strong> {{ student.relation_to_guardian }}</p>
-    {% endif %}
-</body>
-</html>
+
+
+
+                    </div>
+                    <div class="col-md-5">
+                      <canvas id="barChart" width="150" height="90"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+
+             
+    </div>
+  </div>
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Achivement</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+              <div class="row mx-3">
+                <div class="col-6 mb-3">
+                  <div class="border border-secondary border-4 rounded">
+                    <img src="{% static "core/img/class-first.png" %}" alt="" width="100px" height="100px"></img>
+                    <p><b>Class First</b></p>
+                  </div>
+                </div>
+                <div class="col-6 mb-3">
+                  <div class="border border-secondary border-4 rounded">
+                    <img src="{% static "core/img/class-second.png" %}" alt="" width="100px" height="100px"></img>
+                    <p><b>Class First</b></p>
+                  </div>
+                </div>
+                <div class="col-6 mb-3">
+                  <div class="border border-secondary border-4 rounded">
+                    <img src="{% static "core/img/class-second.png" %}" alt="" width="100px" height="100px"></img>
+                    <p><b>Class First</b></p>
+                  </div>
+                </div>
+                <div class="col-6 mb-3">
+                  <div class="border border-secondary border-4 rounded">
+                    <img src="{% static "core/img/class-first.png" %}" alt="" width="100px" height="100px"></img>
+                    <p><b>Class First</b></p>
+                  </div>
+                </div>
+                <div class="col-6 mb-3">
+                  <div class="border border-secondary border-4 rounded">
+                    <img src="{% static "core/img/class-first.png" %}" alt="" width="100px" height="100px"></img>
+                    <p><b>Class First</b></p>
+                  </div>
+                </div>
+                <div class="col-6 mb-3">
+                  <div class="border border-secondary border-4 rounded">
+                    <img src="{% static "core/img/class-second.png" %}" alt="" width="100px" height="100px"></img>
+                    <p><b>Class First</b></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+  <script>
+    // Configure and render the chart
+    const ctx = document.getElementById('pieChart').getContext('2d');
+    const ctxt = document.getElementById('barChart').getContext('2d');
+
+    const pieChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ["Present", "Absent",],
+            datasets: [{
+                label: 'Data',
+                data: [40,10],
+                backgroundColor: [                  
+                'rgb(87, 204, 153)',    
+                'rgb(230, 57, 70)',
+                    
+                ],
+
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+            },
+            
+        },
+    });
+
+    // Bar Chart
+
+    const barChart = new Chart(ctxt, {
+        type: 'bar',
+        data: {
+            labels: ["Hindi", "English", "Marathi", "Science", "Social Science"],
+            datasets: [{
+                label: 'Performance',
+                data: [40,10,20,30,50],
+                backgroundColor: [                  
+                'rgb(87, 204, 153)',    
+                'rgb(230, 57, 70)',
+                'rgb(255, 159, 64)',
+                'rgb(75, 192, 192)',
+                'rgb(153, 102, 255)',
+
+                    
+                ],
+
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+            },
+        },
+    });
+</script>
+
+{% endblock main %}
