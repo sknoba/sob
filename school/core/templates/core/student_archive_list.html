@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
+{% endblock head %}
+
+{% block main %}
+
+
+
+<!-- Page Heading -->
+<!-- <div class="d-sm-flex align-items-center justify-content-between mb-4">
+  <h1 class="h3 mb-0 text-gray-800">Students </h1> -->
+<!-- </div> -->
+
+
+<div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <!-- Heading on the left -->
+          <h2 class="fw-bold text-start" style="color:#1E3A8A;">Deactivated Student's</h2>
+        
+          <!-- Buttons on the right -->
+          <div class="d-flex">
+            <div class="my-3 ms-2 ms-md-3">
+              <a href="{% url 'student-list' %}">
+                <button type="button" id="filter-btn" class="btn btn-success bg-success">
+                  <i class="fa-solid fa-file-excel"></i> Excel
+                </button>
+              </a>
+            </div>
+            
+            <div class="my-3 ms-2 ms-md-3">
+              <a href="{% url 'student-list' %}">
+                <button type="button" id="filter-btn" class="btn btn-danger bg-danger">
+                  <i class="fa-solid fa-file-pdf"></i> PDF
+                </button>
+              </a>
+            </div>
+          </div>
+        </div>
+        
+
+      <hr>
+
+
+      <!-- <div class="row"> -->
+      <div class="row mt-5">
+
+        <div class="card shadow mb-4">
+          <div class="card-header py-3 mt-2">
+            
+            <div class="d-flex justify-content-between align-items-center">
+              <h6 class="m-0 font-weight-bold text-primary">Student's ({{students.all.count}})</h6>
+            </div>
+            
+              
+
+              
+          </div>
+          <div class="card-body">
+              <div class="table-responsive">
+
+                <table id="myTable" class="table text-center" style="width:100%">
+                  <thead>
+                      <tr class="text-center">
+                          <th class="text-center">#</th>
+                          <th class="text-center">Student</th>
+                          <th class="text-center">Name</th>
+                          <th class="text-center">Gender</th>
+                          <th class="text-center">Created Date</th>
+                          <th class="text-center">Any A.Y Available</th>
+                          <th class="text-center">Action</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+              
+                    {% for student in students %}
+                      <tr>
+                        <td class="text-center">{{forloop.counter}}</td>
+                          <td>
+                              {% if student.photo %}
+                              <img src="{{student.photo.url}}" alt="" class="avatar-sm rounded-circle me-2" style="width: 50px; height: 50px;"/>
+                              {% else %}
+                              <img src="{% static "core/img/profile.png" %}" alt="" class="avatar-sm rounded-circle me-2" style="width: 50px; height: 50px;"/>
+                              {% endif %}
+                              <a href="{% url "student-detail" student.id %}" class="text-body">{{student.student_id}}</a>
+                          </td>
+                          <td>{{student.first_name}} {{student.last_name}}</td>
+                          <td>{{student.gender|capfirst }}</td>
+                          <td>{{student.create_date}}</td>
+                          <td>
+                            {% if student.enrollments.exists %}
+                              <i class="fa-solid fa-circle-check text-success"></i><br>
+                              [{% for ay in student.enrollments.all %}
+                                {{ay.academic_year}},
+                              {% endfor %}]
+                            {% else %}
+                              <i class="fa-solid fa-circle-xmark text-danger"> </i><br>
+                            {% endif %}
+                          </td>
+                          <td>
+                            <ul class="list-inline mb-0">
+                                <li class="list-inline-item dropdown">
+                                    <button class="btn btn-outline-primary dropdown-toggle px-3 py-2 rounded-3 font-size-16" 
+                                            type="button" 
+                                            id="dropdownMenuButton" 
+                                            data-bs-toggle="dropdown" 
+                                            aria-="false">
+                                        <i class="bx bx-dots-vertical-rounded me-2"></i> Options
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-end border-0 shadow-lg p-2 rounded-3" aria-labelledby="dropdownMenuButton">
+                                        <form action="" method="POST">
+                                          {% csrf_token %}                                            
+                                          <input type="text" name="student_id" value="{{student.id}}" hidden>
+                                          <button class="dropdown-item ms-2" type="submit">Make Activate</button>
+                                        </form>
+                                        <a class="dropdown-item text-danger ms-2" href="{% url "student-delete" student.id %}">Permanaent Delete</a>                                             
+                                      
+                                    </div>
+                                </li>
+                            </ul>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+              
+              </table>
+              </div>
+          </div>
+        </div>
+        
+      </div>
+
+</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
+
+<script>
+  new DataTable('#myTable', {  
+});
+</script>
+
+{% endblock main %}
+
+
+

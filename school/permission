@@ -1,0 +1,615 @@
+#################### App Core Views ####################
+
+def dashboard(request):
+    return render(request, 'core/dashboard.html')
+
+def profile(request):
+    return render(request, 'core/profile.html')
+
+
+
+############### Student Views
+# List all students (Read - List)
+class StudentListView(ListView):
+    model = Student
+    template_name = 'core/student_list.html'  # Template to render the list of students
+    context_object_name = 'students'
+    
+    def get_queryset(self):
+        students = Student.objects.all()
+        if  self.request.GET:
+            select_class = self.request.GET.get('class')
+            if select_class and select_class != 'no-class':
+                students = students.filter(standard__id__icontains=select_class)
+        return students.order_by('id')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_students'] = Student.objects.all().count()
+        context['standards'] = Standard.objects.all()
+        return context
+
+
+class StudentDetailView(DetailView):
+    model = Student
+    template_name = 'core/student_detail.html'
+    context_object_name = 'student'
+    slug_field = 'id'
+    slug_url_kwarg = 'id'
+
+
+# Update an existing student (Update)
+class StudentUpdateView(UpdateView):
+    model = Student
+    template_name = 'core/student_form.html'  # Reusing the form template for editing
+    form_class = StudentForm
+    success_url = reverse_lazy('student-list')  # Redirect to the student list view on success
+
+
+# Delete a student (Delete)
+class StudentDeleteView(DeleteView):
+    model = Student
+    template_name = 'student_confirm_delete.html'  # Template to confirm deletion
+    success_url = reverse_lazy('student-list')  # Redirect to the student list view on success
+
+
+# Archive Student
+class StudentArchiveListView(ListView):
+    model = Student
+    template_name = 'core/student_list.html'  # Template to render the list of students
+    context_object_name = 'students'
+    
+    def get_queryset(self):
+        students = Student.objects.all().filter(is_active=False)
+        if  self.request.GET:
+            select_class = self.request.GET.get('class')
+            if select_class and select_class != 'no-class':
+                students = students.filter(standard__id__icontains=select_class)
+        return students.order_by('id')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_students'] = Student.objects.all().filter(is_active=False).count()
+        context['standards'] = Standard.objects.all()
+        return context
+
+
+
+
+
+######## Enrollments Views
+# Create a new Enrollment (Create)
+class EnrollmentListView(View):
+    def get(self, request):
+        students = Student.objects.all()
+        return render(request, 'core/enrollment_list.html', {'students': students})
+    
+
+# Create a new Enrollment (Create)
+class EnrollmentCreateView(CreateView):
+    model = Student
+    template_name = 'core/student_form.html'  # Template for creating a new student
+    form_class = StudentForm
+    
+
+    def form_valid(self, form, *args, **kwargs):
+        # Save the form but don't commit it to the database yet
+        student = form.save(commit=False)
+        student.save()  # Now save it to the database
+        return HttpResponseRedirect(reverse('enrollment-fees', kwargs={'id': student.id}))
+
+class EnrollmentFeesView(CreateView):
+    model = FeesCollection
+    template_name = 'core/enrollment_fees.html'  # Template for creating a new student
+    form_class = FeesCollectionForm
+    success_url = reverse_lazy('enrollment-done')  # Redirect to the student list view on success
+    pk_url_kwarg = 'id'
+
+    def get(self, request, *args, **kwargs):
+        if Student.objects.filter(id=self.kwargs['id']).exists():            
+            if FeesCollection.objects.filter(student__id=self.kwargs['id']).exists():
+                fees = FeesCollection.objects.get(student__id=self.kwargs['id'])
+                return HttpResponseRedirect(reverse('fees-detail', args=[fees.id]))
+            else:
+                return super().get(request, *args, **kwargs)                
+        else:
+            return HttpResponseRedirect(reverse('enroll'))
+
+    def form_valid(self, form):
+        if Student.objects.filter(id=self.kwargs['id']).exists():
+            form.instance.student = Student.objects.get(id=self.kwargs['id'])
+            student = form.save()
+        else:
+            return HttpResponseRedirect(reverse('enroll'))
+        return HttpResponseRedirect(reverse('enrollment-done', args=[student.student.id]))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['student'] = Student.objects.get(id=self.kwargs.get('id'))
+        return context
+
+class EnrollmentDoneView(View):
+    def get(self, request, **kwargs):
+        student = Student.objects.get(id=self.kwargs.get('id'))
+        context= {
+            'student': student
+            }
+        return render(request, 'core/enrollment_done.html', context)
+
+
+
+########## Teacher Views
+# List all Teacher (Read - List)
+class TeacherListView(ListView):
+    model = UserProfile
+    template_name = 'core/teacher_list.html'  # Template to render the list of students
+    context_object_name = 'teachers'
+    paginate_by = 10
+
+    def get_queryset(self):
+        teacher = UserProfile.objects.filter(acc_type='TS')
+        if  self.request.GET:
+            teacher_query = self.request.GET.get('search')
+            if teacher_query:
+                teacher = teacher.filter(first_name__icontains=teacher_query) or teacher.filter(last_name__icontains=teacher_query)
+        return teacher
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_teacher'] = UserProfile.objects.filter(acc_type='TS').count()
+        return context
+
+
+class TeacherDetailView(DetailView):
+    model = UserProfile
+    template_name = 'core/teacher_detail.html'
+    context_object_name = 'teacher'
+    slug_url_kwarg = 'acc_id'
+    slug_field = 'acc_id'
+
+
+# Update an existing Teacher (Update)
+class TeacherUpdateView(UpdateView):
+    model = UserProfile
+    template_name = 'core/teacher_form.html'  # Reusing the form template for editing
+    form_class = UserProfileForm
+    slug_url_kwarg = 'acc_id'
+    slug_field = 'acc_id'
+    success_url = reverse_lazy('teacher-list')  # Redirect to the Teaher list view on success
+
+
+########## Staff Views
+# List all Teacher (Read - List)
+class StaffListView(ListView):
+    model = UserProfile
+    template_name = 'core/staff_list.html'  # Template to render the list of students
+    context_object_name = 'staffs'
+    paginate_by = 10
+
+    def get_queryset(self):
+        teacher = UserProfile.objects.filter(acc_type='NT')
+        if  self.request.GET:
+            teacher_query = self.request.GET.get('search')
+            if teacher_query:
+                teacher = teacher.filter(first_name__icontains=teacher_query) or teacher.filter(last_name__icontains=teacher_query)
+        return teacher
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_staff'] = UserProfile.objects.filter(acc_type='NT').count()
+        return context
+    
+class StaffDetailView(DetailView):
+    model = UserProfile
+    template_name = 'core/staff_detail.html'
+    context_object_name = 'staff'
+    slug_url_kwarg = 'acc_id'
+
+    def get_object(self):
+        acc_id = self.kwargs.get('acc_id')
+        return get_object_or_404(UserProfile, acc_id=acc_id)
+
+
+# Update an existing Teacher (Update)
+class StaffUpdateView(UpdateView):
+    model = UserProfile
+    template_name = 'core/staff_form.html'  # Reusing the form template for editing
+    form_class = UserProfileForm
+    slug_url_kwarg = 'acc_id'
+    slug_field = 'acc_id'
+    success_url = reverse_lazy('staff-list')  # Redirect to the Teaher list view on success
+
+
+
+
+
+############### Standard Views
+class StandardListView(ListView):
+    model = Standard
+    template_name = 'core/standard_list.html'  # Template to render the list of students
+    context_object_name = 'standards'
+
+    def test_func(self):
+        return self.request.user.is_staff 
+
+    def get_queryset(self):
+        queryset = Standard.objects.annotate(student_count=Count('student')).order_by('id')
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_standard'] = Standard.objects.all().count()
+        return context
+
+
+class StandardDetailView(DetailView):
+    model = Standard
+    template_name = 'core/standard_detail.html'
+    context_object_name = 'standard'
+
+
+# Create a new Standard (Create)
+class StandardCreateView(CreateView):
+    model = Standard
+    template_name = 'core/standard_form.html'  # Template for creating a new Standard
+    form_class = StandardForm
+    success_url = reverse_lazy('standard-list')  # Redirect to the Teaher list view on success
+
+# Update an existing Standard (Update)
+class StandardUpdateView(UpdateView):
+    model = Standard
+    template_name = 'core/standard_form.html'  # Reusing the form template for editing
+    form_class = StandardForm
+    success_url = reverse_lazy('standard-list')  # Redirect to the Standard list view on success
+
+# Delete a Teacher (Delete)
+class StandardDeleteView(DeleteView):
+    model = Standard
+    template_name = 'standard_confirm_delete.html'  # Template to confirm deletion
+    success_url = reverse_lazy('standard-list')  # Redirect to the Standard list view on success
+
+
+
+def custom_403_view(request, exception=None):
+    return render(request, '403.html', status=403)
+
+def accessmanagement(request):
+    return render(request, 'core/access_management.html')
+
+
+class UserListView(ListView):
+    model = UserProfile
+    template_name = 'core/access_user_list.html'
+    context_object_name = 'users'
+
+class UserRegisterView(FormView):
+    template_name = 'core/access_user_register.html'
+    form_class = UserCreationForm
+    
+    def form_valid(self, form):
+        user = form.save() 
+        return HttpResponseRedirect(reverse('access-user-access', kwargs={'user_id': user.id}))
+
+class UserCreateAccessView(UpdateView):
+    model = User
+    form_class = UserCreateAccessForm
+    template_name = 'core/access_user_access.html'
+
+    def get_object(self):
+        user_id = self.kwargs['user_id']
+        try:
+            return User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            raise Http404("User not found")
+
+    def form_valid(self, form):        
+        form.save()
+        return self.render_to_response(self.get_context_data(success=True))
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["username"] = self.get_object().username
+        return context
+    
+
+class UserAccessUpdateView(UpdateView):
+    model = User
+    form_class = UserAccessUpdateForm
+    template_name = 'core/access_user_access_update.html'
+
+    def get_object(self):
+        user_id = self.kwargs['user_id']
+        try:
+            return User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            raise Http404("User not found")
+
+    def form_valid(self, form):        
+        form.save()
+        return self.render_to_response(self.get_context_data(success=True))
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["username"] = self.get_object().username
+        return context
+    
+        
+class UserProfileUpdateView(UpdateView):
+    model = UserProfile
+    form_class = UserProfileForm
+    template_name = 'core/access_user_profile_update.html'
+    success_url = reverse_lazy('access-user-list')  # Redirect after a successful update
+
+    def get_object(self):
+        user_id = self.kwargs['user_id']
+        try:
+            return UserProfile.objects.get(user_id=user_id)
+        except UserProfile.DoesNotExist:
+            raise Http404("User not found")
+        
+
+class UserDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = User
+    template_name = 'core/access_user_confirm_delete.html'
+    success_url = reverse_lazy('access-user-list')  # Redirect after successful deletion
+
+    def get_object(self):
+        user_id = self.kwargs.get("user_id")  # Retrieve 'user_id' from URL
+        return User.objects.get(id=user_id)
+
+    def test_func(self):
+        return self.request.user.is_superuser  # Only SuperAdmin can delete users
+    
+
+### Group Views
+class GroupListView(ListView):
+    model = Group
+    template_name = 'core/access_group_list.html'
+    context_object_name = 'groups'
+    paginate_by = 10
+
+    def get_queryset(self):
+        group = Group.objects.all()
+        if  self.request.GET:
+            group_query = self.request.GET.get('search')
+            if group_query:
+                group = group.filter(name__icontains=group_query)
+        return group
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_group'] = Group.objects.all().count()
+        return context
+
+class GroupCreateView(CreateView):
+    model = Group
+    template_name = 'core/access_group_form.html'
+    fields = ['name', 'permissions']
+    success_url = reverse_lazy('access-group-list')
+
+class GroupUpdateView(UpdateView):
+    model = Group
+    template_name = 'core/access_group_form.html'
+    fields = ['name', 'permissions']
+    success_url = reverse_lazy('access-group-list')
+
+class GroupDeleteView(DeleteView):
+    model = Group
+    template_name = 'core/access_group_confirm_delete.html'
+    success_url = reverse_lazy('access-group-list')  # Redirect after successful deletion
+
+    def get_object(self):
+        group_id = self.kwargs.get("pk")  # Retrieve 'user_id' from URL
+        return Group.objects.get(id=group_id)
+
+    def test_func(self):
+        return self.request.user.is_superuser  # Only SuperAdmin can delete users
+    
+
+#################### App Attendance Views ####################
+
+
+
+class AttendanceDashboadView(ListView):
+    model = Attendance
+    template_name = 'attendance/dashboard.html'
+    context_object_name = 'attendance'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_standard'] = Standard.objects.all().count()
+        context['total_students'] = Student.objects.all().count()
+        context['total_attendance'] = Attendance.objects.all().count()
+        return context
+
+class AttendanceClassList(ListView):
+    model = Standard
+    template_name = 'attendance/classes_list.html'
+    context_object_name = 'standards'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_standard'] = Standard.objects.all().count()
+        return context
+
+class AttendanceList(ListView):
+    model = Attendance
+    template_name = 'attendance/mark_attendance.html'
+    context_object_name = 'attendance'
+    url_kwarg = 'pk'
+
+    def get_queryset(self):
+        attendance = Attendance.objects.filter(standard_id=self.kwargs.get('pk'))
+        if attendance.filter(datetime__date=timezone.datetime.now().date()).exists():
+            if self.request.GET.get('date'):
+                attendance = attendance.get(datetime__date=self.request.GET.get('date'))
+            else:
+                attendance = attendance.get(datetime__date=timezone.datetime.now().date())
+        else:
+            attendance.none()        
+        return attendance
+
+    def get_queryset(self):
+        attendance = Attendance.objects.filter(standard_id=self.kwargs.get('pk'))
+        if self.request.GET.get('date'):
+            if attendance.filter(datetime__date=self.request.GET.get('date')).exists():
+                attendance = attendance.get(datetime__date=self.request.GET.get('date'))
+            else:
+                pass
+        else:
+            if attendance.filter(datetime__date=timezone.datetime.now().date()).exists():
+               attendance =  attendance.get(datetime__date=timezone.datetime.now().date())
+            else:
+                attendance = attendance.none()
+        return attendance
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        standard = Standard.objects.get(id=self.kwargs.get('pk'))
+        today = timezone.datetime.now().date()
+        context['today']= today
+        context['today_attendance']=  Attendance.objects.filter(standard_id=self.kwargs.get('pk'),datetime__date=today)
+        context['standard'] = standard
+        context['total_students'] = standard.student_set.all().count()
+        return context
+
+
+class AttendanceDeleteView(DeleteView):
+    model = Attendance    
+
+    def post(self, request, *args, **kwargs):
+        clsi_value = self.kwargs.get('clsi')
+        print(clsi_value)
+        self.object = self.get_object()  # Get the object to delete
+        self.object.delete()  # Delete the object
+        return redirect('mark-attendance', pk=self.kwargs.get('clsi'))
+
+def update_present_counts(attendance):
+        present_boys = attendance.attendance.filter(status=True, student__gender='male').count()
+        present_girls = attendance.attendance.filter(status=True, student__gender='female').count()
+        attendance.present_boy = present_boys
+        attendance.present_girl = present_girls
+        attendance.save()
+
+class StudentAttendanceListView(ListView):
+    model = Student
+    template_name = 'attendance/attendance_record.html'
+    context_object_name = 'students'
+    url_kwarg = 'pk'
+    
+    def get_queryset(self):
+        standard = get_object_or_404(Standard, id=self.kwargs.get('pk'))
+        return Student.objects.filter(standard=standard)
+
+    def post(self, request, *args, **kwargs):
+        attendance_record = []
+        today = timezone.datetime.now().date()
+        teacher = Standard.objects.get(id=self.kwargs.get('pk')).class_teacher
+        if not Attendance.objects.filter(standard_id=self.kwargs.get('pk'), datetime__date=today).exists():
+            attendance = Attendance.objects.create(standard_id=self.kwargs.get('pk'),teacher=teacher, datetime=today)
+        else:
+            attendance = Attendance.objects.get(standard_id=self.kwargs.get('pk'), datetime__date=today)
+        
+        mark_attendance = MarkAttendance.objects.filter(attendance=attendance)
+        for student in self.get_queryset():
+            status = f'{student.id}' in request.POST
+            if mark_attendance.filter(student=student).exists():
+                mark_attendance.filter(student=student).update(status=status)
+            else:
+                attendance_record.append(MarkAttendance(attendance=attendance, student=student, status=status))
+        MarkAttendance.objects.bulk_create(attendance_record, ignore_conflicts=True)
+        update_present_counts(attendance)
+        return redirect('mark-attendance', pk=self.kwargs.get('pk'))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_students'] = Student.objects.all().count()
+        context['standard'] = Standard.objects.get(id=self.kwargs.get('pk'))
+        context['date']= timezone.now()
+        return context
+    
+
+
+#################### App Fees Views ####################
+class FeesDashboardView(ListView):
+    model = Invoice
+    template_name = 'fees/dashboard.html'
+    context_object_name = 'invoinces'
+    ordering = ['-date']
+
+
+class FeesCollectionListView(ListView):
+    model = FeesCollection
+    template_name = 'fees/fees_collection_list.html'  # Template to render the list of students
+    context_object_name = 'feescollection'  
+    
+    # def get_queryset(self):
+    #     students = Student.objects.all()
+    #     if  self.request.GET:
+    #         select_class = self.request.GET.get('class')
+    #         if select_class and select_class != 'no-class':
+    #             students = students.filter(standard__id__icontains=select_class)
+    #     return students.order_by('id')
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_fees_collection'] = FeesCollection.objects.count()
+        return context
+    
+
+class FeesCollectionDetailView(DetailView):
+    model = FeesCollection
+    template_name = 'fees/fees_collection_detail.html'
+    context_object_name = 'feescollection'
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_invoince'] = Invoice.objects.filter(fees_collection=self.object).count()
+        return context
+
+def get_invoice_details(request, pk):
+        invoice = get_object_or_404(Invoice, pk=pk)
+        print('this is sec')
+        data = {
+            'registration_no' : invoice.fees_collection.student.student_id,
+            # 'roll_no': None,
+            'name': invoice.fees_collection.student.get_full_name(),
+            'class': invoice.fees_collection.student.standard.name or None,
+            'total_fee': invoice.fees_collection.total_fees,
+            'amount_paid': invoice.amount_paid,
+            'total_paid_fee': invoice.fees_collection.paid_fees,
+            'remaining_fees': invoice.fees_collection.remaining_fees,
+            # 'fee_in_word': None,
+            'receipt_date': invoice.date,
+            'invoice_no' : invoice.invoice_no,
+            'remark': invoice.remarks,
+        }
+        return JsonResponse(data)
+
+
+class InvoiceCreateView(CreateView):
+    model = Invoice
+    form_class = InvoiceForm
+    template_name = 'fees/invoince_create.html'
+    pk_url_kwarg = 'pk'
+
+    def get_success_url(self):
+        return reverse('fees-detail', kwargs={'pk': self.kwargs.get('pk')})
+    
+    def form_valid(self, form):
+        form.instance.fees_collection = FeesCollection.objects.get(id=self.kwargs.get('pk'))
+        form.save()
+        response_data = {
+            'message': 'Invoince Created Successfully',
+            'status': 'success',
+        }
+        return JsonResponse(response_data)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['fees_collection'] = FeesCollection.objects.get(id=self.kwargs.get('pk'))
+        context['date'] = timezone.datetime.now()
+        return context
+    

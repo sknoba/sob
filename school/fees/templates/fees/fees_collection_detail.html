@@ -1,0 +1,267 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %} 
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+{% endblock head %}
+
+{% block main %}
+
+<div class="container">
+
+
+<div class="container">
+  
+    <div class="row my-3">
+        <div class="shadow bg-white rounded-4">
+          <div class="m-3 mt-3">
+            <h5 class="fw-bold fs-4 text-center">Fees Collection of - {{feescollection.enrollment.student.get_full_name}}</h5>
+            <hr>
+              <div class="row text-center">
+                  <div class="col-2">
+                    <p class="m-0"><strong class="fs-5">Name</strong> <br>
+                      {{feescollection.enrollment.student.get_full_name}}
+                    </p>
+                  </div>
+                  <div class="col-2">
+                    <p class="m-0"><strong class="fs-5">Academic Year</strong> <br>
+                      {{feescollection.enrollment.academic_year}}
+                    </p>
+                  </div>
+                  <div class="col-2">
+                    <p class="m-0"><strong class="fs-5">Total Fees</strong> <br>
+                      {{feescollection.total_fees|intcomma}}
+                    </p>
+                  </div>
+                  <div class="col-2">
+                    <p class="m-0"><strong class="fs-5">Paid</strong> <br>
+                      <span class="text-success">{{feescollection.paid_fees|intcomma}}</span>
+                    </p>
+                  </div>
+                  <div class="col-2">
+                    <p class="m-0"><strong class="fs-5">Remaining Fees</strong> <br>
+                      <span class="text-{% if feescollection.remaining_fees == 0 %}success{% else %}danger{% endif %}">{{feescollection.remaining_fees|intcomma}}</span>
+                    </p>
+                  </div>
+                  <div class="col-2">
+                    <p class="m-0"><strong class="fs-5">Statuss</strong> <br>
+                      <span class="badge fs-6 py-1 text-bg-{% if feescollection.payment_status == 'paid' %}success{% elif feescollection.payment_status == 'partially_paid'%}warning{% else %}danger{% endif %}">{{feescollection.get_payment_status_display}}</span>
+                    </p>
+                  </div>
+              </div>
+
+          </div>
+        </div>
+    
+    </div>
+    
+    <div class="row">
+      <div class="shadow rounded-4 bg-white py-2">
+
+        {% if feescollection.remaining_fees != 0 %}
+        <div class="my-2 m-3 mb-3 ">
+          <div class="row">
+            <div class="col-4">
+
+            </div>
+            <div class="col-4 text-center">
+              <h4 class="fw-bold">Invoice Details</h4>
+            </div>
+            <div class="col-4 text-end">
+              <button class="btn btn-primary" onclick="openInvoice()">
+                Create Invoice
+              </button>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+    
+        <div>
+              
+            <div class="card mb-4">
+              <div class="card-header py-3 mt-2">
+                  <h6 class="m-0 font-weight-bold text-primary">Invoinces ({{total_invoince}})</h6>
+              </div>
+              <div class="card-body">
+                  <div class="table-responsive" style="max-height: 170px; height: 170px; overflow-y: auto;">
+                    <table id="myTable" class="table" style="width:100%">
+                      <thead>
+                          <tr class="text-center">
+                              <th>#</th>
+                              <th>Invoince No</th>
+                              <th>Date</th>
+                              <th>Payment Method</th>
+                              <th class="text-center" >Amount Paid</th>
+                              <th>Remark</th>
+                              <th>Download</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        {% for invoince in feescollection.invoices.all %}
+                          <tr class="text-center">
+                            <td class="text-center">{{forloop.counter}}</td>
+                              <td>{{invoince.invoice_no}}</td>
+                              {% comment %} <td><span class="badge text-bg-primary">{{student.standard}}</span></td> {% endcomment %}
+                              <td>{{invoince.date}}</td>
+                              <td>{{invoince.payment_method|capfirst}}</td>
+                              <td class="text-center">{{invoince.amount_paid|intcomma}}</td>
+                              <td ><p data-bs-toggle="tooltip" data-bs-placement="top" title="{{invoince.remarks}}">{{invoince.remarks|default:"No Remark"|truncatechars:50}}</p></td>
+                              <td>
+                                  <button type="button" class="btn btn-primary view-invoice-btn" data-bs-toggle="modal" data-bs-target="#invoiceModal" data-url="{% url 'get_invoice_details' invoince.id %}" >
+                                      View
+                                  </button>                       
+                              </td>                                        
+                          </tr>
+                        {% empty %}
+                              <tr class="text-center">
+                                  <td colspan="7">No record found</td>
+                              </tr>
+                        {% endfor %}
+                      </tbody>
+                  
+                  </table>
+                  </div>
+              </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+</div>
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="invoiceModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="invoiceModalLabel">Invoince</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <h5 class="text-center">SCHOOL OF BRILLIANT & HIGHER SECONDARY COLLEGE, RALEGAON</h5>
+            <hr>
+            <p><strong>Registration No:</strong> <span id="modalRegistrationNo"></span></p>
+            <p><strong>Roll No:</strong> <span id="modalRollNo"></span></p>
+            <p><strong>Name:</strong> <span id="modalName"></span></p>
+            <p><strong>Class:</strong> <span id="modalClass"></span></p>
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Fee Details</th>
+                  <th>Amount (₹)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Total Fee</td>
+                  <td><span id="modalTotalFee"></span></td>
+                </tr>
+                <tr>
+                  <td>Total Paid Fees (Before This Invoice)</td>
+                  <td><span id="modelTotalPaidFee"></span></td>
+                </tr>
+                <tr>
+                  <td>Paid Fee</td>
+                  <td><span id="modalAmountPaid"></span></td>
+                </tr>
+                <tr>
+                  <td>Remaining Fees</td>
+                  <td><span id="modalRemainingFees"></span></td>
+                </tr>
+              </tbody>
+            </table>
+            <p><strong>Receipt Date:</strong> <span id="modalReceiptDate"></span></p>
+            <p><strong>Invince No :</strong> <span id="modalInvoinceNo"></span></p>
+            <p><strong>Remark: </strong><span id="modalRemark"></span></p>
+          </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <a href="#" data-url="{% url 'invoince-pdf' 21 %}" target="_blank">
+            <button type="button" class="btn btn-primary">Download</button>
+          </a>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script>
+    function openInvoice() {
+        // URL to open in a new tab
+        const url = "{% url 'invoice-create' pk=feescollection.id %}";
+        
+        // Open the invoice in a new window
+        const newWindow = window.open(url, '_blank', 'width=800,height=800,toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes'); 
+        // Check if the window is closed, and reload the parent page
+        const checkWindowClosed = setInterval(function() {
+            if (newWindow.closed) {
+                // Reload the parent window once the new window is closed
+                location.reload();
+                clearInterval(checkWindowClosed);  // Stop checking once the window is closed
+            }
+        }, 500); // Check every 500ms
+    }
+</script>
+
+<script>
+    // Initialize tooltips for elements with data-bs-toggle="tooltip"
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+      const modalRegistrationNo = document.getElementById('modalRegistrationNo');
+      // const modalRollNo = document.getElementById('modalRollNo');
+      const modalName = document.getElementById('modalName');
+      // const modalClass = document.getElementById('modalClass');
+      const modalTotalFee = document.getElementById('modalTotalFee');
+      const modelTotalPaidFee = document.getElementById('modelTotalPaidFee');
+      const modalAmountPaid = document.getElementById('modalAmountPaid');
+      const TotalPaidFee = document.getElementById('TotalPaidFee');
+      const modalRemainingFees = document.getElementById('modalRemainingFees');
+      // const modalFeeInWord = document.getElementById('modalFeeInWord');
+      const modalReceiptDate = document.getElementById('modalReceiptDate');
+      const modalInvoinceNo = document.getElementById('modalInvoinceNo');
+      const modalRemark = document.getElementById('modalRemark');     
+      
+
+      document.querySelectorAll('.view-invoice-btn').forEach(button => {
+          button.addEventListener('click', function () {
+            const url = button.getAttribute('data-url');
+  
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.json();
+                })
+                .then(data => {
+                      modalRegistrationNo.textContent = data.registration_no;
+                      // modalRollNo.textContent = data.roll_no;
+                      modalName.textContent = data.name;
+                      // modalClass.textContent = data.class;
+                      modalTotalFee.textContent = data.total_fee;
+                      modalAmountPaid.textContent = data.amount_paid;
+                      modelTotalPaidFee.textContent = data.total_paid_fee;
+                      modalRemainingFees.textContent = data.remaining_fees;
+                      // modalFeeInWord.textContent = data.fee_in_word;
+                      modalReceiptDate.textContent = data.receipt_date;
+                      modalInvoinceNo.textContent = data.invoice_no;
+                      modalRemark.textContent = data.remark;
+                    
+                  })
+                  .catch(error => console.error('Error fetching data:', error));
+          });
+      });
+  });
+  </script>
+
+
+{% endblock main %}
+

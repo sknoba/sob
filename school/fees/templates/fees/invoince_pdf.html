@@ -1,0 +1,251 @@
+{% load custom_filters %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Fee Receipt</title>
+    <style>
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+            }
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+            }
+        }
+
+        .container {
+            width: 100%;
+            height: 100vh;
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 0;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .receipt {
+            border: 1px solid #000;
+            padding: 10px;
+            margin: 20px;
+            margin-bottom: 10px;
+            border-radius: 15px;
+            flex: 1;
+        }
+
+        h2 {
+            text-align: center;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            font-size: 1.2em;
+        }
+
+        .copy-label {
+            text-align: right;
+            font-weight: bold;
+            margin-bottom: 10px;
+            margin-top: 10px;
+            font-size: 1.1em;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+
+        th, td {
+            border: 1px solid #000;
+            padding: 5px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .total {
+            font-weight: bold;
+        }
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .signature {
+            text-align: right;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+
+    <!-- School Copy -->
+    <div class="receipt">
+        <h2>SCHOOL OF BRILIENT & HIGHER SECONDARY COLLEGE, RALEGAON</h2>
+        <div class="copy-label">School Copy</div>
+        <hr>
+        <div class="header">
+            <div>
+                <p><strong>Registration No:</strong> {{invoince.fees_collection.student.student_id}}</p>
+                <p><strong>Roll No:</strong> 411</p>
+                <p><strong>Class:</strong> {{invoince.fees_collection.student.standard}} <sup>th</sup> Std.</p>
+            </div>
+            <div>
+                <p><strong>Name:</strong> {{invoince.fees_collection.student.get_full_name}}</p>
+                <p><strong>Section:</strong> Senior</p>
+                <p><strong>Division:</strong> {% if invoince.fees_collection.student.standard.section %}{{invoince.fees_collection.student.standard.section}}{% else %}-{% endif %}</p>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Fee Details</th>
+                    <th>Amount (₹)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Total Fee</td>
+                    <td>{{invoince.fees_collection.total_fees|intcomma}}</td>
+                </tr>
+                <tr>
+                    <td>Total Paid Fees (Before This* Invoince)</td>
+                    <td>{{total_amount_before.amount_paid__sum|intcomma}}</td>
+                </tr>
+
+
+
+
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+                <tr>
+                    
+                    <td><b>Fee In Word</b></td>
+                    <td>{{invoince.amount_paid|number_to_words|capfirst}} Only*</td>
+                    <td><b>Paid Fee</b></td>
+                    <td>{{invoince.amount_paid|intcomma}}*</td>
+                </tr>
+            </tbody>
+        </table>
+        <table>
+            <tr>
+                <td><b>Remaning Fees(Including All Academic Years):</b> {{remaning_amount|intcomma}}</td>
+                
+            </tr>
+            </tbody>
+        </table>
+
+
+
+        <div class="footer">
+            <p><strong>Receipt No:</strong> {{invoince.invoice_no}}</p>
+            <p><strong>Receipt Date:</strong> {{invoince.date}}</p>
+            <p><strong>Bank Details:</strong> 390</p>
+        </div>
+        Remark
+        <div class="signature">
+            <em>For Principal</em><br>
+            <strong>School Of Brillient</strong>
+        </div>
+    </div>
+
+
+    <hr>
+    <!-- Student Copy -->
+    <div class="receipt">
+        <h2>SCHOOL OF BRILIENT & HIGHER SECONDARY COLLEGE, RALEGAON</h2>
+        <div class="copy-label">Student Copy</div>
+        <hr>
+        <div class="header">
+            <div>
+                <p><strong>Registration No:</strong> {{invoince.fees_collection.student.student_id}}</p>
+                <p><strong>Roll No:</strong> 411</p>
+                <p><strong>Class:</strong> {{invoince.fees_collection.student.standard}} <sup>th</sup> Std.</p>
+            </div>
+            <div>
+                <p><strong>Name:</strong> {{invoince.fees_collection.student.get_full_name}}</p>
+                <p><strong>Section:</strong> Senior</p>
+                <p><strong>Division:</strong> {% if invoince.fees_collection.student.standard.section %}{{invoince.fees_collection.student.standard.section}}{% else %}-{% endif %}</p>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Fee Details</th>
+                    <th>Amount (₹)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Total Fee</td>
+                    <td>{{invoince.fees_collection.total_fees|intcomma}}</td>
+                </tr>
+                <tr>
+                    <td>Total Paid Fees (Before This* Invoince)</td>
+                    <td>{{total_amount_before.amount_paid__sum|intcomma}}</td>
+                </tr>
+
+
+
+
+            </tbody>
+        </table>
+
+        <table>
+            <tbody>
+                <tr>
+                    
+                    <td><b>Fee In Word</b></td>
+                    <td>{{invoince.amount_paid|number_to_words|capfirst}} Only*</td>
+                    <td><b>Paid Fee</b></td>
+                    <td>{{invoince.amount_paid|intcomma}}*</td>
+                </tr>
+            </tbody>
+        </table>
+        <table>
+            <tr>
+                <td><b>Remaning Fees(Including All Academic Years):</b> {{remaning_amount|intcomma}}</td>
+                
+            </tr>
+            </tbody>
+        </table>
+
+
+
+        <div class="footer">
+            <p><strong>Receipt No:</strong> {{invoince.invoice_no}}</p>
+            <p><strong>Receipt Date:</strong> {{invoince.date}}</p>
+            <p><strong>Bank Details:</strong> 390</p>
+        </div>
+        Remark
+        <div class="signature">
+            <em>For Principal</em><br>
+            <strong>School Of Brillient</strong>
+        </div>
+    </div>
+
+
+
+</body>
+</html>

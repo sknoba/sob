@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
+{% endblock head %}
+
+{% block main %}
+
+
+
+<!-- Page Heading -->
+<!-- <div class="d-sm-flex align-items-center justify-content-between mb-4">
+  <h1 class="h3 mb-0 text-gray-800">Students </h1> -->
+<!-- </div> -->
+
+
+<div class="container">
+
+        
+          <!-- Heading on the left -->
+    <h2 class="fw-bold text-start" style="color:#1E3A8A;">Delete Student</h2>
+    <hr>
+          
+
+        
+    {% comment %} <h1>Are you sure you want to delete {{ student.first_name }} {{ student.last_name }}?</h1>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Yes, delete</button>
+        <a href="{% url 'student-list' %}">Cancel</a>
+    </form> {% endcomment %}
+
+
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 20vh;">
+        <div class="card shadow-lg" style="max-width: 500px; width: 100%;">
+          <div class="card-header text-center">
+            <h3 class="m-0">Confirm Deletion</h3>
+          </div>
+          <div class="card-body">
+            <!-- Warning Alert -->
+            <div class="alert alert-warning">
+              <strong>Warning!</strong> This action cannot be undone.
+            </div>
+    
+            <!-- Confirmation Text -->
+            <div class="text-center mb-4">
+              <p><strong>Are you sure you want to delete the student <span class="text-danger">{{ student.first_name }} {{ student.last_name }}</span>?</strong></p>
+            </div>
+    
+            <!-- Form for confirmation -->
+            <form method="post">
+              {% csrf_token %}
+              
+              <!-- Yes, Delete button -->
+              <button type="submit" class="btn btn-danger btn-block mb-2">
+                Yes, Delete
+              </button>
+              
+              <!-- Cancel button -->
+              <a href="{% url 'student-archive-list' %}" class="btn btn-secondary btn-block">
+                Cancel
+              </a>
+            </form>
+          </div>
+        </div>
+      </div>
+
+
+      
+
+
+
+</div>
+
+
+
+
+{% endblock main %}
+
+

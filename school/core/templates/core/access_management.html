@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+
+{% endblock head %}
+
+{% block main %}
+
+
+
+<div class="container">
+ 
+  <h2 class="fw-bold text-center text-lg-start" style="color:#1E3A8A;">Account Management</h2>
+  <hr>
+
+    <a href="{% url "access-user-list" %}">
+        <button>User's</button>
+    </a>
+
+    
+    <a href="{% url "access-group-list" %}">
+      <button>Group's</button>
+    </a>
+</div>
+
+
+
+
+{% endblock main %}
+

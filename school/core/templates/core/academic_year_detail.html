@@ -1,0 +1,11 @@
+
+
+<div class="container mt-4">
+    <h2>Academic Year: {{ academic_year.name }}</h2>
+    <p><strong>Start Date:</strong> {{ academic_year.start_date }}</p>
+    <p><strong>End Date:</strong> {{ academic_year.end_date }}</p>
+    <p><strong>Status:</strong> {{ academic_year.is_active|yesno:"Active,Inactive" }}</p>
+    <a href="{% url 'academic-year-edit' academic_year.pk %}" class="btn btn-secondary">Edit</a>
+    <a href="{% url 'academic-year-delete' academic_year.pk %}" class="btn btn-danger">Delete</a>
+</div>
+

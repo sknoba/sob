@@ -19,8 +19,12 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+handler403 = 'core.views.custom_403_view'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
+    path('enrollment/', include('enrollment.urls')),
     path('attendance/', include('attendance.urls')),
+    path('fees/', include('fees.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

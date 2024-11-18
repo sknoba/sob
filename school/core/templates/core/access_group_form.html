@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+
+{% endblock head %}
+
+{% block main %}
+
+
+
+<div class="container">
+ 
+  <h2 class="fw-bold text-center text-lg-start" style="color:#1E3A8A;">Group List</h2>
+  <hr>
+
+  <div class="row">
+    <div class="col-lg-6">
+      <form method="post" action="{% url 'access-group-create' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </div>  
+
+</div>
+{% endblock main %}

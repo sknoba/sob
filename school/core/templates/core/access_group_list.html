@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+
+{% endblock head %}
+
+{% block main %}
+
+
+
+<div class="container">
+ 
+  <h2 class="fw-bold text-center text-lg-start" style="color:#1E3A8A;">Group List</h2>
+  <hr>
+
+ <a href="{% url "access-group-create" %}">Create Group</a>
+
+
+ <br><br>
+ 
+
+  {% for group in groups %}
+  
+  <a href="{% url "access-group-update" group.id %}">{{ group.name }}</a> --  <a href="{% url "access-group-delete" group.id %}">Delete </a>
+  
+  <br>
+  
+  {%for permission in group.permissions.all %}
+    {{ permission }} <br>
+  {% endfor %} 
+
+
+  <br><br>
+
+  {% endfor %}
+
+</div>
+{% endblock main %}

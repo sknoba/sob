@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+{% endblock head %}
+
+{% block main %}
+
+<div class="container">
+  <h2 class="fw-bold text-center text-lg-start" style="color:#1E3A8A;">User List</h2>
+  <hr>
+
+    <div class="col-4 text-end">
+    <button class="btn btn-primary" onclick="openReigsterUser()">
+      Register New User
+    </button>
+  </div>
+
+<br>
+<br>
+<br>
+<br>
+
+
+    {% for user in users %}
+        {{user}} <a href="{% url "access-user-access-update" user.id %}">Update User Access</a> --
+        <a href="{% url "access-user-update" user.id %}">Update User Profile</a> --
+        <a href="{% url "access-user-delete" user.id %}">Delete User</a>
+        <br>
+    {% endfor %}
+    
+</div>
+
+<script>
+
+
+let newWindow = null;
+
+function openReigsterUser() {
+    const url = "{% url 'access-user-register' %}";       
+
+    if (newWindow && !newWindow.closed) {
+        // If window is already open, focus it
+        newWindow.focus();
+    } else {
+        // Otherwise, open a new window
+        newWindow = window.open(url, '_blank', 'width=800,height=800,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no');
+    }
+
+    // Optionally, check if the window is closed and reload the parent page
+    const checkWindowClosed = setInterval(function() {
+        if (newWindow && newWindow.closed) {
+            clearInterval(checkWindowClosed);
+            location.reload(); // Reload the parent page when the window is closed
+        }
+    }, 500);
+}
+
+function focusNewWindow() {
+    // Re-focus the new window every 500ms (if it's not closed)
+    if (newWindow && !newWindow.closed) {
+        newWindow.focus();
+    }}
+</script>
+
+
+
+
+{% endblock main %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block head %}
+
+{% endblock head %}
+
+{% block main %}
+{% load static %}
+
+    <div class="container">                
+        
+            
+            <h2 class="fw-bold text-center text-lg-start " style="color:#1E3A8A;">Teacher Update</h2>
+        
+            <hr class=""> 
+
+
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                
+
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+        
+            <a href="{% url 'teacher-list' %}" class="btn btn-secondary">Back to TEacher List</a>
+{% endblock main %}

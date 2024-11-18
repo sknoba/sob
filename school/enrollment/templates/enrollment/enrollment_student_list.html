@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
+{% endblock head %}
+
+{% block main %}
+
+
+
+<!-- Page Heading -->
+<!-- <div class="d-sm-flex align-items-center justify-content-between mb-4">
+  <h1 class="h3 mb-0 text-gray-800">Students </h1> -->
+<!-- </div> -->
+
+
+<div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <!-- Heading on the left -->
+          <h2 class="fw-bold text-start" style="color:#1E3A8A;">Student Available For Enrollment</h2>
+        </div>
+        
+
+      <hr>
+
+
+      <!-- <div class="row"> -->
+      <div class="row mt-5">
+
+        <div class="card shadow mb-4">
+          <div class="card-header py-3 mt-2">
+            
+            <div class="d-flex justify-content-between align-items-center">
+              <h6 class="m-0 font-weight-bold text-primary">Student's ({{students.all.count}})</h6>
+            
+            </div>
+
+          </div>
+          <div class="card-body">
+              <div class="table-responsive">
+
+                <table id="myTable" class="table" style="width:100%">
+                  <thead>
+                      <tr class="text-center">
+                          <th class="text-center">#</th>
+                          <th class="text-center">Student</th>
+                          <th>Name</th>
+                          <th class="text-center">Class</th>
+                          <th class="text-center">Gender</th>
+                          <th class="text-center">Entrollment Date</th>
+                          <th class="text-center">Action</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+              
+                    {% for student in students %}
+                      <tr>
+                        <td class="text-center">{{forloop.counter}}</td>
+                          <td>
+                              {% if student.photo %}
+                              <img src="{{student.photo.url}}" alt="" class="avatar-sm rounded-circle me-2" style="width: 50px; height: 50px;"/>
+                              {% else %}
+                              <img src="{% static "core/img/profile.png" %}" alt="" class="avatar-sm rounded-circle me-2" style="width: 50px; height: 50px;"/>
+                              {% endif %}
+                              <a href="{% url "student-detail" student.id %}" class="text-body">{{student.student_id}}</a>
+                          </td>
+                          <td>{{student.first_name}} {{student.last_name}}</td>
+                          <td class="text-center"><span class="badge text-bg-primary">{{student.standard}}</span></td>
+                          <td>{{student.gender|capfirst }}</td>
+                          <td>{{student.enrollment_date}}</td>
+                          <td>
+                            <a href="{% url "enroll" student.id %}">
+                              <button class="btn btn-outline-primary px-3 py-2 rounded-3 font-size-16" type="button"> Enroll</button>  
+                            </a>
+                          </td>
+                        
+                        
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+              
+              </table>
+              </div>
+          </div>
+        </div>
+        
+      </div>
+
+</div>
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
+
+<script>
+  new DataTable('#myTable', {  
+});
+</script>
+
+{% endblock main %}
+
+
+

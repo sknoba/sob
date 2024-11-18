@@ -1,0 +1,492 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %} 
+
+{% block head %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
+{% endblock head %}
+
+{% block main %}
+
+
+<div class="container">
+    <h2 class="fw-bold text-center text-lg-start" style="color:#1E3A8A;">Fees Dashboard</h2>
+    <hr class="">
+    <div class="container">      
+
+
+        <!-- First Row -->
+        <div class="row pt-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="card mb-3 shadow-lg" style="min-height: 180px; border-radius: 1rem;">
+                    <div class="card-body">
+                        <!-- Icon and Title -->
+                        <div class="align-items-center text-center">
+                            <i class="fas fa-users text-primary mb-4 mt-3" style="font-size: 2rem;"></i>
+                            <h5 class="card-title text-dark">Total Students</h5>
+                            <h3 class="card-text text-primary">100%</h3> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="card mb-3 shadow-lg" style="min-height: 180px; border-radius: 1rem;">
+                    <div class="card-body">
+                        <!-- Icon and Title -->
+                        <div class="align-items-center text-center">
+                            <i class="fas fa-check-circle text-success mb-4 mt-3" style="font-size: 2rem;"></i>
+                            <h5 class="card-title text-dark">Paid Fees</h5>
+                            <h3 class="card-text text-success">80%</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="card mb-3 shadow-lg" style="min-height: 180px; border-radius: 1rem;">
+                    <div class="card-body">
+                        <!-- Icon and Title -->
+                        <div class="align-items-center text-center">
+                            <i class="fas fa-adjust text-warning mb-4 mt-3" style="font-size: 2rem;"></i>
+                            <h5 class="card-title text-dark">Partial paid</h5>
+                            <h3 class="card-text text-warning">20</h3> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="card mb-3 shadow-lg" style="min-height: 180px; border-radius: 1rem;">
+                    <div class="card-body">
+                        <!-- Icon and Title -->
+                        <div class="align-items-center text-center">
+                            <i class="fas fa-times-circle text-danger mb-4 mt-3" style="font-size: 2rem;"></i>
+
+                            <h5 class="card-title text-dark">Unpaid</h5>
+                            <h3 class="card-text text-danger">13</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Second Row -->
+        <div class="row">
+            <!-- Overall Fees Report Card -->
+            <div class="col-lg-6 my-2">
+                <div class="card shadow-lg border-0" style="border-radius:10px;">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Overall Fees Report</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row border rounded-4 mx-2">
+                            <div class="col-12">
+                                <div class="table-responsive" style="height: 140px; overflow-y: auto;">
+                                <table class="table">
+ 
+                                    <tbody>
+                                    <tr style="background-color: #bdecb6; color: #181818;">
+                                        <th scope="row">Total Fees</th>
+                                        <td>Rs. 1,030,093</td>
+
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" class="border-secondary">Total Fees Paid</th>
+                                        <td class="border-secondary">Rs. 190,635</td>
+                                    </tr>
+                                    <tr class="border-secondary">
+                                        <th class="border-secondary">Total Fees Balance</th>
+                                        <td class="border-secondary">Rs. 839,458</td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Overall Students Report Card -->
+            <div class="col-lg-6 my-2">
+                <div class="card shadow-lg border-0" style="border-radius:10px;">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Overall Students Report</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row border rounded-4 mx-2">
+                            <div class="col-12">
+                                <div class="table-responsive" style="height: 140px; overflow-y: auto;">
+                                <table class="table">
+                                    <tbody class="mb-0">
+                                        <tr style="background-color: #bdecb6; color: #181818;">
+                                            <th scope="row">No. of Students Paid Fees</th>
+                                            <td>
+                                                <span class="text-dark">(22)</span>
+                                                <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal" class="text-decoration-none ">
+                                                    <i class="bi bi-eye text-primary"></i>
+                                                </a>
+                                            </td>
+
+                                        </tr>
+                                        <tr style="background-color: #bdecb6; color: #181818;">
+                                            <th scope="row">No. of Students Paid Nothing</th>
+                                            <td> 
+                                                <span>(53)</span>
+                                                <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal" class="text-decoration-none">
+                                                    <i class="bi bi-eye text-primary"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <tr style="background-color: #bdecb6; color: #181818;">
+                                            <th scope="row">Total Registered Students</th>
+                                            <td>
+                                                <span>(75)</span>
+                                                <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal" class="text-decoration-none">
+                                                    <i class="bi bi-eye text-primary"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+                            
+        <!-- third row -->
+        <div class="row">
+            <div class="col-md-12 my-2">
+                <div class="card rounded-4 shadow p-5">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="m-0 text-dark">Monthly Fees</h5>
+                        <div>
+                            <select id="monthSelect" class="form-select d-inline-block me-2" style="width: auto;">
+                                <option value="Apr">Apr</option>
+                                <option value="May">May</option>
+                                <option value="Jun">Jun</option>
+                            </select>
+                            <select id="yearSelect" class="form-select d-inline-block" style="width: auto;">
+                                <option value="2023-2024">2023 - 2024</option>
+                                <option value="2022-2023">2022 - 2023</option>
+                            </select>
+                        </div>
+                    </div>
+                    <p class="text-dark">Total Amount: <strong>176500</strong></p>
+                    <div class="chart-container" style="position: relative; height: 300px; width: 100%;">
+                        <canvas id="feesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div> 
+
+        <!-- Fourth Row -->
+        <div class="row">
+                                
+            <div class="col my-2">
+                <div class="table-responsive shadow" >
+
+                    <div class="card border-0 rounded-4 shadow">
+
+                        <div class="card-body">
+                        <h4 style="color:#1E3A8A;" class="text-center"><i class="fa-solid fa-indian-rupee-sign"></i> Invoinces</h4>
+                        <hr class="" style="color:#1E3A8A;">
+                        
+                            <div class="row border rounded-4 mx-2">
+                            <div class="col-12">
+                                <div class="table-responsive my-3">
+                                    <table id="invoinceTable" class="table" style="width:100%">
+                                      <thead>
+                                          <tr class="text-center">
+                                            <th class="text-center">#</th>
+                                            <th class="text-center">Invoince No</th>
+                                            <th class="text-center">Date</th>
+                                            <th class="text-center">Student</th>
+                                            <th class="text-center" >Amount Paid</th>
+                                            <th class="text-center">Payment Method</th>
+                                            <th class="text-center">Remark</th>
+                                            <th>Download</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                        
+                                  
+                                        {% for invoince in invoinces %}
+                                          <tr >
+                                                <td class="text-center">{{forloop.counter}}</td>
+                                                <td class="text-center">{{invoince.invoice_no}}</td>
+                                                <td>{{invoince.date}}</td>
+                                                <td>
+                                                    {% if invoince.fees_collection.student.photo %}
+                                                    <img src="{{invoince.fees_collection.student.photo.url}}" alt="" class="avatar-sm rounded-circle me-2" style="width: 30px; height: 30px;"/>
+                                                    {% else %}
+                                                    <img src="{% static "core/img/profile.png" %}" alt="" class="avatar-sm rounded-circle me-2" style="width: 30px; height: 30px;"/>
+                                                    {% endif %}
+                                                    <a href="{% url "student-detail" invoince.fees_collection.student.id %}" class="text-body">{{invoince.fees_collection.student.student_id}}</a>
+                                                </td>
+                                                <td class="text-center">{{invoince.amount_paid|intcomma}}</td>
+                                                <td class="text-center">{{invoince.payment_method|capfirst}}</td>
+                                                <td ><p data-bs-toggle="tooltip" data-bs-placement="top" title="{{invoince.remarks}}">{{invoince.remarks|default:"No Remark"|truncatechars:50}}</p></td>
+                                                {% comment %}<td>
+                                                     <button type="button" class="btn btn-primary view-invoice-btn" data-bs-toggle="modal" data-bs-target="#invoiceModal" data-url="{% url 'get_invoice_details' invoince.id %}" > 
+                                                        View
+                                                     </button>                      
+                                                </td>              
+                                                  {% endcomment %}
+                                                  <td>
+                                                    
+
+                                                  </td>                  
+                                              
+                                          </tr>
+                                        {% endfor %}
+                                      </tbody>
+                                  
+                                    </table>
+                                  </div>
+        
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>         
+
+
+        
+
+
+ {% comment %} <div class="card mb-4 border-0 rounded-4 shadow">
+
+    <div class="card-body text-center">
+        <h4 style="color:#1E3A8A;"><i class="fa-solid fa-indian-rupee-sign"></i> Invoinces Final</h4>
+        <hr class="" style="color:#1E3A8A;">
+        <div class="row border rounded-4 mx-2">
+            <div class="table-responsive">
+            <table id="" class="table" style="width:100%">
+                <thead>
+                    <tr class="text-center">
+                        <th>#</th>
+                        <th>Student</th>
+                        <th>Name</th>
+                        <th>Class</th>
+                        <th>Gender</th>
+                        <th>Entrollment Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+            
+                {% for student in invoinces %}
+                    <tr>
+                    <td class="text-center">{{forloop.counter}}</td>
+                        <td>
+                            {% if student.photo %}
+                            <img src="{{student.photo.url}}" alt="" class="avatar-sm rounded-circle me-2" style="width: 50px; height: 50px;"/>
+                            {% else %}
+                            <img src="{% static "core/img/profile.png" %}" alt="" class="avatar-sm rounded-circle me-2" style="width: 50px; height: 50px;"/>
+                            {% endif %}
+                            <a href="{% url "student-detail" student.id %}" class="text-body">{{student.student_id}}</a>
+                        </td>
+                        <!-- <td>{{student.first_name}} {{student.last_name}}</td> -->
+                        <td>Akash kamble</td>
+                        <td><span class="badge text-bg-primary">{{student.standard}}</span></td>
+                        <td>{{student.gender|capfirst }}</td>
+                        <td>{{student.enrollment_date}}</td>                                     
+                    </tr>
+                {% endfor %}
+                </tbody>
+            
+            </table>
+            </div>
+        </div>
+    </div>
+
+  </div>
+
+</div> {% endcomment %}
+</div>
+
+
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Student Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Replace with your scrollable content -->
+                <div class="card-body">
+                    <table class="table table-bordered" style="border-color: #000; border-width: 1px;">
+                        <tbody>
+                            <tr class="border-dark">
+                                <td class="border-dark">Total Fees</td>
+                                <td class="text-end border-dark">Rs. 1,030,093</td>
+                            </tr>
+                            <tr class="border-dark">
+                                <td class="border-dark">Total Fees Paid</td>
+                                <td class="text-end border-dark">Rs. 190,635</td>
+                            </tr>
+                            <tr class="border-dark">
+                                <td class="border-dark">Total Fees Balance</td>
+                                <td class="text-end border-dark">Rs. 839,458</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered" style="border-color: #000; border-width: 1px;">
+                        <tbody>
+                            <tr class="border-dark">
+                                <td class="border-dark">Total Fees</td>
+                                <td class="text-end border-dark">Rs. 1,030,093</td>
+                            </tr>
+                            <tr class="border-dark">
+                                <td class="border-dark">Total Fees Paid</td>
+                                <td class="text-end border-dark">Rs. 190,635</td>
+                            </tr>
+                            <tr class="border-dark">
+                                <td class="border-dark">Total Fees Balance</td>
+                                <td class="text-end border-dark">Rs. 839,458</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered" style="border-color: #000; border-width: 1px;">
+                        <tbody>
+                            <tr class="border-dark">
+                                <td class="border-dark">Total Fees</td>
+                                <td class="text-end border-dark">Rs. 1,030,093</td>
+                            </tr>
+                            <tr class="border-dark">
+                                <td class="border-dark">Total Fees Paid</td>
+                                <td class="text-end border-dark">Rs. 190,635</td>
+                            </tr>
+                            <tr class="border-dark">
+                                <td class="border-dark">Total Fees Balance</td>
+                                <td class="text-end border-dark">Rs. 839,458</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered" style="border-color: #000; border-width: 1px;">
+                        <tbody>
+                            <tr class="border-dark">
+                                <td class="border-dark">Total Fees</td>
+                                <td class="text-end border-dark">Rs. 1,030,093</td>
+                            </tr>
+                            <tr class="border-dark">
+                                <td class="border-dark">Total Fees Paid</td>
+                                <td class="text-end border-dark">Rs. 190,635</td>
+                            </tr>
+                            <tr class="border-dark">
+                                <td class="border-dark">Total Fees Balance</td>
+                                <td class="text-end border-dark">Rs. 839,458</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered" style="border-color: #000; border-width: 1px;">
+                        <tbody>
+                            <tr class="border-dark">
+                                <td class="border-dark">Total Fees</td>
+                                <td class="text-end border-dark">Rs. 1,030,093</td>
+                            </tr>
+                            <tr class="border-dark">
+                                <td class="border-dark">Total Fees Paid</td>
+                                <td class="text-end border-dark">Rs. 190,635</td>
+                            </tr>
+                            <tr class="border-dark">
+                                <td class="border-dark">Total Fees Balance</td>
+                                <td class="text-end border-dark">Rs. 839,458</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Bootstrap Modal -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css" rel="stylesheet">    
+
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
+
+
+
+
+<script>
+    // Initialize Chart.js
+    const ctxt = document.getElementById('feesChart').getContext('2d');
+
+    new Chart(ctxt, {
+        type: 'bar',
+        data: {
+            labels: ['Week One', 'Week Two', 'Week Three', 'Week Four', 'Week Five'], // X-axis labels (Weeks)
+            datasets: [
+                {
+                    label: 'Fees',
+                    data: [20000, 30000, 25000, 40000, 20000], // Y-axis data for each week
+                    backgroundColor: '#66F066', // Bar color
+                    borderColor: 'green', // Bar border color
+                    borderWidth: 1,
+                },
+            ],
+        },
+        options: {
+            responsive: true, // Makes the chart responsive
+            maintainAspectRatio: false, // Allows dynamic resizing
+            scales: {
+                y: {
+                    beginAtZero: true, // Y-axis starts at zero
+                },
+            },
+            plugins: {
+                legend: {
+                    display: true, // Display legend for "Fees"
+                    position: 'top',
+                },
+            },
+        },
+    });
+</script>
+
+<script>
+    new DataTable('#invoinceTable', {    
+  });
+</script>
+
+<script>
+    // Initialize tooltips for elements with data-bs-toggle="tooltip"
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+</script>
+
+
+{% endblock main %}
+
+
+
+

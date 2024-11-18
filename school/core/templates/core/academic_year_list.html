@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
+{% endblock head %}
+
+{% block main %}
+
+
+
+<!-- Page Heading -->
+<!-- <div class="d-sm-flex align-items-center justify-content-between mb-4">
+  <h1 class="h3 mb-0 text-gray-800">Students </h1> -->
+<!-- </div> -->
+
+
+<div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <!-- Heading on the left -->
+          <h2 class="fw-bold text-start" style="color:#1E3A8A;">Academic Years</h2>
+          
+          
+          <!-- Buttons on the right -->
+          <div class="d-flex">
+            <div class="my-3 ms-2 ms-md-3">
+              <a href="{% url 'student-list' %}">
+                <button type="button" id="filter-btn" class="btn btn-success bg-success">
+                  <i class="fa-solid fa-file-excel"></i> Excel
+                </button>
+              </a>
+            </div>
+            
+            <div class="my-3 ms-2 ms-md-3">
+              <a href="{% url 'student-list' %}">
+                <button type="button" id="filter-btn" class="btn btn-danger bg-danger">
+                  <i class="fa-solid fa-file-pdf"></i> PDF
+                </button>
+              </a>
+            </div>
+            <div class="my-3 ms-2 ms-md-3">
+              <a href="{% url 'student-create' %}">
+                <button type="button" id="filter-btn" class="btn btn-primary bg-primary">
+                  <i class="fa-solid fa-user-plus"></i> New 
+                </button>
+              </a>
+            </div>
+            
+
+          </div>
+        </div>
+        
+
+      <hr>
+
+
+      <!-- <div class="row"> -->
+      <div class="row mt-5">
+
+        <div class="card shadow mb-4">
+          <div class="card-header py-3 mt-2">
+            
+            <div class="d-flex justify-content-between align-items-center">
+              <h6 class="m-0 font-weight-bold text-primary">A.Y ({{academic_years.all.count}})</h6>
+              
+              <form action="" method="get" class="d-flex w-auto">
+                <div class="me-2">
+                  <select class="form-select" id="class-filter" name="search">
+                    <option selected value="no-select">Filter</option>
+                    <option value="enrolled">Enrolled</option>
+                    <option value="not-enrolled">Not Enrolled</option>                    
+                  </select>
+                </div>
+                
+                <button type="submit" id="filter-btn" class="btn btn-primary" style="background-color:#1E3A8A;">
+                  <i class="fa-solid fa-filter"></i>
+                </button>
+              </form>
+            </div>
+
+          </div>
+          <div class="card-body">
+              <div class="table-responsive">
+
+                <table id="myTable" class="table text-center" style="width:100%">
+                  <thead>
+                      <tr class="text-center">
+                          <th class="text-center">#</th>
+                          <th class="text-center">Academic Year</th>
+                          <th class="text-center">Start Date</th>
+                          <th class="text-center">End Date</th>
+                          <th class="text-center">Is Active</th>
+                          <th class="text-center">Action</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+              
+                    {% for year in academic_years %}
+                      <tr>
+                          <td class="text-center">{{forloop.counter}}</td>
+                          <td>{{year.name}}</td>
+                          <td>{{year.start_date}}</td>
+                          <td>{{year.end_date}}</td>
+                          <td>
+                            {% if year.is_active %}
+                              <i class="fa-solid fa-circle-check text-success"></i><br>
+                              <small>{{student.enrollments.first.academic_year}}</small>
+                            {% else %}
+                              <i class="fa-solid fa-circle-xmark text-danger"> </i> 
+                            {% endif %}
+                          </td>
+                          <td>
+                            <a href="{% url "academic-year-detail" year.id %}">
+                              <button class="btn btn-outline-primary px-3 py-2 rounded-3 font-size-16" type="button"> Detail </button>  
+                            </a>
+                          </td>
+                        
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+              
+              </table>
+              </div>
+          </div>
+        </div>
+        
+      </div>
+
+</div>
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
+
+<script>
+  new DataTable('#myTable', {  
+});
+</script>
+
+{% endblock main %}
+
+
+
+
+
+
+
+<div class="container mt-4">
+    <h2>Academic Years</h2>
+    <a href="{% url 'academic-year-add' %}" class="btn btn-primary mb-3">Add Academic Year</a>
+    <div class="list-group">
+        {% comment %} {% for year in academic_years %} {% endcomment %}
+            <a href="{% url 'academic-year-detail' year.pk %}" class="list-group-item list-group-item-action">
+                {{ year.name }} - {% if year.is_active %}<span class="badge bg-success">Active</span>{% endif %}
+            </a>
+        
+    </div>
+</div>

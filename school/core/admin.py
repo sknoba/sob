@@ -1,13 +1,20 @@
 from django.contrib import admin
-from .models import Student, Standard, Teacher, Subject
+from .models import Student, Standard, UserProfile, Subject, AcademicYear
+
+
+
+@admin.register(AcademicYear)
+class AcademicYearAdmin(admin.ModelAdmin):
+    list_display = ('name','is_active', 'start_date', 'end_date')
+    search_fields = ('name',)
 
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
-    list_display = ('student_id', 'full_name', 'gender', 'date_of_birth', 'enrollment_date', 'current_standard')
-    list_filter = ('gender', 'enrollment_date', 'standard')
+    list_display = ('student_id','full_name', 'gender', 'date_of_birth', 'create_date')
+    list_filter = ('gender', 'create_date')
     search_fields = ('student_id', 'first_name', 'last_name', 'father_name', 'mother_name')
-    readonly_fields = ('enrollment_date','student_id')
+    readonly_fields = ('create_date','student_id')
     exclude = ('student_id',)
 
     
@@ -16,7 +23,7 @@ class StudentAdmin(admin.ModelAdmin):
             'fields': (('first_name', 'last_name'), 'date_of_birth', 'gender', 'photo')
         }),
         ('Academic Information', {
-            'fields': ('student_id','standard')
+            'fields': ('is_active','student_id')
         }),
         ('Contact Information', {
             'fields': ('address_line_1', 'address_line_2', 'city', 'district', 'state', 'pin_code')
@@ -31,30 +38,28 @@ class StudentAdmin(admin.ModelAdmin):
     def full_name(self, obj):
         return f"{obj.first_name} {obj.last_name}"
     full_name.short_description = 'Name'
+   
 
-    def current_standard(self, obj):
-        return obj.standard.name if obj.standard else 'Not Assigned'
-    current_standard.short_description = 'Standard'
 
-@admin.register(Teacher)
-class TeacherAdmin(admin.ModelAdmin):
-    list_display = ('teacher_id', 'full_name', 'gender', 'phone_number', 'email', 'employment_type')
-    list_filter = ('gender', 'employment_type', 'joining_date')
-    search_fields = ('teacher_id', 'first_name', 'last_name', 'email')
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('acc_id', 'user', 'acc_type','gender', 'phone_number', 'employment_type')
+    list_filter = ('gender', 'employment_type', 'acc_type')
+    search_fields = ('acc_id',)
     filter_horizontal = ('subjects',)
-    readonly_fields = ('teacher_id',)
-    exclude = ('teacher_id',)
+    readonly_fields = ('acc_id',)
+    exclude = ('acc_id',)
     
     fieldsets = (
         ('Personal Information', {
-            'fields': (('first_name', 'last_name'), 'date_of_birth', 'gender', 'photo','relation_status')
+            'fields': ('date_of_birth', 'gender', 'photo','relation_status')
         }),
         ('Contact Information', {
-            'fields': ('address_line_1', 'address_line_2', 'city', 'district', 'state', 'pin_code',('phone_number', 'email',))
+            'fields': ('address_line_1', 'address_line_2', 'city', 'district', 'state', 'pin_code',('phone_number',))
         }),
 
         ('Employment Information', {
-            'fields': ('teacher_id', 'joining_date', 'employment_type')
+            'fields': ('acc_type','acc_id', 'employment_type')
         }),
         ('Education', {
             'fields': ('education', 'subjects')

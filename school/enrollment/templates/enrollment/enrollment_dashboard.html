@@ -1,0 +1,270 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+
+{% endblock head %}
+
+{% block main %}
+<div class="container">
+    <h2 class="fw-bold text-center text-lg-start" style="color:#1E3A8A;">Enrollment Dashboard</h2>
+    <hr class="">
+    <div class="container">      
+
+        <!-- First Row -->
+        <div class="row mb-3">
+            <div class="col-3">
+                <div class="card mb-3 shadow" style="min-height: 180px; border-radius:1rem">
+                    <div class="card-body ">
+                        <!-- Icon and Title -->
+                        <div class="align-items-center text-center">
+                            <i class="fas fa-users text-primary mb-4 mt-3" style="font-size: 2rem;"></i>
+                            <h5 class="card-title text-black">Total Class</h5>
+                            <h3 class="card-text text-primary">20</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card mb-3 shadow" style="min-height: 180px; border-radius:1rem">
+                    <div class="card-body">
+                        <!-- Icon and Title -->
+                        <div class="align-items-center text-center">
+                            <i class="fas fa-check-circle text-success mb-4 mt-3" style="font-size: 2rem;"></i>
+                            <h5 class="card-title text-black">Attendance Clicks</h5>
+                            <h3 class="card-text text-success">13</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-3">
+                <div class="card mb-3 shadow" style="min-height: 180px; border-radius:1rem">
+                    <div class="card-body">
+                        <!-- Icon and Title -->
+                        <div class="align-items-center text-center">
+                            <i class="fas fa-male text-success mb-3 mt-3" style="font-size: 2.5rem;"></i>
+                            <h5 class="card-title text-black">Boys Present</h5>
+                            <h3 class="card-text text-success">13</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card mb-3 shadow" style="min-height: 180px; border-radius:1rem">
+                    <div class="card-body">
+                        <!-- Icon and Title -->
+                        <div class="align-items-center text-center">
+                            <i class="fas fa-female text-danger mb-3 mt-3" style="font-size: 2.5rem;"></i>
+                            <!-- <i class="fas fa-check-circle text-success mb-4 mt-3" style="font-size: 2rem;"></i> -->
+                            <h5 class="card-title text-black">Girls Present</h5>
+                            <h3 class="card-text text-success">13</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>                         
+        </div>
+
+        <!-- Second Row -->
+        <div class="row mb-3">
+                                
+            <div class="col">
+                <div class="table-responsive shadow" >
+
+                    <div class="card border-0 rounded-4 shadow">
+                        <div class="card-body text-center">
+                        <h4 style="color:#1E3A8A;"><i class="fa-solid fa-indian-rupee-sign"></i> Attendance Taken</h4>
+                        <hr class="" style="color:#1E3A8A;">
+                        
+                            <div class="row border rounded-4 mx-2">
+                            <div class="col-12">
+                                <div class="table-responsive" style="max-height: 190px; height: 190px; overflow-y: auto;">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Class Name</th>
+                                        <th scope="col">Attendance Status</th>
+                                        <th scope="col">Present Student</th>
+                                        <th scope="col">Attendance Taken by</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr style="background-color: #bdecb6; color: #181818;">
+                                        <th scope="row">1</th>
+                                        <td>Class 9B</td>
+                                        <td>Not Done</td>
+                                        <td>100%</td>
+                                        <td>Arya Kakade</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">2</th>
+                                        <td>Class 9B</td>
+                                        <td>Not Done</td>
+                                        <td>100%</td>
+                                        <td>Arya Kakade</td>
+                                    </tr>
+                                    <tr style="background-color: #f8caca; color: #181818;">
+                                        <th scope="row">3</th>
+                                        <td>Class 9B</td>
+                                        <td>Not Done</td>
+                                        <td>100%</td>
+                                        <td>Arya Kakade</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">4</th>
+                                        <td>Class 9B</td>
+                                        <td>Not Done</td>
+                                        <td>100%</td>
+                                        <td>Arya Kakade</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                </div>
+        
+                            </div>
+                            </div>
+                        </div>
+    
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Third Row -->
+        <div class="row">
+            <!-- Parent Information Card -->
+            <div class="col-md-6 mb-4 ">
+            <div class="card border-0 rounded-4 shadow">
+                <div class="card-body text-center">
+                <h4 style="color:#1E3A8A;"><i class="fa-solid fa-clipboard-user"></i> Attendance</h4>
+                <hr class="mb-4" style="color:#1E3A8A;">
+                
+                
+                <div class="row">
+                    <div class="col" style="height: 45vh;">
+                        <canvas id="barChart"></canvas>
+                    </div>
+                    
+                </div>
+
+                
+                </div>
+            </div>
+            </div>
+
+            <!-- Fees Information Card -->
+            <div class="col-md-6 mb-4">
+            <div class="card border-0 rounded-4 shadow">
+                <div class="card-body text-center">
+                <h4 style="color:#1E3A8A;"><i class="fa-solid fa-indian-rupee-sign"></i> Fees</h4>
+                <hr class="mb-4" style="color:#1E3A8A;">
+                
+                <div class="row">
+                    <div class="col d-flex justify-content-center align-items-center" style="height: 45vh;">
+                        <canvas id="doughnutChart"></canvas>
+                    </div>
+                    
+                </div>
+
+                </div>
+
+
+
+            </div>
+            </div>
+        
+        </div>
+    </div>
+
+
+
+    
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script>
+
+        // Define variable 
+        const ctx = document.getElementById('barChart').getContext('2d');
+        const ctd = document.getElementById('doughnutChart').getContext('2d');
+
+        // Initialize Bar Chart
+        const barChart = new Chart(ctx, {
+            type: 'bar',
+            data:{
+                labels: ['Boys', 'Girls',],
+                datasets: [{
+                label: 'My First Dataset',
+                data: [65, 59, 80, 81, 56, 55, 40], // Example data points
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(255, 205, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(201, 203, 207, 0.2)'
+                ],
+                borderColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(255, 159, 64)',
+                    'rgb(255, 205, 86)',
+                    'rgb(75, 192, 192)',
+                    'rgb(54, 162, 235)',
+                    'rgb(153, 102, 255)',
+                    'rgb(201, 203, 207)'
+                ],
+                borderWidth: 1
+            }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            },
+
+
+        });
+
+
+         // Initialize Bar Chart
+         const doughnutChart = new Chart(ctd, {
+            type: 'doughnut',
+            data:{
+                labels:['Red', 'Blue', 'Yellow'],
+                datasets:[{
+                label: 'My First Dataset',
+                data: [300, 50, 100], // Values for each section of the doughnut
+                backgroundColor: [
+                    'rgb(255, 99, 132)', // Red
+                    'rgb(54, 162, 235)', // Blue
+                    'rgb(255, 205, 86)'  // Yellow
+                ],
+                hoverOffset: 4 // Slightly shifts the segment on hover
+            }]},
+
+        });
+
+
+
+        
+
+
+
+</script>
+
+
+{% endblock main %}
+
+
+
+

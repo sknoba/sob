@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% block main %}
+{% load static %}
+{% block head %}
+<link href="https://fonts.googleapis.com/css2?family=Cinzel&display=swap" rel="stylesheet">
+<style>
+.cinzel {
+            font-family: 'Cinzel', serif;
+            font-size: 20px;
+        }
+</style>  
+{% endblock head %}
+
+<div id="main-content">
+    <div class="container">              
+      <div class="container mx-4 mt-4">
+  
+              <h2 class="fw-bold text-center text-lg-start mt-5" style="color:#1E3A8A;">Teacher Detail</h2>
+              <hr class="">
+             <!-- Card Content -->
+
+        <div class="contaienr px-3">
+          <div class="col px-2">
+            <div class="row bg-white py-3 mb-2 rounded-4 shadow mb-3">
+              <div class="col-md-3 d-flex justify-content-center align-items-center d-sm-flex ">
+                <img src="{% if teacher.photo %}{{teacher.photo.url}}{% else %}{% static "core/img/profile.png" %}{% endif %}" class="img-fluid rounded border border-3 px-2 py-2 border-secondary " alt="..." style="height: 220px; width:220px; object-fit: cover; ">
+              </div>
+              <div class="col-md-9 d-sm-flex d-sm-justify-content-center d-sm-align-items-center">
+                <div class="card-body">
+                  <h5 class="card-title mb-2 fs-1 fw-semibold mt-2 text-center" style="color:#1E3A8A;">{{teacher.user.first_name|capfirst}} {{teacher.user.last_name|capfirst}}</h5>
+                  <p class="card-text fs-5 text-center">ID: <span class="cinzel px-1 py-1 rounded-3" style="color: red; background-color: yellow;"><b>{{teacher.acc_id}}</b></span></p>
+                  <hr class="mb-4 fw-bold fs-1" style="color:#1E3A8A;">
+                  <div class="row">
+                    <div class="col-4 border-end">
+                      <p><strong>First Name:</strong> {{teacher.user.first_name|capfirst}}</p>
+                      <p><strong>Gender:</strong> {{teacher.get_gender_display}}</p>
+                      <p><strong>Date of Birth:</strong> {{teacher.date_of_birth}}</p>
+                    </div>
+                    <div class="col-4 border-end">
+                      <p><strong>Last Name:</strong> {{teacher.user.last_name|capfirst}}</p>
+                      <p><strong>Relation:</strong> <span class="badge text-bg-{% if teacher.relation_status == "M" %}primary{% else %}secondary{% endif %}"> {{teacher.get_relation_status_display}}</span></p>
+                      <p><strong>Phone:</strong> {{teacher.phone_number|default:"Not Available"}}</p>
+                      
+                    </div>
+                    <div class="col-4">
+                      <p><strong>Education:</strong> [ {{teacher.education}} ]</p>  
+                      <p><strong>Class Teacher:</strong>
+                          {% for standard in teacher.class_teacher_of.all %}
+                          [ {{standard}} ]
+                          {% empty %}
+                          Not Assigned
+                          {% endfor %}
+                        </p>
+                        
+                        
+                      </div>
+                  </div>
+                </div>
+              </div>
+              
+             </div>
+          </div>
+           <div class="row">
+                    <!-- Parent Information Card -->
+                    <div class="col-md-6 mb-4">
+                      <div class="card border-0 rounded-4 shadow">
+                        <div class="card-body">
+                          <h4 style="color:#1E3A8A;"><i class="fa-solid fa-user"></i> Employment</h4>
+                          <hr class="mb-4" style="color:#1E3A8A;">
+                          <div class="row">
+                            <div class="col-md-6 border-end">
+                              <p><strong>Email: </strong> {{teacher.user.email|default:"Not Available"|truncatechars:35}}</p>
+                              <p><strong>Joining Date:</strong> {{teacher.user.date_joined}}</p>
+                              <p><strong>Class Teacher:</strong>
+                                {% for standard in teacher.class_teacher_of.all %}
+                                [ {{standard}} ]
+                                {% empty %}
+                                Not Assigned
+                                {% endfor %}
+                              </p>
+                              
+                            </div>
+                            <div class="col-md-6">
+                              <p><strong>Employee:</strong> <span class="badge text-bg-{% if teacher.employment_type == "FT"%}success{% else %}warning{% endif %}">{{teacher.get_employment_type_display}}</span></p>
+                              <p><strong>Addon Access:</strong> [-] [-]</p>
+                              <p><strong>Subject's:</strong> 
+                                {% for standard in teacher.subjects.all %}
+                                [ {{standard}} ] 
+                                {% empty %}
+                                Not Assigned
+                                {% endfor %}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Address Information Card -->
+                    <div class="col-md-6 mb-4">
+                      <div class="card border-0 rounded-4 shadow">
+                        <div class="card-body">
+                          <h4 style="color:#1E3A8A;"><i class="fa-regular fa-address-card"></i> Address</h4>
+                          <hr class="mb-4" style="color:#1E3A8A;">
+                          <div class="row">
+                            <div class="col-md-6 border-end">
+                              <p><strong>Address Line 1:</strong> {{teacher.address_line_1}}</p>
+                              <p><strong>City:</strong> {{teacher.city|capfirst}}</p>
+                              <p><strong>State:</strong> {{teacher.get_state_display}}</p>
+                            </div>
+                            <div class="col-md-6">
+                              <p><strong>Address Line 2:</strong> {{teacher.address_line_1}}</p>
+                              <p><strong>District:</strong> {{teacher.district|capfirst}}</p>
+                              <p><strong>PIN Code:</strong> {{teacher.pin_code}}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+           </div>
+          
+
+
+            
+
+
+
+        </div>
+      </div>
+
+
+
+             
+    </div>
+  </div>
+
+
+
+
+
+
+
+{% endblock main %}

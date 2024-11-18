@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+
+{% endblock head %}
+
+{% block main %}
+
+
+
+<div class="container">
+ 
+  <h2 class="fw-bold text-center text-lg-start" style="color:#1E3A8A;">User Delete</h2>
+  <hr>
+
+
+  <h2>Delete User</h2>
+
+    <p>Are you sure you want to delete  <strong>{{ user }}</strong>?</p> 
+  <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Delete</button>
+  </form>
+</div>
+{% endblock main %}

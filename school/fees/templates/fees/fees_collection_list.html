@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %} 
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
+{% endblock head %}
+
+{% block main %}
+
+
+
+<div class="container">
+
+    <div class="container">
+        
+        <div class="row rounded my-2 px-1">
+          <div>
+
+            <div class="card shadow mb-4">
+              <div class="card-header py-3 mt-2">
+                  <h6 class="m-0 font-weight-bold text-primary">Fees ({{total_fees_collection}})</h6>
+              </div>
+                    <div class="card-body">
+                        <div class="table-responsive" style="max-height: 560px; height: 400px; overflow-y: auto;">
+                          <table id="myTable" class="table text-center" style="width:100%; height: 300px;">
+                            <thead class="text-center">
+                                <tr>
+                                    <th class="text-center">#</th>
+                                    <th class="text-center">Student</th>
+                                    <th class="text-center">Academic Year</th>
+                                    <th class="text-center">Payment Statuss</th>
+                                    <th class="text-center">Total Fees</th>
+                                    <th class="text-center">Paid Fees</th>
+                                    <th class="text-center">Remaning Fees</th>
+                                    <th class="text-center">Invoince</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                        
+                              {% for fees in feescollection %}
+                                <tr>
+                                  <td class="text-center">{{forloop.counter}}</td>
+                                    <!-- <td>
+                                        {% if student.photo %}
+                                        <img src="{{student.photo.url}}" alt="" class="avatar-sm rounded-circle me-2" style="width: 50px; height: 50px;"/>
+                                        {% else %}
+                                        <img src="{% static "core/img/profile.png" %}" alt="" class="avatar-sm rounded-circle me-2" />
+                                        {% endif %}
+                                        <a href="" class="text-body">{{student.student_id}}</a>
+                                    </td> -->
+                                    <td>
+                                      <a href="{% url "fees-detail" fees.id %}" class="text-body">{{fees.enrollment.student.get_full_name}} - {{fees.enrollment.student.student_id}}</a>
+                                    </td>
+                                    <td class="text-center">{{fees.enrollment.academic_year}} </td>
+                                    <td><span class="badge text-bg-{% if fees.payment_status == 'paid' %}success{% elif fees.payment_status == 'partially_paid'%}warning{% else %}danger{% endif %}">{{fees.get_payment_status_display}}</span></td>
+                                    <td class="text-center">{{fees.total_fees|intcomma}}</td>
+                                    <td class="text-center text-success">{{fees.paid_fees|intcomma}}</td>
+                                    <td class="text-center text-danger">{{fees.remaining_fees|intcomma}}</td>
+                                    <td class="text-center">{{fees.invoices.all.count}}</td>                                        
+                                </tr>
+                              {% endfor %}
+                            </tbody>
+                        
+                        </table>
+                        </div>
+                    </div>
+            </div>
+
+          </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
+
+<script>
+  new DataTable('#myTable', {  
+
+});
+</script>
+
+{% endblock main %}
+
