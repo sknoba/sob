@@ -533,30 +533,4 @@
 
 
 
-import weasyprint
-from django.http import HttpResponse, Http404
-from django.template.loader import render_to_string
-from django.views import View
-from .models import Student
 
-class GenerateStudentPDF(View):
-    def get(self, request, id, *args, **kwargs):
-        # Get the student record by ID
-        try:
-            student = Student.objects.get(id=id)
-        except Student.DoesNotExist:
-            raise Http404("Student record not found")
-
-        # Render the template with the student data
-        html_content = render_to_string("core/student_pdf.html", {
-            'student': student  # Pass the student record to the template
-        })
-
-        # Generate the PDF
-        pdf = weasyprint.HTML(string=html_content).write_pdf()
-
-        # Create an HTTP response with the PDF content
-        response = HttpResponse(pdf, content_type="application/pdf")
-        response["Content-Disposition"] = f"inline; filename=student_{id}_report.pdf"
-
-        return response

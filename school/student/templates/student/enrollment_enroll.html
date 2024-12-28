@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
+{% endblock head %}
+
+{% block main %}
+<div class="container-fluid">
+  <h2 class="fw-bold text-center text-lg-start" style="color:#1E3A8A;">New Enrollment</h2>
+  <hr> 
+  
+  <!-- Student Details Section --> 
+  <div class="row bg-white shadow-lg rounded-4 mb-3 p-4 border" style="margin-left: 1px; margin-right: 1px; margin-top: 25px;">
+  
+    <h3 class="mb-4"><i class="fa-solid fa-user-large"></i> Student Details</h3>
+
+      <!-- Student Information (3 columns) -->
+      <div class="col-lg-4 col-md-6 col-12 mb-3">
+        <p><strong>Student Name :</strong> {{ student.first_name }} {{ student.last_name }}</p>
+        <p><strong>Date Of Birth :</strong> {{ student.date_of_birth }}</p>
+      </div>
+      <div class="col-lg-4 col-md-6 col-12 mb-3">
+        <p><strong>Gender :</strong> {{ student.get_gender_display }}</p>
+        <p><strong>Mobile :</strong> +91 {% if student.father_mobile_number %}{{ student.father_mobile_number }}{% else %}{% endif %}</p>
+      </div>
+      <div class="col-lg-4 col-md-6 col-12 mb-3">
+        <p><strong>Profile Creation Date :</strong> {{student.profile_creation_date}}</p>
+        <p><strong>City :</strong> {{student.residential_city}}</p>
+      </div>
+  </div>
+
+  <!-- Fees Details Form -->
+  <div class="row bg-white shadow-lg rounded-4 mb-4 p-4 border" style="margin-left: 1px; margin-right: 1px; margin-top: 25px;">
+    <form method="POST" novalidate>
+      {% csrf_token %}
+      <div class="row">
+        <h3 class="mb-4"><i class="fa fa-file"></i> Enrollment Details {% if academic_year and academic_year.is_active == False %}<span class="mx-5 text-danger fs-4">! Can Not make New Enrollment</span>{% endif %}</h3> 
+        
+        <!-- Form Fields for Fees Details -->
+        <div class="col-lg-5 col-md-6 col-12 mb-3">
+          <label for="due_date">Academic Year <span class="text-danger">*</span></label>
+          <input type="text" class="form-control {% if not academic_year or academic_year.is_active == False %}is-invalid{% endif %}" value="{% if academic_year %}{{academic_year.name}}{% else %}! No Academic Year{% endif %}" disabled>
+          {% if academic_year and academic_year.is_active == False %}
+          <span class="text-danger">Academic Year Not Active</span>
+          {% endif %}
+        </div>
+        
+        <div class="col-lg-5 col-md-6 col-12 mb-3">
+          <label for="total_fees">{{ form.standard.label }} <span class="text-danger">*</span></label>
+          {{ form.standard }}
+        </div>
+
+        <div class="col-lg-2 col-md-12 col-12 mb-3 d-flex justify-content-center align-items-end">
+          <button type="submit" class="btn btn-primary mt-4" {% if not academic_year or academic_year.is_active == False %}disabled{% endif %}>Submit</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock main %}
+

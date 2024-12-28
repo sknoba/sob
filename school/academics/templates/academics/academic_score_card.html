@@ -1,0 +1,289 @@
+{% extends "base.html" %}
+{% load static %}
+{% load arithmetic %}
+{% block head %}
+<style>
+    body {
+      background: #d6e7f4;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Header */
+    .marksheet-header {
+      background: linear-gradient(90deg, #1e88e5, #1976d2);
+      color: #fff;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      margin-bottom: 30px;
+      animation: slideInDown 1s ease-out;
+    }
+
+    /* Boxes */
+    .box {
+      background-color: #fff;
+      border: 2px solid #ddd;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      margin-bottom: 30px;
+    }
+
+    .box h5 {
+      font-size: 1.2rem;
+      color: #1e88e5;
+      font-weight: bold;
+      margin-bottom: 15px;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    /* Table Styles */
+    .table th {
+      background: linear-gradient(90deg, #1976d2, #1e88e5);
+      color: #fff;
+      border: none;
+    }
+
+    .table tbody tr:nth-child(even) {
+      background-color: #f7f7f7;
+    }
+
+    .table tbody tr:hover {
+      background-color: #e3f2fd;
+      transition: background-color 0.3s ease;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #555;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+    }
+
+    /* Animations */
+    @keyframes slideInDown {
+      from {
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    /* Responsive Scroll for Tables */
+    .table-responsive {
+      overflow-x: auto;
+    }
+  </style>
+{% endblock head %}
+
+{% block main %}
+<div class="container">
+
+    <div class="container">
+
+        <div class="row mt-3 mb-5">
+                  <!-- Exam Form -->
+
+                  <h1 class="text-center mb-4 text-primary">Exams Score</h1>                  
+                  
+
+                  <div class="container-fluid">
+                    <!-- <h4 class="h3 mb-2 text-dark fw-bold text-start">Accademic Progress Card</h4> -->
+    
+                    <!-- <div class="container my-4"> -->
+                        <!-- Header -->
+                        <div class="marksheet-header">
+                          <h2 class="fw-bold">Academic Progress Card 2024-25</h2>
+                        </div>
+                    
+                        <div class="box">
+                            <h5>Student Information</h5>
+                            <div class="row text-center">
+                              <div class="col-md-4"><strong>Student Name:</strong> {{student.student|capfirst}}</div>
+                              <div class="col-md-4"><strong>Class:</strong> {{student.standard}}</div>
+                              <div class="col-md-4"><strong>Roll No:</strong> 10000</div>
+                            </div>
+                          </div>
+                          
+
+
+                          {% for exam in exam_score %}
+                          <div class="box">
+                            <div class="table-responsive">
+                             <h5>{{exam.exam.get_exam_display}}</h5>
+                             <table class="table table-hover align-middle">
+                               <thead>
+                                 <tr>
+                                   <th>Subject</th><th>Theory</th><th>Seminar</th><th>Notebook</th><th>Sub. En.</th><th>Total</th><th>Obtained</th><th>%</th>
+                                 </tr>
+                               </thead>
+                               <tbody>
+                                 <tr><td>Marathi</td><td>40</td><td>3</td><td>3</td><td>2</td><td>50</td><td>44</td><td>88%</td></tr>
+                                 <tr><td>Hindi</td><td>40</td><td>3</td><td>3</td><td>2</td><td>50</td><td>45</td><td>90%</td></tr>
+                                 <tr><td>English</td><td>40</td><td>3</td><td>3</td><td>2</td><td>50</td><td>46</td><td>92%</td></tr>
+                                 <tr><td>Mathematics</td><td>40</td><td>3</td><td>3</td><td>2</td><td>50</td><td>42</td><td>84%</td></tr>
+                                 <tr><td>Science</td><td>40</td><td>3</td><td>3</td><td>2</td><td>50</td><td>43</td><td>86%</td></tr>
+                                 <tr><td>Social Science</td><td>40</td><td>3</td><td>3</td><td>2</td><td>50</td><td>41</td><td>82%</td></tr>
+                               </tbody>
+                             </table>
+                           </div>
+                           </div>
+                          {% endfor %}
+
+
+                        <!-- Periodic Test I -->                        
+                        <div class="box">
+                         <div class="table-responsive">
+                          <h5>Periodic Test I</h5>
+                          <table class="table table-hover align-middle">
+                            <thead>
+                              <tr>
+                                <th>Subject</th><th>Theory</th><th>Seminar</th><th>Notebook</th><th>Sub. En.</th><th>Total</th><th>Obtained</th><th>%</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr><td>Marathi</td><td>40</td><td>3</td><td>3</td><td>2</td><td>50</td><td>44</td><td>88%</td></tr>
+                              <tr><td>Hindi</td><td>40</td><td>3</td><td>3</td><td>2</td><td>50</td><td>45</td><td>90%</td></tr>
+                              <tr><td>English</td><td>40</td><td>3</td><td>3</td><td>2</td><td>50</td><td>46</td><td>92%</td></tr>
+                              <tr><td>Mathematics</td><td>40</td><td>3</td><td>3</td><td>2</td><td>50</td><td>42</td><td>84%</td></tr>
+                              <tr><td>Science</td><td>40</td><td>3</td><td>3</td><td>2</td><td>50</td><td>43</td><td>86%</td></tr>
+                              <tr><td>Social Science</td><td>40</td><td>3</td><td>3</td><td>2</td><td>50</td><td>41</td><td>82%</td></tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        </div>
+                    
+                        <!-- Term Examination I -->
+                        <div class="box">
+                            <div class="table-responsive">
+                          <h5>Term Examination I</h5>
+                          <table class="table table-hover align-middle">
+                            <thead>
+                              <tr>
+                                <th>Subject</th><th>Theory</th><th>Slip Test</th><th>Seminar</th><th>Notebook</th><th>Sub. En.</th><th>Total</th><th>Obtained</th><th>%</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr><td>Marathi</td><td>80</td><td>10</td><td>4</td><td>3</td><td>3</td><td>100</td><td>89</td><td>89%</td></tr>
+                              <tr><td>Hindi</td><td>80</td><td>10</td><td>4</td><td>3</td><td>3</td><td>100</td><td>91</td><td>91%</td></tr>
+                              <tr><td>English</td><td>80</td><td>10</td><td>4</td><td>3</td><td>3</td><td>100</td><td>90</td><td>90%</td></tr>
+                              <tr><td>Mathematics</td><td>80</td><td>10</td><td>4</td><td>3</td><td>3</td><td>100</td><td>85</td><td>85%</td></tr>
+                              <tr><td>Science</td><td>80</td><td>10</td><td>4</td><td>3</td><td>3</td><td>100</td><td>87</td><td>87%</td></tr>
+                              <tr><td>Social Science</td><td>80</td><td>10</td><td>4</td><td>3</td><td>3</td><td>100</td><td>83</td><td>83%</td></tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        </div>
+                    
+                        <!-- Periodic Test 2 -->
+                        <div class="box">
+                            <div class="table-responsive">
+                                <h5 >Periodic Test II</h5>
+                                <table class="table table-hover align-middle">
+                                <thead>
+                                    <tr>
+                                    <th>Subject</th><th>Theory</th><th>Seminar</th><th>Notebook</th><th>Sub. En.</th><th>Total</th><th>Obtained</th><th>%</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Marathi</td><td>40</td><td>3</td><td>3</td><td>2</td><td>50</td><td>44</td><td>88%</td></tr>
+                                    <tr><td>Hindi</td><td>40</td><td>3</td><td>3</td><td>2</td><td>50</td><td>45</td><td>90%</td></tr>
+                                    <tr><td>English</td><td>40</td><td>3</td><td>3</td><td>2</td><td>50</td><td>46</td><td>92%</td></tr>
+                                    <tr><td>Mathematics</td><td>40</td><td>3</td><td>3</td><td>2</td><td>50</td><td>42</td><td>84%</td></tr>
+                                    <tr><td>Science</td><td>40</td><td>3</td><td>3</td><td>2</td><td>50</td><td>43</td><td>86%</td></tr>
+                                    <tr><td>Social Science</td><td>40</td><td>3</td><td>3</td><td>2</td><td>50</td><td>41</td><td>82%</td></tr>
+                                </tbody>
+                                </table>
+                            </div>
+                          </div>
+                    
+                        <!-- Term Examination II -->
+                        <div class="box">
+                            <div class="table-responsive">
+                                <h5 >Term Examination II</h5>
+                                <table class="table table-hover align-middle">
+                                <thead>
+                                    <tr>
+                                    <th>Subject</th><th>Theory</th><th>Slip Test</th><th>Seminar</th><th>Notebook</th><th>Sub. En.</th><th>Total</th><th>Obtained</th><th>%</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Marathi</td><td>80</td><td>10</td><td>4</td><td>3</td><td>3</td><td>100</td><td>89</td><td>89%</td></tr>
+                                    <tr><td>Hindi</td><td>80</td><td>10</td><td>4</td><td>3</td><td>3</td><td>100</td><td>91</td><td>91%</td></tr>
+                                    <tr><td>English</td><td>80</td><td>10</td><td>4</td><td>3</td><td>3</td><td>100</td><td>90</td><td>90%</td></tr>
+                                    <tr><td>Mathematics</td><td>80</td><td>10</td><td>4</td><td>3</td><td>3</td><td>100</td><td>85</td><td>85%</td></tr>
+                                    <tr><td>Science</td><td>80</td><td>10</td><td>4</td><td>3</td><td>3</td><td>100</td><td>87</td><td>87%</td></tr>
+                                    <tr><td>Social Science</td><td>80</td><td>10</td><td>4</td><td>3</td><td>3</td><td>100</td><td>83</td><td>83%</td></tr>
+                                </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    
+                        <!-- Annual Result -->
+                        <div class="box">
+                            <div class="table-responsive">
+                                <h5>Annual Result</h5>
+                                <table class="table table-bordered text-center">
+                                <thead class="table-light">
+                                    <tr>
+                                    <th>Subject</th><th>PT I</th><th>PT II</th><th>Term I</th><th>Term II</th><th>Total</th><th>Obtained</th><th>%</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                    <td>Marathi</td>
+                                    <td>8.8</td><td>8.4</td><td>35.6</td><td>35.6</td><td>100</td><td>88</td><td>88%</td>
+                                    </tr>
+                                    <tr>
+                                    <td>Hindi</td>
+                                    <td>9.0</td><td>8.6</td><td>36.4</td><td>36.0</td><td>100</td><td>90</td><td>90%</td>
+                                    </tr>
+                                    <tr>
+                                    <td>English</td>
+                                    <td>9.2</td><td>9.0</td><td>36.0</td><td>36.8</td><td>100</td><td>91</td><td>91%</td>
+                                    </tr>
+                                    <tr>
+                                    <td>Mathematics</td>
+                                    <td>8.4</td><td>8.2</td><td>34.0</td><td>35.2</td><td>100</td><td>86</td><td>86%</td>
+                                    </tr>
+                                    <tr>
+                                    <td>Science</td>
+                                    <td>8.6</td><td>8.6</td><td>34.8</td><td>35.0</td><td>100</td><td>87</td><td>87%</td>
+                                    </tr>
+                                    <tr>
+                                    <td>Social Science</td>
+                                    <td>8.2</td><td>7.8</td><td>33.2</td><td>33.6</td><td>100</td><td>83</td><td>83%</td>
+                                    </tr>
+                                </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    
+                <!-- Footer -->
+                <footer class="sticky-footer bg-white">
+                    <div class="container my-auto">
+                        <div class="copyright text-center my-auto">
+                            <span>Copyright &copy; Your Website 2020</span>
+                        </div>
+                    </div>
+                </footer>
+                <!-- End of Footer -->
+            </div>
+
+            
+        </div>
+    </div>    
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+{% endblock main %}
+
+

@@ -1,0 +1,271 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.1.0/dist/css/multi-select-tag.css">
+<style>
+    .thumbnail-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+</style>
+{% endblock head %}
+
+
+{% block main %}
+
+<div class="row mx-3 mx-md-4 mx-lg-5">
+
+        <h2 class="fw-bold text-center text-lg-start" style="color:#1E3A8A;">Edit Profile</h2>
+        <hr class="">
+        <div class="card bg-white rounded-4 p-5 my-lg-4 shadow-lg">
+        <form method="POST" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+            <div class="row">
+                <h3 class="col-12">Personal Information</h3>
+        
+                <div class="col-md-8 col-12 mb-3">
+                    <div class="row">
+                        <div class="col-md-6 col-12 mb-1">
+                            <label for="first_name" class="form-label">Full Name <span class="text-danger">*</span></label>
+                            <input class="form-control" type="text" value="{{profile.user.get_full_name|capfirst}}" disabled>
+                        </div>
+                        <div class="col-md-6 col-12 mb-1">
+                            <label for="date_of_birth" class="form-label">Email <span class="text-danger">*</span></label>
+                            <input class="form-control" type="text" value="{{profile.user.email}}" disabled>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6 col-12 mb-1">
+                            <label for="gender" class="form-label">Gender <span class="text-danger">*</span></label>
+                            {{ form.gender }}
+                            <span class="text-danger">{{form.gender.errors}}</span>
+                        </div>
+                        <div class="col-md-6 col-12 mb-1">
+                            <label for="date_of_birth" class="form-label">Date Of Birth <span class="text-danger">*</span></label>
+                            {{ form.date_of_birth }}
+                            <span class="text-danger">{{form.date_of_birth.errors}}</span>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6 col-12 mb-1">
+                            <label for="gender" class="form-label">Relation Statuss <span class="text-danger">*</span></label>
+                            {{ form.relation_status }}                            
+                            <span class="text-danger">{{form.relation_status.errors}}</span>
+                        </div>
+                        <div class="col-md-6 col-12 mb-1">
+                            <label for="adhar_number" class="form-label">Aadhar Number</label>
+                            {{ form.adhar_number }}                            
+                            <span class="text-danger">{{form.adhar_number.errors}}</span>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6 col-12 mb-1">
+                            <label for="gender" class="form-label">Contact Number <span class="text-danger">*</span></label>
+                            {{ form.contact_number }}                            
+                            <span class="text-danger">{{form.contact_number.errors}}</span>
+                        </div>
+                        <div class="col-md-6 col-12 mb-1">
+                            <label for="religion" class="form-label">Whatsapp Number</label>
+                            {{ form.whatsapp_number }}                            
+                            <span class="text-danger">{{form.whatsapp_number.errors}}</span>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="col-md-4 col-12 mb-3 text-center">
+                    <div class="thumbnail-wrapper">
+                        <!-- Display the existing or preview image -->
+                        <img id="imagePreview" src="{% if form.photo.value %}{{ form.photo.value.url }}{% else %}{% static "core/img/uplod-thumbnel.png" %}{% endif %}" alt="..." class="rounded-3 px-2 py-2" style="height: 180px; width:180px; border:dashed;">
+            
+                        <!-- Hidden file input for selecting a new image -->
+                        {{form.photo}}                          
+                        <span class="text-danger">{{form.photo.errors}}</span>
+                        <button type="button" class="btn btn-primary" onclick="document.getElementById('id_photo').click()">Browse</button>
+                        <small class="text-secondary px-5">{{ form.photo.help_text }}</small>
+                    </div>  
+                </div>
+            </div>
+        
+            <hr/>
+        
+            <div class="row">
+                <h3 class="col-12 mt-3">About - {{profile.user.get_full_name}}</h3>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="last_school_name" class="form-label">Bio :</label>
+                    {{ form.bio }}
+                    <span class="text-danger">{{form.bio.errors}}</span>
+                </div>
+
+            </div>
+        
+            <hr/>
+
+
+            <div class="row">
+                <h3 class="col-12 my-3">Address Details</h3>
+
+
+                    <div class="col-md-6 col-12 mb-3">
+                        <label for="father_name" class="form-label">Address Line 1: <span class="text-danger">*</span></label>
+                        {{ form.address_line_1 }}
+                        <span class="text-danger">{{form.address_line_1.errors}}</span>
+                    </div>
+                    <div class="col-md-6 col-12 mb-3">
+                        <label for="father_age" class="form-label">Address Line 2<span class="text-danger">*</span></label>
+                        {{ form.address_line_2 }}
+                        <span class="text-danger">{{form.address_line_2.errors}}</span>
+                    </div>
+                    <div class="col-md-6 col-12 mb-3">
+                        <label for="father_education" class="form-label">City<span class="text-danger">*</span></label>
+                        {{ form.city }}
+                        <span class="text-danger">{{form.city.errors}}</span>   
+                    </div>
+                    <div class="col-md-6 col-12 mb-3">
+                        <label for="father_occupation" class="form-label">District<span class="text-danger">*</span></label>
+                        {{ form.district }}
+                        <span class="text-danger">{{form.district.errors}}</span>
+                    </div>
+                    <div class="col-md-6 col-12 mb-3">
+                        <label for="father_organisation" class="form-label">State<span class="text-danger">*</span></label>
+                        {{ form.state }}
+                        <span class="text-danger">{{form.state.errors}}</span>  
+                    </div>
+                    <div class="col-md-6 col-12 mb-3">
+                        <label for="father_designation" class="form-label">Pin Code<span class="text-danger">*</span></label>
+                        {{ form.pin_code }}
+                        <span class="text-danger">{{form.pin_code.errors}}</span>
+                    </div>
+
+                <hr/>
+
+
+            <div class="row">
+                <h3 class="col-12 my-3">Other Information</h3>
+
+                <!-- Father's Details -->
+                <div class="col-12 mb-4">
+                    <h4>Education and Experience</h4>
+                </div>
+
+                    <div class="col-md-6 col-12 mb-3">
+                        <label for="father_name" class="form-label">Education<span class="text-danger">*</span></label>
+                        {{ form.education }}
+                        <span class="text-danger">{{form.education.errors}}</span>
+                    </div>
+                    <div class="col-md-6 col-12 mb-3">
+                        <label for="father_age" class="form-label">Experience<span class="text-danger">*</span></label>
+                        {{ form.experience }}
+                        <span class="text-danger">{{form.experience.errors}}</span>
+                    </div>
+                    <div class="col-md-6 col-12 mb-3">
+                        <label for="father_education" class="form-label">Years of Experience<span class="text-danger">*</span></label>
+                        {{ form.year_of_experience }}
+                        <span class="text-danger">{{form.year_of_experience.errors}}</span>
+                    </div>
+                    <div class="col-md-6 col-12 mb-3">
+                        <label for="father_occupation" class="form-label">Field Of Study<span class="text-danger">*</span></label>
+                        {{ form.field_of_study }}
+                        <span class="text-danger">{{form.field_of_study.errors}}</span>
+                    </div>
+                    <div class="col-md-6 col-12 mb-3">
+                        <label for="father_organisation" class="form-label">Certification<span class="text-danger">*</span></label>
+                        {{ form.certificate }}
+                        <span class="text-danger">{{form.certificate.errors}}</span>
+                    </div>
+                    <div class="col-md-6 col-12 mb-3">
+                        <label for="father_designation" class="form-label">Achivements<span class="text-danger">*</span></label>
+                        {{ form.achivements }}
+                        <span class="text-danger">{{form.achivements.errors}}</span>
+                    </div>
+
+                <hr/>
+
+                <!-- Mother's Details -->
+                <div class="col-12 mb-4">
+                    <h4>Employment & Specialisation</h4>
+                </div>
+
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="mother_name" class="form-label">Employment Type<span class="text-danger">*</span></label>
+                    {{ form.employment_type }}
+                    <span class="text-danger">{{form.employment_type.errors}}</span>
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="mother_education" class="form-label">Subject<span class="text-danger">*</span></label>
+                    {{form.subjects}}
+                    <span class="text-danger">{{form.subjects.errors}}</span>
+                </div> 
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="mother_age" class="form-label">Specializ In<span class="text-danger">*</span></label>
+                    {{ form.specializations }}
+                    <span class="text-danger">{{form.specializations.errors}}</span>
+                </div>                
+            </div>            
+            <hr/>
+        
+            <div class="row my-3">
+                <div class="col text-end me-5">
+                    <button type="submit" class="btn btn-primary px-3 p-2">Update Detail</button>
+                </div>                
+            </div>
+        </form>
+        
+        
+        </div>
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@3.1.0/dist/js/multi-select-tag.js"></script>
+
+    <!-- JavaScript to preview uploaded image -->
+    <script>
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const imagePreview = document.getElementById('imagePreview');
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result; // Update the <img> src with the new image
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+
+<script>   
+    new MultiSelectTag('subjects', {
+    rounded: true,    // default true
+    shadow: true,      // default false
+    placeholder: 'Search',  // default Search...
+    tagColor: {
+        textColor: '#327b2c',
+        borderColor: '#92e681',
+        bgColor: '#eaffe6',
+    },
+    onChange: function(values) {
+        console.log(values)
+    }
+})
+</script>
+{% endblock main %}
+
+
+
+
+
+<div class="container">
+ 
+  <h2 class="fw-bold text-center text-lg-start" style="color:#1E3A8A;">User Prfile Update</h2>
+  <hr>
+
+
+  <h2>Update Prfofile</h2>
+  <form method="post" enctype="multipart/form-data" novalidate>
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Register</button>
+  </form>
+</div>

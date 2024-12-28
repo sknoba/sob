@@ -1,0 +1,277 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head %}
+<style>
+    .thumbnail-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+</style>
+{% endblock head %}
+
+
+{% block main %}
+
+<div class="container mb-4">
+
+        <h2 class="fw-bold text-center text-lg-start" style="color:#1E3A8A;">{% if student %}Edit{% else %}Add{% endif %} Student</h2>
+        <hr class="">
+        <div class="container bg-white rounded-4 py-4 px-4 shadow">
+        <form method="POST" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+            <div class="row">
+                <h3 class="col-12">Personal Information</h3>
+        
+                <div class="col-md-8 col-12 mb-3">
+                    <div class="row">
+                        <div class="col-md-6 col-12 mb-3">
+                            <label for="first_name" class="form-label">First Name <span class="text-danger">*</span></label>
+                            {{ form.first_name }}
+                        </div>
+                        <div class="col-md-6 col-12 mb-3">
+                            <label for="last_name" class="form-label">Last Name <span class="text-danger">*</span></label>
+                            {{ form.last_name }}
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6 col-12 mb-3">
+                            <label for="date_of_birth" class="form-label">Date Of Birth <span class="text-danger">*</span></label>
+                            {{ form.date_of_birth }}
+                        </div>
+                        <div class="col-md-6 col-12 mb-3">
+                            <label for="gender" class="form-label">Gender <span class="text-danger">*</span></label>
+                            {{ form.gender }}
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6 col-12 mb-3">
+                            <label for="adhar_number" class="form-label">Aadhar Number</label>
+                            {{ form.adhar_number }}
+                        </div>
+                        <div class="col-md-6 col-12 mb-3">
+                            <label for="religion" class="form-label">Religion</label>
+                            {{ form.religion }}
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="col-md-4 col-12 mb-3 text-center">
+                    <div class="thumbnail-wrapper">
+                        <!-- Display the existing or preview image -->
+                        <img id="imagePreview" src="{% if form.photo.value %}{{ form.photo.value.url }}{% else %}{% static "core/img/uplod-thumbnel.png" %}{% endif %}" alt="..." class="rounded-3 px-2 py-2" style="height: 180px; width:180px; border:dashed;">
+            
+                        <!-- Hidden file input for selecting a new image -->
+                        {{form.photo}}      
+                        
+                        <!-- Button to trigger file input -->
+                        <button type="button" class="btn btn-primary" onclick="document.getElementById('id_photo').click()">Browse</button>
+                    </div>  
+                </div>
+            </div>
+        
+            <hr/>
+        
+            <div class="row">
+                <h3 class="col-12 mt-3">Previous School Information</h3>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="last_school_name" class="form-label">Last School Name</label>
+                    {{ form.last_school_name }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="last_class_attended" class="form-label">Last Class Attended</label>
+                    {{ form.last_class_attended }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="examination_board" class="form-label">Examination Board</label>
+                    {{ form.examination_board }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="percentage_or_grade" class="form-label">Percentage/Grade</label>
+                    {{ form.percentage_or_grade }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="leaving_certificate_date" class="form-label">Leaving Certificate Date</label>
+                    {{ form.leaving_certificate_date }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="leaving_certificate_number" class="form-label">Leaving Certificate Number</label>
+                    {{ form.leaving_certificate_number }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="uid_number" class="form-label">UID Number</label>
+                    {{ form.uid_number }}
+                </div>
+            </div>
+        
+            <hr/>
+
+
+
+            <div class="row">
+                <h3 class="col-12 mt-3">Parent's Information</h3>
+
+                <!-- Father's Details -->
+                <div class="col-12 mb-4">
+                    <h4>Father's Details</h4>
+                </div>
+
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="father_name" class="form-label">Father Name<span class="text-danger">*</span></label>
+                    {{ form.father_name }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="father_age" class="form-label">Father Age<span class="text-danger">*</span></label>
+                    {{ form.father_age }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="father_education" class="form-label">Father Education<span class="text-danger">*</span></label>
+                    {{ form.father_education }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="father_occupation" class="form-label">Father Occupation<span class="text-danger">*</span></label>
+                    {{ form.father_occupation }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="father_organisation" class="form-label">Father Organisation<span class="text-danger">*</span></label>
+                    {{ form.father_organisation }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="father_designation" class="form-label">Father Designation<span class="text-danger">*</span></label>
+                    {{ form.father_designation }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="father_languages_known" class="form-label">Father Languages Known<span class="text-danger">*</span></label>
+                    {{ form.father_languages_known }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="father_mobile_number" class="form-label">Father Mobile Number<span class="text-danger">*</span></label>
+                    {{ form.father_mobile_number }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="father_email" class="form-label">Father Email<span class="text-danger">*</span></label>
+                    {{ form.father_email }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="father_phone" class="form-label">Father Phone<span class="text-danger">*</span></label>
+                    {{ form.father_phone }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="father_annual_income" class="form-label">Father Annual Income<span class="text-danger">*</span></label>
+                    {{ form.father_annual_income }}
+                </div>
+
+                <hr/>
+
+                <!-- Mother's Details -->
+                <div class="col-12 mb-4">
+                    <h4>Mother's Details</h4>
+                </div>
+
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="mother_name" class="form-label">Mother Name<span class="text-danger">*</span></label>
+                    {{ form.mother_name }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="mother_age" class="form-label">Mother Age<span class="text-danger">*</span></label>
+                    {{ form.mother_age }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="mother_education" class="form-label">Mother Education<span class="text-danger">*</span></label>
+                    {{ form.mother_education }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="mother_occupation" class="form-label">Mother Occupation<span class="text-danger">*</span></label>
+                    {{ form.mother_occupation }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="mother_organisation" class="form-label">Mother Organisation<span class="text-danger">*</span></label>
+                    {{ form.mother_organisation }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="mother_designation" class="form-label">Mother Designation<span class="text-danger">*</span></label>
+                    {{ form.mother_designation }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="mother_languages_known" class="form-label">Mother Languages Known<span class="text-danger">*</span></label>
+                    {{ form.mother_languages_known }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="mother_mobile_number" class="form-label">Mother Mobile Number<span class="text-danger">*</span></label>
+                    {{ form.mother_mobile_number }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="mother_email" class="form-label">Mother Email<span class="text-danger">*</span></label>
+                    {{ form.mother_email }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="mother_phone" class="form-label">Mother Phone<span class="text-danger">*</span></label>
+                    {{ form.mother_phone }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="mother_annual_income" class="form-label">Mother Annual Income<span class="text-danger">*</span></label>
+                    {{ form.mother_annual_income }}
+                </div>
+            </div>
+    
+        <hr/>
+
+
+            <!-- Guardian Information Section -->
+        <div class="row">
+            <h3 class="col-12 mt-3">Local Guardian Information (If any)</h3>
+            <div class="col-md-6 col-12 mb-3">
+                <label for="local_guardian_name" class="form-label">Guardian Name</label>
+                {{ form.local_guardian_name }}
+            </div>
+            <div class="col-md-6 col-12 mb-3">
+                <label for="local_guardian_mobile" class="form-label">Guardian Mobile</label>
+                {{ form.local_guardian_mobile }}
+            </div>
+            <div class="col-md-6 col-12 mb-3">
+                <label for="local_guardian_address" class="form-label">Guardian Address</label>
+                {{ form.local_guardian_address }}
+            </div>
+            <div class="col-md-6 col-12 mb-3">
+                <label for="local_guardian_health_problem" class="form-label">Guardian Health Problem</label>
+                {{ form.local_guardian_health_problem }}
+            </div>
+            <div class="col-md-6 col-12 mb-3">
+                <label for="relation_to_guardian" class="form-label">Guardian Relation</label>
+                {{ form.relation_to_guardian }}
+            </div>
+        </div>
+    
+        <hr/>
+
+        
+            <div class="row my-3">
+                <div class="col text-end me-5">
+                    <button type="submit" class="btn btn-success mx-2" name="action" value="save_and_enroll">Update</button>
+                </div>                
+            </div>
+        </form>
+        
+        
+        </div>
+</div>
+
+    <!-- JavaScript to preview uploaded image -->
+    <script>
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const imagePreview = document.getElementById('imagePreview');
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result; // Update the <img> src with the new image
+                }
+
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+
+{% endblock main %}

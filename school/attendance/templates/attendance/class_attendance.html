@@ -1,0 +1,413 @@
+{% extends "base.html" %}
+{% load static %}
+{% load arithmetic %}
+{% block head %}
+
+{% endblock head %}
+
+{% block main %}
+<div class="container">
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col">
+                <div class="shadow bg-white rounded-4 p-5 pt-4 pb-4">
+                    <div class="row">
+                        <h5 class="mb-0 text-secondary text-center mb-3">Class Details</h5>
+                        <hr>
+                        <div class="col-3 text-center">
+                            <strong>Class</strong> <br> 
+                            <p class="fs-3 m-0 p-0">{{class}}</p>
+                        </div>
+                        <div class="col-3 text-center">
+                            <strong>Class Teacher</strong><br>
+                            <p class="fs-3 m-0 p-0">
+                                {{class.class_teacher.first_name|capfirst}} {{class.class_teacher.last_name|capfirst}}
+                            </p>
+                        </div>
+                        <div class="col-3 text-center">
+                            <strong>Class Alias</strong> <br>
+                            <p class="fs-3 m-0 p-0">
+                                {% if class.alias %}{{class.alias}}{% else %}---{% endif %}
+                            </p>
+                        </div>
+                        <div class="col-3 text-center">
+                            <strong>Today's Attendance</strong> <br>
+                            <p class="fs-3 m-0 p-0">
+                                {% if attendance %}
+                                <i class="fa-solid fa-circle-check text-success"></i>
+                                {% else %}
+                                <i class="fa-solid fa-circle-xmark text-danger"> </i>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row mt-3 mb-5">
+            <!-- Main Section -->
+            <div class="col-lg-9 col-md-12 col-12">
+              <div class="shadow p-4 pb-5 bg-white" style="border-radius: 1rem;">
+                <!-- Date Picker -->
+                <div class="row m-4">
+                    <div class="col-10 text-center">
+                        <h5 class="mb-0 text-secondary">Todays Attendance Details</h5>
+                    </div>
+
+                    <div class="col-2 text-center">
+                        {% comment %} <a href="{% url "attendance-log" %}"><button class="btn btn-secondary"> {% endcomment %}
+                            View Log
+                        </button></a>
+                    </div>
+                </div>
+                    
+                      <!-- Attendance Summary -->
+                      <div class="p-3 " style="border: 1px solid rgb(53, 52, 52); border-radius: 1rem;">
+                        <div class="row">
+                            
+                            <div class="col-3" >
+                                <div class="text-center my-auto py-3 shadow mx-2" style="border-radius: 2rem;">
+                                    <h5 class="text-center">Total</h5>
+                                    <h2 class="text-dark">{% if class %}{{ class.total_students }}{% else %}---{% endif %}</h2>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="text-center my-auto py-3 shadow mx-2" style="border-radius: 2rem;">
+                                    <h5 class="text-center">Present</h5>
+                                     <h2 class="text-success">{% if attendance %}{{attendance.first.present}}{% else %}---{% endif %}</h2>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="text-center my-auto py-3 shadow mx-2 " style="border-radius: 2rem;">
+                                    <h5 class="text-center">Absent</h5>
+                                    <h2 class="text-danger">{% if attendance %}{{ attendance.first.absent }}{% else %}---{% endif %}</h2>
+                                    
+                                    
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="text-center my-auto py-4 shadow mx-2 my-auto " style="border-radius: 2rem;">
+                                   
+                                   <a class="btn btn-primary text-white px-4 py-2 rounded-pill" 
+                                    data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                    View Details
+                                    </a>
+                                </div>
+                                </div>
+                            </div>
+                      </div>
+                      <!-- Collapsible Table -->
+                      <div class="collapse mt-4" id="collapseExample">
+                          <div class="card card-body"  style="border: 1px solid rgb(53, 52, 52); border-radius: 1rem;">
+                          <table class="table table-hover table-bordered">
+                            
+                              <thead class="table-secondary">
+                              <tr>
+                                  <th scope="col">Roll No.</th>
+                                  <th scope="col">Name</th>
+                                  <th scope="col">Gender</th>
+                                  <th class="text-center" scope="col">Statuss</th>
+                                  <th class="text-center" scope="col">Updates</th>
+                                  
+                              </tr>
+                              </thead>
+                              <tbody>
+                               
+                            {% for student in attendance.first.attendance_records.all %}
+                            <tr>
+                                <th scope="row">{{forloop.counter}}</th>
+                                <td>{{student.student.first_name}} {{student.student.last_name}}</td>
+                                <td>{{student.student.get_gender_display}}</td>
+                                <td class="text-center">{% if student.status %}<i class="fa-solid fa-circle-check text-success"></i>{% else %}<i class="fa-solid fa-circle-xmark text-danger">{% endif %}</i></td>
+                                <td>
+                                    {% for history in student.history.all %}
+                                        {% if history.status %}                                         
+                                            <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{{history.history_date|time}}"><i class="fa-solid fa-circle-check text-success"></i></span>
+                                        {% else %}
+                                            <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{{history.history_date|time}}"><i class="fa-solid fa-circle-xmark text-danger"></i></span>
+                                        {% endif %}
+                                        
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                              
+
+                            {% empty %}
+                            <tr>
+                                <td class="text-center" colspan="6">No Data Available</td>
+                            </tr>
+                            {% endfor %} 
+                              </tbody>
+                          </table>
+                          
+                          </div>
+                      </div>
+              </div>
+            </div>                             
+
+            <!-- Buttons Section -->
+            <div class="col-lg-3 col-md-12 col-12">
+            
+              <div class="shadow p-3 bg-white text-center pt-4" style="border-radius: 1rem;"> 
+                <span> Take Attendance </span> <br>
+                <hr class="m-1">
+            
+                {% if attendance %}
+                <button class="btn btn-outline-success mb-2 w-100 rounded-pill mt-3" style="padding-top:0.7rem;" disabled>Take Attendence</button>
+                <a href="{% url "mark-attendance" class.id %}">
+                    <button class="btn btn-outline-warning mb-2 w-100 rounded-pill mt-3" style="padding-top:0.7rem;">Update Attendence</button>
+                </a>
+                {% else %}
+                <a href="{% url "mark-attendance" class.id %}">
+                    <button class="btn btn-outline-success mb-2 w-100 rounded-pill mt-3" style="padding-top:0.7rem;">Take Attendence</button>
+                </a>
+                <button class="btn btn-outline-warning mb-2 w-100 rounded-pill mt-3" style="padding-top:0.7rem;" disabled>Update Attendence</button>
+                {% endif %}
+                
+                
+              </div>
+
+              <!-- Log Record Section -->
+              <div class="shadow p-3 bg-white text-center pt-4 my-5" style="border-radius: 1rem;"> 
+                <span> Attendance Taken By </span> <br>
+                <hr class="m-1">
+
+                <div class="text-center py-2">
+                    <h5 class="py-2">Created ~</h5>
+                    <img src="{% if attendance.first.created_by.profile.photo %}{{attendance.first.created_by.profile.photo.url}}{% else %}{% static "core/img/profile.png" %}{% endif %}" alt="" class="avatar-sm rounded-circle me-2" style="width: 50px; height: 50px;"/>
+                    <p class="fs-5 m-0 ">{{attendance.first.created_by.first_name|capfirst}}</p>
+                    <small class="text-secondary">{{attendance.first.date}}</small>
+                
+                <hr class="m-1">
+                <h5 class="py-2">Updated +</h5>
+                {% for history in attendance.first.history.all %}
+                <img src="{% if history.first.created_by.profile.photo %}{{history.first.created_by.profile.photo.url}}{% else %}{% static "core/img/profile.png" %}{% endif %}" alt="" class="avatar-sm rounded-circle me-2" style="width: 50px; height: 50px;"/>
+                <p class="fs-5 m-0 ">{{history.first.created_by.first_name|capfirst}}</p>
+                <small class="text-secondary">{{history.first.date}}</small>
+                {% endfor %}
+              </div>
+
+              
+            </div>
+
+
+            
+
+            
+
+
+            
+        </div>
+    </div>    
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Initialize tooltips for elements with data-bs-toggle="tooltip"
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+  </script>
+  
+{% endblock main %}
+
+
+
+
+{% comment %} {% extends "base.html" %}
+{% load static %}
+{% load arithmetic %}
+{% block head %}
+
+{% endblock head %}
+
+{% block main %}
+<div class="container-fluid">
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-12">
+                <div class="shadow bg-white rounded-4 p-5 pt-4 pb-4">
+                    <div class="row">
+                        <h5 class="mb-0 text-secondary text-center mb-3">Class Details</h5>
+                        <hr>
+                        <div class="col-6 col-sm-3 text-center">
+                            <strong>Class</strong> <br> 
+                            <p class="fs-3 m-0 p-0">{{class}}</p>
+                        </div>
+                        <div class="col-6 col-sm-3 text-center">
+                            <strong>Class Teacher</strong><br>
+                            <p class="fs-3 m-0 p-0">
+                                {{class.class_teacher.first_name|capfirst}} {{class.class_teacher.last_name|capfirst}}
+                            </p>
+                        </div>
+                        <div class="col-6 col-sm-3 text-center">
+                            <strong>Class Alias</strong> <br>
+                            <p class="fs-3 m-0 p-0">
+                                {% if class.alias %}{{class.alias}}{% else %}---{% endif %}
+                            </p>
+                        </div>
+                        <div class="col-6 col-sm-3 text-center">
+                            <strong>Today's Attendance</strong> <br>
+                            <p class="fs-3 m-0 p-0">
+                                {% if attendance %}
+                                <i class="fa-solid fa-circle-check text-success"></i>
+                                {% else %}
+                                <i class="fa-solid fa-circle-xmark text-danger"> </i>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3 mb-5">
+            <!-- Main Section -->
+            <div class="col-lg-9 col-md-12">
+              <div class="shadow p-4 pb-5 bg-white" style="border-radius: 1rem;">
+                <!-- Date Picker -->
+                <div class="row m-4">
+                    <div class="col-10 text-center">
+                        <h5 class="mb-0 text-secondary">Today's Attendance Details</h5>
+                    </div>
+                    <div class="col-2 text-center">
+                        <a href="#"><button class="btn btn-secondary">View Log</button></a>
+                    </div>
+                </div>
+                    
+                <!-- Attendance Summary -->
+                <div class="p-3" style="border: 1px solid rgb(53, 52, 52); border-radius: 1rem;">
+                    <div class="row">
+                        <div class="col-6 col-sm-3">
+                            <div class="text-center my-auto py-3 shadow mx-2" style="border-radius: 2rem;">
+                                <h5>Total</h5>
+                                <h2 class="text-dark">{% if class %}{{ class.total_students }}{% else %}---{% endif %}</h2>
+                            </div>
+                        </div>
+                        <div class="col-6 col-sm-3">
+                            <div class="text-center my-auto py-3 shadow mx-2" style="border-radius: 2rem;">
+                                <h5>Present</h5>
+                                <h2 class="text-success">{% if attendance %}{{attendance.first.present}}{% else %}---{% endif %}</h2>
+                            </div>
+                        </div>
+                        <div class="col-6 col-sm-3">
+                            <div class="text-center my-auto py-3 shadow mx-2 " style="border-radius: 2rem;">
+                                <h5>Absent</h5>
+                                <h2 class="text-danger">{% if attendance %}{{ attendance.first.absent }}{% else %}---{% endif %}</h2>
+                            </div>
+                        </div>
+                        <div class="col-6 col-sm-3">
+                            <div class="text-center my-auto py-4 shadow mx-2" style="border-radius: 2rem;">
+                                <a class="btn btn-primary text-white px-4 py-2 rounded-pill" 
+                                data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Collapsible Table -->
+                <div class="collapse mt-4" id="collapseExample">
+                    <div class="card card-body" style="border: 1px solid rgb(53, 52, 52); border-radius: 1rem;">
+                        <table class="table table-hover table-bordered">
+                            <thead class="table-secondary">
+                                <tr>
+                                    <th scope="col">Roll No.</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Gender</th>
+                                    <th class="text-center" scope="col">Status</th>
+                                    <th class="text-center" scope="col">Updates</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for student in attendance.first.attendance_records.all %}
+                                <tr>
+                                    <th scope="row">{{forloop.counter}}</th>
+                                    <td>{{student.student.first_name}} {{student.student.last_name}}</td>
+                                    <td>{{student.student.get_gender_display}}</td>
+                                    <td class="text-center">{% if student.status %}<i class="fa-solid fa-circle-check text-success"></i>{% else %}<i class="fa-solid fa-circle-xmark text-danger"></i>{% endif %}</td>
+                                    <td>
+                                        {% for history in student.history.all %}
+                                            <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{{history.history_date|time}}">
+                                                {% if history.status %}<i class="fa-solid fa-circle-check text-success"></i>{% else %}<i class="fa-solid fa-circle-xmark text-danger"></i>{% endif %}
+                                            </span>
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td class="text-center" colspan="5">No Data Available</td>
+                                </tr>
+                                {% endfor %} 
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+              </div>
+            </div>                             
+
+            <!-- Buttons Section -->
+            <div class="col-lg-3 col-md-12">
+              <div class="shadow p-3 bg-white text-center pt-4" style="border-radius: 1rem;"> 
+                <span> Take Attendance </span> <br>
+                <hr class="m-1">
+                {% if attendance %}
+                <button class="btn btn-outline-success mb-2 w-100 rounded-pill mt-3" style="padding-top:0.7rem;" disabled>Take Attendance</button>
+                <a href="{% url "mark-attendance" class.id %}">
+                    <button class="btn btn-outline-warning mb-2 w-100 rounded-pill mt-3" style="padding-top:0.7rem;">Update Attendance</button>
+                </a>
+                {% else %}
+                <a href="{% url "mark-attendance" class.id %}">
+                    <button class="btn btn-outline-success mb-2 w-100 rounded-pill mt-3" style="padding-top:0.7rem;">Take Attendance</button>
+                </a>
+                <button class="btn btn-outline-warning mb-2 w-100 rounded-pill mt-3" style="padding-top:0.7rem;" disabled>Update Attendance</button>
+                {% endif %}
+              </div>
+
+              <!-- Log Record Section -->
+              <div class="shadow p-3 bg-white text-center pt-4 my-5" style="border-radius: 1rem;"> 
+                <span> Attendance Taken By </span> <br>
+                <hr class="m-1">
+                <div class="text-center py-2">
+                    <h5 class="py-2">Created ~</h5>
+                    <img src="{% if attendance.first.created_by.profile.photo %}{{attendance.first.created_by.profile.photo.url}}{% else %}{% static "core/img/profile.png" %}{% endif %}" alt="" class="avatar-sm rounded-circle me-2" style="width: 50px; height: 50px;"/>
+                    <p class="fs-5 m-0">{{attendance.first.created_by.first_name|capfirst}}</p>
+                    <small class="text-secondary">{{attendance.first.date}}</small>
+                    <hr class="m-1">
+                    <h5 class="py-2">Updated +</h5>
+                    {% for history in attendance.first.history.all %}
+                    <img src="{% if history.first.created_by.profile.photo %}{{history.first.created_by.profile.photo.url}}{% else %}{% static "core/img/profile.png" %}{% endif %}" alt="" class="avatar-sm rounded-circle me-2" style="width: 50px; height: 50px;"/>
+                    <p class="fs-5 m-0">{{history.first.created_by.first_name|capfirst}}</p>
+                    <small class="text-secondary">{{history.first.date}}</small>
+                    {% endfor %}
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>    
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Initialize tooltips for elements with data-bs-toggle="tooltip"
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+</script>
+
+{% endblock main %}
+
+
+ {% endcomment %}
+
+

@@ -1,0 +1,251 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head %}
+{% endblock head %}
+
+
+{% block main %}
+
+<div class="container-fluid">
+    <h2 class="fw-bold text-center text-lg-start" style="color:#1E3A8A;">Other Information</h2>
+    <hr>    
+    <div class="card bg-white rounded-4 shadow-lg my-4" style="padding: 30px;">
+        <form method="POST" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+            
+            <div class="row">
+                <!-- Residential Address Section -->
+                <h3 class="col-12">Residential Address</h3>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="residential_address" class="form-label">Residential Address <span class="text-danger">*</span></label>
+                    {{ form.residential_address }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="residential_city" class="form-label">Residential City <span class="text-danger">*</span></label>
+                    {{ form.residential_city }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="residential_state" class="form-label">Residential State <span class="text-danger">*</span></label>
+                    {{ form.residential_state }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="residential_pin_code" class="form-label">Residential Pin Code <span class="text-danger">*</span></label>
+                    {{ form.residential_pin_code }}
+                    <span class="text-danger">{{ form.permanent_pin_code.errors}}</span>
+                </div>
+            </div>
+
+            <!-- Checkbox to replicate the address -->
+            <div class="col-12 mb-3 mx-3">
+                <input type="checkbox" id="same_as_residential" class="form-check-input border border-primary" />
+                <label for="same_as_residential" class="form-check-label">Permanent address is same as Residential Address.</label>
+            </div>                   
+
+            <hr/>
+            
+            <div class="row">
+                <!-- Permanent Address Section -->
+                <h3 class="col-12">Permanent Address</h3>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="permanent_address" class="form-label">Permanent Address <span class="text-danger">*</span></label>
+                    {{ form.permanent_address }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="permanent_city" class="form-label">Permanent City <span class="text-danger">*</span></label>
+                    {{ form.permanent_city }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="permanent_state" class="form-label">Permanent State <span class="text-danger">*</span></label>
+                    {{ form.permanent_state }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="permanent_pin_code" class="form-label">Permanent Pin Code <span class="text-danger">*</span></label>
+                    {{ form.permanent_pin_code }}
+                    <span class="text-danger">{{ form.permanent_pin_code.errors}}</span>
+                </div>
+            </div>
+
+            <hr/>
+            
+            <div class="row">
+                <!-- Nationality Field (moved to bottom after address) -->
+                <h3 class="col-12">Nationality</h3>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="nationality" class="form-label">Nationality <span class="text-danger">*</span></label>
+                    {{ form.nationality }}
+                </div>
+            </div>
+
+            <hr/>
+
+            <!-- Parent Information Section -->
+            <div class="row">
+                <h3 class="col-12 mt-3">Parent's Information</h3>
+
+                <!-- Father's Details -->
+                <div class="col-12 mb-4">
+                    <h4>Father's Details</h4>
+                </div>
+
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="father_name" class="form-label">Father Name<span class="text-danger">*</span></label>
+                    {{ form.father_name }}
+                    <span class="text-danger">{{ form.father_name.errors }}</span>
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="father_age" class="form-label">Father Age</label>
+                    {{ form.father_age }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="father_education" class="form-label">Father Education</label>
+                    {{ form.father_education }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="father_occupation" class="form-label">Father Occupation</label>
+                    {{ form.father_occupation }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="father_organisation" class="form-label">Father Organisation</label>
+                    {{ form.father_organisation }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="father_designation" class="form-label">Father Designation</label>
+                    {{ form.father_designation }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="father_languages_known" class="form-label">Father Languages Known</label>
+                    {{ form.father_languages_known }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="father_mobile_number" class="form-label">Father Mobile Number <span class="text-danger">*</span></label>
+                    {{ form.father_mobile_number }}
+                    <span class="text-danger">{{ form.father_mobile_number.errors }}</span>
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="father_email" class="form-label">Father Email</label>
+                    {{ form.father_email }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="father_phone" class="form-label">Father Phone</label>
+                    {{ form.father_phone }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="father_annual_income" class="form-label">Father Annual Income</label>
+                    {{ form.father_annual_income }}
+                </div>
+
+                <hr/>
+
+                <!-- Mother's Details -->
+                <div class="col-12 mb-4">
+                    <h4>Mother's Details</h4>
+                </div>
+
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="mother_name" class="form-label">Mother Name <span class="text-danger">*</span></label>
+                    {{ form.mother_name }}
+                    <span class="text-danger">{{ form.mother_name.errors }}</span>
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="mother_age" class="form-label">Mother Age</label>
+                    {{ form.mother_age }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="mother_education" class="form-label">Mother Education</label>
+                    {{ form.mother_education }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="mother_occupation" class="form-label">Mother Occupation</label>
+                    {{ form.mother_occupation }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="mother_organisation" class="form-label">Mother Organisation</label>
+                    {{ form.mother_organisation }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="mother_designation" class="form-label">Mother Designation</label>
+                    {{ form.mother_designation }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="mother_languages_known" class="form-label">Mother Languages Known</label>
+                    {{ form.mother_languages_known }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="mother_mobile_number" class="form-label">Mother Mobile Number <span class="text-danger">*</span></label>
+                    {{ form.mother_mobile_number }}
+                    <span class="text-danger">{{ form.mother_mobile_number.errors }}</span>
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="mother_email" class="form-label">Mother Email</label>
+                    {{ form.mother_email }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="mother_phone" class="form-label">Mother Phone</label>
+                    {{ form.mother_phone }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="mother_annual_income" class="form-label">Mother Annual Income<span class="text-danger">*</span></label>
+                    {{ form.mother_annual_income }}
+                </div>
+            </div>
+
+            <hr/>
+
+            <!-- Guardian Information Section -->
+            <div class="row">
+                <h3 class="col-12 mt-3">Local Guardian Information (If any)</h3>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="local_guardian_name" class="form-label">Guardian Name</label>
+                    {{ form.local_guardian_name }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="local_guardian_mobile" class="form-label">Guardian Mobile</label>
+                    {{ form.local_guardian_mobile }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="local_guardian_address" class="form-label">Guardian Address</label>
+                    {{ form.local_guardian_address }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="local_guardian_health_problem" class="form-label">Guardian Health Problem</label>
+                    {{ form.local_guardian_health_problem }}
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="relation_to_guardian" class="form-label">Guardian Relation</label>
+                    {{ form.relation_to_guardian }}
+                </div>
+            </div>
+
+            <hr/>
+
+            <div class="row my-3">
+                <div class="col text-end me-5">
+                    <button type="submit" class="btn btn-success mx-2" name="action" value="save_and_enroll">Save & Next<i class="fa-solid fa-circle-right mx-1"></i></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- JavaScript to handle address replication -->
+<script>
+    document.getElementById('same_as_residential').addEventListener('change', function() {
+        if (this.checked) {
+            // Replicate Residential Address to Permanent Address
+            document.getElementById('id_permanent_address').value = document.getElementById('id_residential_address').value;
+            document.getElementById('id_permanent_city').value = document.getElementById('id_residential_city').value;
+            document.getElementById('id_permanent_state').value = document.getElementById('id_residential_state').value;
+            document.getElementById('id_permanent_pin_code').value = document.getElementById('id_residential_pin_code').value;
+        } else {
+            // Clear Permanent Address Fields if checkbox is unchecked
+            document.getElementById('id_permanent_address').value = '';
+            document.getElementById('id_permanent_city').value = '';
+            document.getElementById('id_permanent_state').value = '';
+            document.getElementById('id_permanent_pin_code').value = '';
+        }
+    });
+</script>
+
+
+{% endblock main %}

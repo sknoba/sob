@@ -1,0 +1,1 @@
+const VAPID_PUBLIC_KEY = "{{ VAPID_PUBLIC_KEY }}";

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block main %}
+
+<div class="container">
+
+  <div class="container-fluid d-flex justify-content-center">
+                
+    <div class="card col-md-10 p-lg-5 shadow-lg rounded-4 p-0">
+        <div class="card-header border-0 bg-white">
+            <h4 class="card-title h3 mb-4 text-primary text-start ">Standard Information</h4>
+            <form method="POST" novalidate>
+              {% csrf_token %}
+              <div class="row">
+                  <!-- First column with 3 fields -->
+                  <div class="col-md-6">
+                      
+                          <div class="row g-4">
+                              <div class="col-12">
+                                  <label for="standardName" class="form-label text-dark fw-semibold">Standard Name <span class="text-danger">*</span></label>
+                                  {{form.name}}
+                              </div>
+                              <div class="col-12">
+                                  <label for="standardAlias" class="form-label mt-3 text-dark fw-semibold">Standard Alias</label>
+                                  {{form.alias}}
+                              </div>
+                              <div class="col-12">
+                                  <label for="section" class="form-label mt-3 text-dark fw-semibold">Section</label>
+                                  {{form.section}}
+                              </div>
+                          </div>
+                      
+                  </div>
+
+                  <!-- Second column with 3 fields -->
+                  <div class="col-md-6">
+                      
+                          <div class="row g-4">
+                              <div class="col-12">
+                                  <label for="classTeacher" class="form-label text-dark fw-semibold">Class Teacher</label>
+                                  {{form.user}}
+                              </div>
+                              <div class="col-12">
+                                  <label for="classMonitorBoy" class="form-label mt-3 text-dark fw-semibold">Class Monitor Boy</label>
+                                  {{form.class_monitor_boy}}
+                              </div>
+                              <div class="col-12">
+                                  <label for="classMonitorGirl" class="form-label mt-3 text-dark fw-semibold">Class Monitor Girl</label>
+                                  {{form.class_monitor_girl}}                                  
+                              </div>
+                          </div>
+
+                  </div>
+              </div>
+
+              <!-- Action buttons -->
+              <div class="row mt-4">
+                  <div class="col-md-12">
+                      <div class="d-flex flex-column flex-sm-row justify-content-between">
+                        <a href="{% url 'classes-list' %}">
+                          <button  type="button" class="btn btn-outline-dark px-5 py-2 rounded-pill mb-3 mb-sm-0 transition-all hover:bg-dark hover-text-white">
+                              <i class="bi bi-arrow-left"></i> Back
+                          </button>
+                        </a>
+                          <button type="submit" class="btn btn-outline-primary px-5 py-2 rounded-pill transition-all hover:bg-primary hover-text-white">
+                              Save <i class="bi bi-save"></i>
+                          </button>
+                      </div>
+                  </div>
+              </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</div>
+{% endblock main %}

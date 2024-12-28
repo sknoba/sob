@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head %}
+<style>
+    .thumbnail-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+</style>
+{% endblock head %}
+
+
+{% block main %}
+
+
+<div class="container-fluid">
+    <h2 class="fw-bold text-center text-lg-start" style="color:#1E3A8A;">Add New Student</h2>
+    <hr class="">
+
+    <div class="card bg-white rounded-4 shadow-lg my-4" style="padding: 30px;">            
+        <form method="POST" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+            <div class="row">
+                <h3 class="col-12">Personal Information</h3>
+        
+                <div class="col-md-8 col-12 mb-3">
+                    <div class="row">
+                        <div class="col-md-6 col-12 mb-3">
+                            <label for="first_name" class="form-label">First Name <span class="text-danger">*</span></label>
+                            {{ form.first_name }}                            
+                            <span class="text-danger">{{ form.first_name.errors }}</span>
+                        </div>
+                        <div class="col-md-6 col-12 mb-3">
+                            <label for="last_name" class="form-label">Last Name <span class="text-danger">*</span></label>
+                            {{ form.last_name }}
+                            <span class="text-danger">{{ form.last_name.errors }}</span>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6 col-12 mb-3">
+                            <label for="date_of_birth" class="form-label">Date Of Birth <span class="text-danger">*</span></label>
+                            {{ form.date_of_birth }}
+                            <span class="text-danger">{{ form.date_of_birth.errors }}</span>
+                        </div>
+                        <div class="col-md-6 col-12 mb-3">
+                            <label for="gender" class="form-label">Gender <span class="text-danger">*</span></label>
+                            {{ form.gender }}
+                            <span class="text-danger">{{ form.gender.errors }}</span>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6 col-12 mb-3">
+                            <label for="adhar_number" class="form-label">Aadhar Number <span class="text-danger">*</span></label>
+                            {{ form.adhar_number }}
+                            <span class="text-danger">{{ form.adhar_number.errors }}</span>
+                        </div>
+                        <div class="col-md-6 col-12 mb-3">
+                            <label for="religion" class="form-label">Religion <span class="text-danger">*</span></label>
+                            {{ form.religion }}
+                            <span class="text-danger">{{ form.religion.errors }}</span>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="col-md-4 col-12 mb-3 text-center">
+                    <div class="thumbnail-wrapper">
+                        <!-- Display the existing or preview image -->
+                        <img id="imagePreview" src="{% if form.photo.value %}{{ form.photo.value.url }}{% else %}{% static "core/img/uplod-thumbnel.png" %}{% endif %}" alt="..." class="rounded-3 px-2 py-2" style="height: 180px; width:180px; border:dashed;">
+            
+                        <!-- Hidden file input for selecting a new image -->
+                        {{form.photo}}     
+                        
+                        <!-- Button to trigger file input -->
+                        <button type="button" class="btn btn-primary" onclick="document.getElementById('id_photo').click()">Browse</button>
+                        <small class="text-secondary px-5">{{ form.photo.help_text }}</small>
+                        <span class="text-danger">{{ form.photo.errors }}</span> 
+                    </div>  
+                </div>
+            </div>
+        
+            <hr/>
+        
+            <div class="row">
+                <h3 class="col-12 mt-3">Previous School Information</h3>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="last_school_name" class="form-label">Last School Name <span class="text-danger">*</span></label>
+                    {{ form.last_school_name }}
+                    <span class="text-danger">{{ form.last_school_name.errors }}</span>
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="last_class_attended" class="form-label">Last Class Attended <span class="text-danger">*</span></label>
+                    {{ form.last_class_attended }}
+                    <span class="text-danger">{{ form.last_class_attended.errors }}</span>
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="examination_board" class="form-label">Examination Board <span class="text-danger">*</span></label>
+                    {{ form.examination_board }}
+                    <span class="text-danger">{{ form.examination_board.errors }}</span>
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="percentage_or_grade" class="form-label">Percentage/Grade <span class="text-danger">*</span></label>
+                    {{ form.percentage_or_grade }}
+                    <span class="text-danger">{{ form.percentage_or_grade.errors }}</span>
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="leaving_certificate_date" class="form-label">Leaving Certificate Date</label>
+                    {{ form.leaving_certificate_date }}
+                    <span class="text-danger">{{ form.leaving_certificate_date.errors }}</span>
+                </div>
+                <div class="col-md-6 col-12 mb-3">
+                    <label for="leaving_certificate_number" class="form-label">Leaving Certificate Number <span class="text-danger">*</span></label>
+                    {{ form.leaving_certificate_number }}
+                    <span class="text-danger">{{ form.leaving_certificate_number.errors }}</span>
+                </div>                
+            </div>
+        
+            <hr/>
+        
+            <div class="row my-3">
+                <div class="col text-end me-5">
+                    <button type="submit" class="btn btn-success mx-2" name="action" value="save_and_enroll">Save & Next<i class="fa-solid fa-circle-right mx-1"></i></button>
+                </div>                
+            </div>
+        </form>        
+    </div>
+
+</div>
+
+<!-- JavaScript to preview uploaded image -->
+<script>
+    function previewImage(event) {
+        const file = event.target.files[0];
+        const imagePreview = document.getElementById('imagePreview');
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result; // Update the <img> src with the new image
+            }
+
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
+    
+
+{% endblock main %}

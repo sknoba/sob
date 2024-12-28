@@ -1,0 +1,409 @@
+{% extends "base.html" %}
+{% load static %}
+{% load arithmetic %}
+
+{% block head %}
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .school-header {
+        text-align: center;
+    }
+
+    .school-logo {
+        max-width: 100px;
+        height: auto;
+    }
+
+    .card {
+        border-radius: 15px;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: 1px solid #ddd;
+        position: relative;
+        overflow: hidden;
+        transition: box-shadow 0.4s ease-in-out, border 0.4s ease-in-out;
+    }
+
+    .card::before {
+        content: '';
+        position: absolute;
+        top: -3px;
+        left: -3px;
+        right: -3px;
+        bottom: -3px;
+        z-index: -1;
+        background: linear-gradient(135deg, #0061ff, #60efff);
+        border-radius: 18px; /* Matches the card's border-radius + 3px */
+        filter: blur(10px);
+        opacity: 0;
+        transition: opacity 0.4s ease-in-out;
+    }
+
+    .card:hover::before {
+        opacity: 1;
+    }
+
+    .form-control {
+        border-radius: 10px;
+        padding: 10px 15px;
+        transition: box-shadow 0.3s ease-in-out;
+    }
+
+    .form-control:focus {
+        box-shadow: 0 0 8px rgba(0, 102, 255, 0.5);
+        border-color: #0061ff;
+    }
+
+    .btn-teacher-submit {
+        background: linear-gradient(135deg,#60efff, #0061ff);
+        border: none;
+        border-radius: 10px;
+        color: #fff;
+        font-weight: bold;
+        padding: 10px 20px;
+        transition: transform 0.2s ease-in-out;
+    }
+    .btn-staff-submit {
+        background: linear-gradient(135deg, #ff6a00, #ee0979);
+        border: none;
+        border-radius: 10px;
+        color: #fff;
+        font-weight: bold;
+        padding: 10px 20px;
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .btn-outline-secondary {
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .btn-outline-secondary:hover {
+        background: linear-gradient(135deg, #0061ff, #60efff);
+        color: #fff;
+    }
+
+    hr {
+        border-top: 2px solid rgba(255, 106, 0, 0.3);
+    }
+
+    .teacher-heading {
+        background: linear-gradient(135deg, #0061ff, #60efff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .staff-heading{
+        background: linear-gradient(135deg, #ff6a00, #ee0979);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+
+    }
+
+    .error-message {
+        color: red;
+        font-size: 0.9rem;
+        margin-top: 5px;
+        display: block;
+    }
+
+    .is-valid {
+        border-color: green;
+    }
+
+    .is-invalid {
+        border-color: red;
+    }
+
+    #errorMessage {
+        font-size: 0.875rem;
+        font-weight: normal;
+    }
+    
+   /* Style for the button */
+    #toggleUsername {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        padding: 8px 15px;
+        background-color: #fff;
+        transition: background-color 0.3s ease;
+    }
+
+    #toggleUsername:hover {
+        background-color: #f0f0f0;
+    }
+
+    /* Style for the input field when disabled */
+    .form-control:disabled {
+        background-color: #e9ecef;
+        cursor: not-allowed;
+    }
+
+    /* Style for the icon */
+    #toggleIcon {
+        font-size: 16px;
+    }
+
+    #togglePassword{
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        padding: 10px 15px;
+        background-color: #fff;
+        transition: background-color 0.3s ease;
+    }
+</style>
+
+
+{% endblock head %}
+
+
+
+{% block main %}
+<div class="container d-flex justify-content-center pt-5">
+    <div class="card shadow-lg" style="max-width: 800px; width: 100%; ">        
+        <div class="school-header text-center" >
+            <img src="{% static "core/img/school-logo.png" %}" alt="School Logo" class="school-logo mb-2">
+            <h4 class="{% if 'staff' in request.path %}staff{% elif 'teacher' in request.path %}teacher{% endif %}-heading fw-bold">School of Brilliant Ralegaon</h4>
+        </div>
+        <hr>
+        <h3 class="text-center mb-4">Create User Teacher</h3>                         
+        
+    <form id="userForm" method='POST' novalidate>
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="firstName" class="form-label">First Name</label>
+                    {{form.first_name}}
+                    <p id="firstNameError" class="error-message"></p>
+                    <span class="error-message">{{form.first_name.errors}}</span>
+
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="lastName" class="form-label">Last Name</label>
+                    {{form.last_name}}                    
+                    <p id="lastNameError" class="error-message"></p>
+                    <span class="error-message">{{form.last_name.errors}}</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <div class="input-group">
+                        {{form.username}}                        
+                        <button type="button" class="btn btn-outline-secondary" id="toggleUsername">
+                            <i id="toggleIcon" class="fa-solid fa-pencil"></i>
+                        </button>
+                    </div>
+                    <p id="usernameError" class="error-message"></p>
+                    <span class="error-message">{{form.username.errors}}</span>  
+                </div>
+                
+                
+                <div class="col-md-6 mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    {{form.email}}                    
+                    <p id="emailError" class="error-message"></p>
+                    <span class="error-message">{{form.email.errors}}</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-group">
+                        {{form.password}}                        
+                        <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                    <!-- Error message below input field -->
+                    <p id="passwordErrors" class="error-message mt-2"></p>
+                    <span class="error-message">{{form.password.errors}}</span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="confirmPassword" class="form-label">Confirm Password</label>
+                    <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password" required>
+                    <p id="confirmPasswordError" class="error-message"></p> <!-- Message will be shown here -->
+                </div>
+                
+            </div>
+            
+            <button type="submit" class="btn btn-{% if 'staff' in request.path %}staff{% elif 'teacher' in request.path %}teacher{% endif %}-submit w-100 mb-2">Submit</button>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const firstNameInput = document.getElementById("firstName");
+        const lastNameInput = document.getElementById("lastName");
+        const usernameInput = document.getElementById("username");
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
+        const togglePasswordBtn = document.getElementById("togglePassword");
+        const usernameError = document.getElementById("usernameError");
+        const firstNameError = document.getElementById("firstNameError");
+        const lastNameError = document.getElementById("lastNameError");
+        const emailError = document.getElementById("emailError");
+        const form = document.getElementById("userForm");
+        const confirmPasswordInput = document.getElementById("confirmPassword");
+        const confirmPasswordError = document.getElementById("confirmPasswordError");
+        const toggleUsernameButton = document.getElementById("toggleUsername");
+        const toggleIcon = document.getElementById("toggleIcon");
+        
+        
+        const passwordCriteria = {
+            minLength: "Password must be at least 8 characters.",
+            notNumeric: "Password can't be all numbers.",
+            noCommonPasswords: "Password is too common.",
+            notSimilar: "Password is too similar to personal info.",
+            firstLetterCapital: "Password must start with a capital letter.",
+            specialCharacterAndNumber: "Password must include at least one special character and one number."
+        };
+        
+        const commonPasswords = ["password", "12345678", "qwerty", "admin"];
+        
+        const passwordErrorElement = document.createElement("p");
+        passwordErrorElement.className = "error-message";
+        passwordInput.parentElement.appendChild(passwordErrorElement);
+
+        // Toggle password visibility
+        togglePasswordBtn.addEventListener("click", () => {
+            const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+            passwordInput.setAttribute("type", type);
+            togglePasswordBtn.innerHTML = type === "text" 
+                ? '<i class="fa-solid fa-eye-slash"></i>' 
+                : '<i class="fa-solid fa-eye"></i>';
+        });
+
+        // Username auto-update
+        function updateUsername() {
+            const firstName = firstNameInput.value.trim().toLowerCase();
+            const lastName = lastNameInput.value.trim().toLowerCase();
+            usernameInput.value = firstName && lastName ? `${firstName}.${lastName}` : firstName || lastName;
+        }
+        firstNameInput.addEventListener("input", updateUsername);
+        lastNameInput.addEventListener("input", updateUsername);
+
+        // Form validation
+        const validateInput = (input, regex, errorField, errorMessage) => {
+            if (!regex.test(input.value)) {
+                errorField.textContent = errorMessage;
+                input.classList.add("is-invalid");
+            } else {
+                errorField.textContent = "";
+                input.classList.remove("is-invalid");
+            }
+        };
+
+        firstNameInput.addEventListener("input", () => validateInput(firstNameInput, /^[a-zA-Z]+$/, firstNameError, "First name can only contain letters."));
+        lastNameInput.addEventListener("input", () => validateInput(lastNameInput, /^[a-zA-Z]+$/, lastNameError, "Last name can only contain letters."));
+        usernameInput.addEventListener("input", () => validateInput(usernameInput, /^[a-z]+\.[a-z]+$/, usernameError, "Username must be in the format firstname.lastname."));
+        emailInput.addEventListener("input", () => validateInput(emailInput, /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, emailError, "Please enter a valid email address."));
+        
+        // Function to toggle the disabled state and change the icon
+        toggleUsernameButton.addEventListener("click", () => {
+            if (usernameInput.disabled) {
+                usernameInput.disabled = false; // Enable the input
+                toggleIcon.classList.remove("fa-eye-slash"); // Remove the slash icon
+                toggleIcon.classList.add("fa-eye"); // Add the visible icon
+            } else {
+                usernameInput.disabled = true; // Disable the input
+                toggleIcon.classList.remove("fa-eye"); // Remove the visible icon
+                toggleIcon.classList.add("fa-eye-slash"); // Add the slash icon
+            }
+        });
+
+        // Password validation
+        passwordInput.addEventListener("input", () => {
+            const password = passwordInput.value;
+            const firstName = firstNameInput.value.toLowerCase();
+            const lastName = lastNameInput.value.toLowerCase();
+            const username = usernameInput.value.toLowerCase();
+
+            let error = ""; // Only one error message will be stored
+
+            // Check if the first letter is capital
+            if (!/^[A-Z]/.test(password)) {
+                error = passwordCriteria.firstLetterCapital;
+            }
+            // Check minimum length
+            else if (password.length < 8) {
+                error = passwordCriteria.minLength;
+            }
+            // Check if all numeric
+            else if (/^\d+$/.test(password)) {
+                error = passwordCriteria.notNumeric;
+            }
+            // Check for common passwords
+            else if (commonPasswords.includes(password)) {
+                error = passwordCriteria.noCommonPasswords;
+            }
+            // Check for at least one special character and one number
+            else if (!/[!@#$%^&*(),.?":{}|<>]/.test(password) || !/\d/.test(password)) {
+                error = passwordCriteria.specialCharacterAndNumber;
+            }
+            // Check similarity with personal info
+            else if (
+                password.toLowerCase().includes(firstName) ||
+                password.toLowerCase().includes(lastName) ||
+                password.toLowerCase().includes(username)
+            ) {
+                error = passwordCriteria.notSimilar;
+            }
+
+            // Display error
+            const passwordErrorElement = document.getElementById("passwordErrors");
+
+            if (error) {
+                passwordErrorElement.textContent = error;
+                passwordInput.classList.add("is-invalid");
+            } else {
+                passwordErrorElement.textContent = "";
+                passwordInput.classList.remove("is-invalid");
+            }
+        });
+
+        // Confirm Password Validation
+        confirmPasswordInput.addEventListener("input", () => {
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+
+            if (password === confirmPassword && confirmPassword !== "") {
+                // Passwords match: Set green border and show "Matched"
+                confirmPasswordInput.classList.add("is-valid");
+                confirmPasswordInput.classList.remove("is-invalid");
+                confirmPasswordError.textContent = "Matched"; // Display 'Matched' message
+                confirmPasswordError.style.color = "green"; // Set text color to green
+            } else {
+                // Passwords don't match: Set red border and show error
+                confirmPasswordInput.classList.add("is-invalid");
+                confirmPasswordInput.classList.remove("is-valid");
+                confirmPasswordError.textContent = "Passwords do not match."; // Display error message
+                confirmPasswordError.style.color = "red"; // Set text color to red
+            }
+        })
+
+        // Prevent form submission if any field is invalid
+        form.addEventListener("submit", (e) => {
+            const inputs = [firstNameInput, lastNameInput, usernameInput, emailInput, passwordInput];
+            let formIsValid = true;
+
+            inputs.forEach((input) => {
+                if (input.classList.contains("is-invalid") || !input.value.trim()) {
+                    formIsValid = false;
+                }
+            });
+
+            // if (!formIsValid) {
+            //     e.preventDefault();
+            //     alert("Please fix the errors in the form before submitting.");
+            // }
+        });
+    });
+</script>
+
+
+{% endblock main %}

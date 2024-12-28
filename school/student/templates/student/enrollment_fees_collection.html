@@ -1,0 +1,263 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %} 
+
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
+{% endblock head %}
+
+{% block main %}
+
+<div class="container-fluid">
+    <h2 class="fw-bold text-center text-lg-start" style="color:#1E3A8A;">Fees Details</h2>
+    <hr>
+    
+    
+    <!-- Student Details Section -->
+    <div class="row bg-white shadow-lg rounded-4 mb-3 pt-3 px-4 border" style="margin-left: 1px; margin-right: 1px; margin-top: 25px;">
+        <h3 class="mb-4"><i class="fa-solid fa-user-large"></i> Student Details</h3>
+
+        <!-- Student Information (3 columns) -->
+        <div class="col-md-4 col-12 mb-3">
+            <p><strong>Student Name :</strong> {{ enrollment.student.first_name }} {{ enrollment.student.last_name }}</p>
+        </div>
+        <div class="col-md-4 col-12 mb-3">
+            <p><strong>Class :</strong> {{ enrollment.standard }}</p>
+        </div>
+        <div class="col-md-4 col-12 mb-3">
+            <p><strong>Academic Year :</strong> {{enrollment.academic_year}}</p>
+        </div>
+    </div>
+
+    <!-- Fees Details Form -->
+    <div class="row mb-4 bg-white shadow-lg rounded-4 py-4 px-4 border" style="margin-left: 1px; margin-right: 1px; margin-top: 25px;">
+        <form method="POST" novalidate>
+            {% csrf_token %}
+            <div class="row">
+                <h3 class="mb-4"><i class="fa-solid fa-indian-rupee-sign"></i> Fees Collection Details </h3>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered align-middle">
+                        <thead class="table-light text-dark">
+                            <tr>
+                                <th>Fees Type</th>
+                                <th>Fees</th>
+                                <th>Concession</th>
+                                <th>Final Fees</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- School Fees -->
+                            <tr>
+                                <td>School Fees</td>
+                                <td id="schoolFees">{{fees_structure.school_fee}}</td>
+                                <td>{{ form.school_fee_concession }}</td>
+                                <td id="finalSchoolFees"></td>
+                            </tr>
+                            <!-- Transport Fees -->
+                            <tr>
+                                <td>Transport Fees: {{ form.transport }}</td>
+                                <td id="transportFees">0</td>
+                                <td>{{ form.transport_fee_concession }}</td>
+                                <td id="finalTransportFees">0</td>
+                            </tr>
+                            <!-- Total Fees -->
+                            <tr class="table-success text-dark font-weight-bold">
+                                <td>Total Fees</td>
+                                <td id="totalFees">₹ 0</td>
+                                <td id="totalConcession">₹ 0</td>
+                                <td id="finalFees">₹ 0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Summary and Submit Button -->
+                <div class="row align-items-center mt-3">
+                    <!-- Summary Section (Stacked on small screens, side by side on larger screens) -->
+                    <div class="col-12 col-md-10">
+                        <div class="card bg-primary p-2 summary h-100">
+                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center px-4 text-white">
+                                <span class="fw-bold mb-2 mb-md-0">In Words: <span id="finalPayableWords"></span></span>
+                                <span class="fw-bold">In Figures: ₹ <span id="finalPayable">50000.00</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button (col-12 for small screens, col-md-2 for larger screens) -->
+                    <div class="col-12 col-md-2 mt-3 mt-md-0">
+                        <button type="submit" class="btn btn-success w-100 h-100 p-2 fw-bold text-white shadow-lg rounded summary">
+                            Submit
+                        </button>
+                    </div>
+                </div>
+
+                
+
+            </div>
+        </form>
+    </div>
+</div>
+
+
+{% if form.errors %}
+    <div class="alert alert-danger">
+        <ul>
+            {% for field, error_list in form.errors.items %}
+                {% for error in error_list %}
+                    <li><strong>{{ field }}:</strong> {{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script>
+// Wait for the DOM to be ready
+$(document).ready(function() {
+
+    // Function to update the fees
+    function updateFees() {
+        var schoolFee = parseFloat($('#schoolFees').text()) || 0;
+        var transportFee = parseFloat($('#transportFees').text()) || 0;
+
+        // Get the concession values
+        var schoolFeeConcession = parseFloat($('#id_school_fee_concession').val()) || 0;
+        var transportFeeConcession = parseFloat($('#id_transport_fee_concession').val()) || 0;
+
+        // Check if the concession exceeds the fee for school fees
+        if (schoolFeeConcession > schoolFee) {
+            alert('School fee concession cannot exceed the Fee amount.');
+            $('#id_school_fee_concession').val(''); // Reset to 0.00
+            schoolFeeConcession = 0; // Adjust the variable to match the reset value
+        }
+
+        // Check if the concession exceeds the fee for transport fees
+        if (transportFeeConcession > transportFee) {
+            alert('Transport fee concession cannot exceed the Fee amount.');
+            $('#id_transport_fee_concession').val(''); // Reset to 0.00
+            transportFeeConcession = 0; // Adjust the variable to match the reset value
+        }
+
+        // Calculate the final fees
+        var finalSchoolFees = schoolFee - schoolFeeConcession;
+        var finalTransportFees = transportFee - transportFeeConcession;
+        var totalFees = finalSchoolFees + finalTransportFees;
+        var totalConcession = schoolFeeConcession + transportFeeConcession;
+        var finalTotal = totalFees;
+
+        // Update the UI
+        $('#finalSchoolFees').text(finalSchoolFees.toFixed(2));
+        $('#finalTransportFees').text(finalTransportFees.toFixed(2));
+        $('#totalFees').text('₹ ' + totalFees.toFixed(2));
+        $('#totalConcession').text('₹ ' + totalConcession.toFixed(2));
+        $('#finalFees').text('₹ ' + finalTotal.toFixed(2));
+
+        // Convert the final payable amount to words
+        $('#finalPayable').text(finalTotal.toFixed(2));
+        $('#finalPayableWords').text(convertNumberToWords(finalTotal));
+    }
+
+    // Update transport fee when the bus route is changed
+    $('#id_transport').change(function() {
+        var busRoute = $(this).val();
+        if (busRoute) {
+            $.ajax({
+                url: '/fees/get_transport_fee/', // Replace with your Django URL endpoint
+                data: {
+                    'bus_route': busRoute,
+                    'academic_year': '{{ enrollment.academic_year.name }}',
+                },
+                success: function(data) {
+                    $('#transportFees').text(data.transport_fee);
+                    updateFees(); // Recalculate all fees
+                }
+            });
+        } else {
+            $('#transportFees').text('0');
+            updateFees(); // Recalculate all fees
+        }
+    });
+
+    // Recalculate fees whenever concession values are updated
+    $('#id_school_fee_concession, #id_transport_fee_concession').on('input', function() {
+        // Ensure input is numeric
+        var inputValue = $(this).val();
+        if (isNaN(inputValue) || inputValue < 0) {
+            $(this).val(''); // Clear the input if it's not a number or negative
+            alert('Please enter a valid number for concession');
+        } else {
+            updateFees(); // Recalculate if the input is a valid number
+        }
+    });
+
+    // Restrict input to numbers and decimal points only for school fee and transport fee concession
+    $('#id_school_fee_concession, #id_transport_fee_concession').on('keypress', function(event) {
+        // Allow only digits and decimal point (.)
+        var key = event.key;
+        if (!/[\d\.]/.test(key)) {
+            event.preventDefault(); // Block non-numeric input
+        }
+    });
+
+    // Initialize the page by calling the update function
+    updateFees();
+});
+
+function convertNumberToWords(num) {
+    if (isNaN(num) || num < 0) {
+      return "Invalid input";
+    }
+  
+    if (num === 0) {
+      return "Zero rupees only";
+    }
+  
+    const units = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"];
+    const teens = ["Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
+    const tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+  
+    function convertLessThanThousand(n) {
+      let str = "";
+      if (n > 99) {
+        str += units[Math.floor(n / 100)] + " Hundred ";
+        n %= 100;
+      }
+      if (n >= 10 && n <= 19) {
+        str += teens[n - 10];
+      } else if (n >= 20) {
+        str += tens[Math.floor(n / 10)] + " ";
+        str += units[n % 10];
+      } else if (n > 0) {
+          str += units[n];
+      }
+      return str;
+    }
+  
+    let words = "";
+    if (num >= 10000000) {
+      words += convertLessThanThousand(Math.floor(num / 10000000)) + " Crore ";
+      num %= 10000000;
+    }
+    if (num >= 100000) {
+      words += convertLessThanThousand(Math.floor(num / 100000)) + " Lakh ";
+      num %= 100000;
+    }
+    if (num >= 1000) {
+      words += convertLessThanThousand(Math.floor(num / 1000)) + " Thousand ";
+      num %= 1000;
+    }
+    if (num > 0) {
+      words += convertLessThanThousand(num);
+    }
+  
+    return words.trim() + " rupees only";
+  }
+
+ 
+
+</script>
+
+{% endblock main %}

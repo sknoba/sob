@@ -1,0 +1,434 @@
+{% extends "base.html" %}
+{% load static %}
+{% load arithmetic %}
+{% block head %}
+<style>
+    body {
+        background-color: #f5f5f5;
+    }
+
+    /* Common Card Styling */
+    .card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    /* Periodic Test Styling */
+    .card-header-periodic {
+        background: linear-gradient(to right, #28a745, #2ecc71); /* Green Gradient */
+        color: white;
+        font-size: 1.2rem;
+        font-weight: bold;
+        border-radius: 10px 10px 0 0;
+        padding: 10px;
+        position: relative;
+    }
+
+    /* Term Examination Styling */
+    .card-header-term {
+        background: linear-gradient(to right, #ff5733, #ff6f61); /* Orange Gradient */
+        color: white;
+        font-size: 1.2rem;
+        font-weight: bold;
+        border-radius: 10px 10px 0 0;
+        padding: 10px;
+        position: relative;
+    }
+
+    /* Pencil Icon */
+    .icon-edit {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: white;
+        cursor: pointer;
+        font-size: 1.2rem;
+    }
+
+    /* Buttons */
+    .btn-custom {
+        border-radius: 20px;
+        font-weight: bold;
+        color: white;
+        padding: 5px 20px;
+    }
+
+    .btn-periodic {
+        background-color: #28a745;
+    }
+
+    .btn-term {
+        background-color: #ff5733;
+    }
+
+    .btn-custom:hover {
+        opacity: 0.8;
+    }
+
+    /* Filter Container */
+    .filter-container {
+        background-color: #ffffff;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    /* Filter Labels */
+    .filter-label {
+        font-weight: bold;
+        margin-right: 10px;
+    }
+
+    /* Responsive Filter Form */
+    .filter-form select,
+    .filter-form input {
+        width: 100%;
+        max-width: 250px;
+        margin-bottom: 15px;
+    }
+</style>
+<style>
+    body {
+        background-color: #f5f5f5;
+        font-family: Arial, sans-serif;
+    }
+    .custom-card {
+        border-radius: 35px;
+    }
+    .card {
+        border: none;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+        background-color: #fff;
+        max-width: 260px;
+        margin: auto;
+        height: 350px;
+        border-radius: 15px; /* Rounded corners */
+        overflow: hidden;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+    .card-header {
+        height: 110px;
+        background: linear-gradient(135deg, #ff6a00, #ee0979);
+        position: relative;
+        border-radius: 15px 15px 0 0;
+    }
+    .card-header img {
+        position: absolute;
+        bottom: -35px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        border: 3px solid white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .card-body {
+        padding-top: 50px;
+        text-align: center;
+    }
+    .card-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #414143;
+        margin: 0;
+        padding: 0.5rem 0;
+    }
+    .card-text {
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin-bottom: 1rem;
+    }
+    .btn-card {
+        background-color: #414143;
+        border-color: #414143;
+        transition: background-color 0.2s, border-color 0.2s;
+        border-radius: 15px;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    .btn-card:hover {
+        background-color: #2e2e2e;
+        border-color: #2e2e2e;
+    }
+    /* Active Status Green Dot with Strong Glow */
+    .active-status {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        width: 18px; /* Increase size of the dot */
+        height: 18px; /* Increase size of the dot */
+        background-color: #28a745; /* Green color */
+        border-radius: 50%;
+        border: 3px solid white; /* Optional, to make it stand out more */
+        box-shadow: 0 0 5px rgba(40, 167, 69, 0.8), 0 0 15px rgba(40, 167, 69, 1), 0 0 25px rgba(40, 167, 69, 1); /* Strong glow effect */
+        animation: glow 1.5s infinite ease-in-out; /* Glowing animation */
+    }
+    
+    /* Glowing effect animation */
+    @keyframes glow {
+        0% {
+            box-shadow: 0 0 5px rgba(40, 167, 69, 0.8), 0 0 15px rgba(40, 167, 69, 1), 0 0 25px rgba(40, 167, 69, 1);
+        }
+        50% {
+            box-shadow: 0 0 15px rgba(40, 167, 69, 0.9), 0 0 30px rgba(40, 167, 69, 1), 0 0 50px rgba(40, 167, 69, 1);
+        }
+        100% {
+            box-shadow: 0 0 5px rgba(40, 167, 69, 0.8), 0 0 15px rgba(40, 167, 69, 1), 0 0 25px rgba(40, 167, 69, 1);
+        }
+    }
+</style>
+
+
+{% endblock head %}
+
+{% block main %}
+<div class="container">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-start" style="color:#1E3A8A;">Teacher List</h2>
+        <div class="d-flex">
+            <a href="{% if 'staff' in request.path %}{% url 'access-staff-register' %}{% elif 'teacher' in request.path %}{% url 'access-teacher-register' %}{% endif %}">
+            <button class="btn btn-primary">
+                <i class="fa-solid fa-plus"></i>{% if 'staff' in request.path %}New Staff{% elif 'teacher' in request.path %}New Teacher{% endif %}
+            </button>
+            </a>
+        </div>
+    </div>
+    <hr>
+
+    {% if form.errors %}
+    <div class="alert alert-danger">
+        <ul>
+            {% for field in form %}
+                {% if field.errors %}
+                    <li><strong>{{ field.label }}:</strong> 
+                        {% for error in field.errors %}
+                            {{ error }}<br>
+                        {% endfor %}
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+{% elif form.non_field_errors %}
+    <div class="alert alert-danger">
+        <ul>
+            {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+
+    <!-- Filter Section -->
+    <div class="filter-container shadow">
+        <form class="filter-form row">
+            <!-- Name Filter -->
+            <div class="col-md-6">
+                <label for="nameFilter" class="filter-label">Name</label>
+                <input type="text" class="form-control" id="nameFilter" placeholder="Search by Name">
+            </div>
+        </form>
+    </div>
+
+    
+
+    <div class="container">
+        <div class="row" id="examList">
+            
+
+            <div class="row">
+                {% for user in users %}
+                <div class="col-md-3 user-card my-3" data-name="{{ user.get_full_name|lower }}">
+                    <div class="card shadow-lg">
+                        <div class="card-header" style="background: linear-gradient{% if user.user_type == 'STA' %}(135deg, #ff6a00, #ee0979);{% else %}(135deg, #0061ff, #60efff);{% endif %}">
+                            <img src="{% if user.profile.photo %}{{ user.profile.photo.url}}{% else %}{% static "core/img/profile.png" %}{% endif %}" alt="User Photo">
+                        </div>
+                        {% if user.is_active %}
+                        <span class="active-status"></span>
+                        {% endif %}
+                        
+                        <div class="card-body">
+                            <h5 class="card-title">{{user.get_full_name|capfirst}}</h5>
+                            <p class="card-text">
+                                <strong>User Id:</strong> {{user.user_id}}<br>
+                                <strong>User Type:</strong> {{user.get_user_type_display}}<br>
+                                <strong>Joining Date:</strong> {{user.date_joined|date:"d M Y"}}<br>
+                            </p>
+                            <a href="{% url "access-user-detail" user.id %}" class="btn btn-card btn-sm text-white">User Details</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+        </div>
+    </div>
+
+</div>
+ 
+
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
+
+<script>
+// Filter Functionality
+const filterUsers = () => {
+    // Get the filter value (name)
+    const nameFilter = document.getElementById("nameFilter").value.toLowerCase();
+    
+    // Get all the user cards
+    const userCards = document.querySelectorAll('.user-card');
+    
+    // Loop through each user card and check if it matches the filter
+    userCards.forEach(card => {
+        // Get data attributes of each card
+        const userCardName = card.getAttribute('data-name').toLowerCase();
+    
+        // Check if the name matches
+        const nameMatches = nameFilter === "" || userCardName.includes(nameFilter);
+    
+        // If it matches, show the card; otherwise, hide it
+        if (nameMatches) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+};
+
+// Event listener for name filter
+document.getElementById("nameFilter").addEventListener("input", filterUsers);
+
+// Initial filter call when the page loads
+filterUsers();
+</script>
+
+{% comment %} 
+<script>
+    let newWindow = null;
+
+    function openReigsterUser() {
+
+
+        // Check if a window is already open
+        if (newWindow && !newWindow.closed) {
+            // If the window is already open, focus it
+            newWindow.focus();
+        } else {
+            // Open a new window with small dimensions and positioning to avoid full screen
+            const windowWidth = 500;
+            const windowHeight = 600;
+            const left = screen.width / 2 - windowWidth / 2;
+            const top = screen.height / 2 - windowHeight / 2;
+
+            // Create the window with specific size, positioning, and no extra UI features
+            newWindow = window.open(url, '_blank', `width=${windowWidth},height=${windowHeight},left=${left},top=${top},toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no`);
+        }
+
+        // Optionally, check if the window is closed and reload the parent page
+        const checkWindowClosed = setInterval(function() {
+            if (newWindow && newWindow.closed) {
+                clearInterval(checkWindowClosed);
+                location.reload(); // Reload the parent page when the window is closed
+            }
+        }, 500);
+    }
+
+    function focusNewWindow() {
+        // Re-focus the new window every 500ms (if it's not closed)
+        if (newWindow && !newWindow.closed) {
+            newWindow.focus();
+        }
+    }
+</script> {% endcomment %}
+
+{% endblock main %}
+
+
+{% comment %} {% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+{% endblock head %}
+
+{% block main %}
+
+<div class="container">
+  <h2 class="fw-bold text-center text-lg-start" style="color:#1E3A8A;">User List</h2>
+  <hr>
+
+    <div class="col-4 text-end">
+    <button class="btn btn-primary" onclick="openReigsterUser()">
+      Register New User
+    </button>
+  </div>
+
+<br>
+<br>
+<br>
+<br>
+
+
+    {% for user in users %}
+        <span class="text-danger">
+            [{{user.user_type}}]
+        </span>
+        {{user}} <a href="{% url "access-user-access-update" user.id %}">Update User Access</a> --
+        <a href="{% url "access-user-update" user.id %}">Update User Profile</a> --
+        <a href="{% url "access-user-delete" user.id %}">Delete User</a>
+        <br>
+    {% endfor %}
+    
+</div>
+
+<script>
+
+
+let newWindow = null;
+
+function openReigsterUser() {
+    const url = "{% url 'access-user-register' %}";       
+
+    if (newWindow && !newWindow.closed) {
+        // If window is already open, focus it
+        newWindow.focus();
+    } else {
+        // Otherwise, open a new window
+        newWindow = window.open(url, '_blank', 'width=800,height=800,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no');
+    }
+
+    // Optionally, check if the window is closed and reload the parent page
+    const checkWindowClosed = setInterval(function() {
+        if (newWindow && newWindow.closed) {
+            clearInterval(checkWindowClosed);
+            location.reload(); // Reload the parent page when the window is closed
+        }
+    }, 500);
+}
+
+function focusNewWindow() {
+    // Re-focus the new window every 500ms (if it's not closed)
+    if (newWindow && !newWindow.closed) {
+        newWindow.focus();
+    }}
+</script>
+
+
+
+
+{% endblock main %} {% endcomment %}
+
+

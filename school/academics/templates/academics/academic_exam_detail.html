@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+{% load static %}
+{% load arithmetic %}
+{% block head %}
+
+<style>
+    /* Periodic Exams - p1, p2 */
+.card-header-periodic {
+    background: linear-gradient(to right, #28a745, #2ecc71); /* Green Gradient */
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 10px 10px 0 0;
+    padding: 10px;
+    position: relative;
+}
+
+.btn-periodic {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-periodic:hover {
+    background-color: #2ecc71;
+}
+
+/* Term Exams - t1, t2 */
+.card-header-term {
+    background: linear-gradient(to right, #ff5733, #ff6f61); /* Orange Gradient */
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 10px 10px 0 0;
+    padding: 10px;
+    position: relative;
+}
+
+.btn-term {
+    background-color: #ff5733;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-term:hover {
+    background-color: #ff6f61;
+}
+
+/* General Card Styling */
+.card-body {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+}
+
+.card-header {
+    border-radius: 10px 10px 0 0;
+}
+
+.card-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+h4 {
+    font-size: 1.1rem;
+}
+
+.row.mb-3 {
+    margin-bottom: 20px;
+}
+
+/* Customizations for Buttons */
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+</style>
+
+{% endblock head %}
+
+{% block main %}
+<div class="container">
+
+    <div class="container my-4">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="card shadow-sm">
+                    <!-- Apply dynamic class to card-header based on the exam type -->
+                    <div class="card-header text-white 
+                        {% if exam.exam in "p1,p2" %}
+                            card-header-periodic
+                        {% elif exam.exam in "t1,t2" %}
+                            card-header-term
+                        {% else %}
+                            bg-primary
+                        {% endif %}
+                    ">
+                        <h3 class="card-title text-center mb-0">Exam Details</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Exam Name and Class -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <h5><strong>Exam:</strong> {{ exam.get_exam_display }}</h5>
+                            </div>
+                            <div class="col-md-6">
+                                <h5><strong>Class:</strong> {{ exam.class_name.name }}</h5> <!-- assuming Class has a name field -->
+                            </div>
+                        </div>
+    
+                        <!-- Academic Year -->
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <h5><strong>Academic Year:</strong> {{ exam.academic_year.year }}</h5> <!-- assuming AcademicYear has a year field -->
+                            </div>
+                        </div>
+    
+                        <!-- Exam Dates -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <p><strong>Start Date:</strong> {{ exam.start_date|date:"F j, Y" }}</p>
+                            </div>
+                            <div class="col-md-4">
+                                <p><strong>End Date:</strong> {{ exam.end_date|date:"F j, Y" }}</p>
+                            </div>
+                            <div class="col-md-4">
+                                <p><strong>Result Date:</strong> {{ exam.result_date|date:"F j, Y" }}</p>
+                            </div>
+                        </div>
+    
+                        <!-- Notes Section -->
+                        {% if exam.note %}
+                        <div class="row mb-3">
+                            <div class="col">
+                                <h5><strong>Notes:</strong></h5>
+                                <p>{{ exam.note }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+    
+                        <!-- History Section -->
+                        <div class="row mb-3">
+                            <div class="col">
+                                <h5><strong>History:</strong></h5>
+                                <p>{{ exam.history }}</p>  <!-- This will render the historical records -->
+                            </div>
+                        </div>
+    
+                        <!-- Timetable Section -->
+                        <div class="row mb-3">
+                            <div class="col">
+                                <h5><strong>Timetable:</strong></h5>
+                                <table class="table table-bordered">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col">Time</th>
+                                            <th scope="col">Subject</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for subject in exam.subjects.all %}
+                                        <tr>
+                                            <td>{{ subject.time|date:"H:i A" }}</td>
+                                            <td>{{ subject.name }}</td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="2" class="text-center">No subjects available for this exam.</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+    
+                        <!-- Action Buttons -->
+                        <div class="text-center">
+                            <a href="{% url 'academic-exams' %}" class="btn {% if exam.exam in 'p1,p2' %}btn-periodic{% elif exam.exam in 't1,t2' %}btn-term{% else %}btn-secondary{% endif %} btn-sm">Back to Exam List</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock main %}

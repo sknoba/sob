@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block head %}
+<title>Delete Fees Structure</title>
+{% endblock head %}
+
+{% block main %}
+
+<div class="container">
+  <h2 class="fw-bold text-center text-lg-start" style="color:#1E3A8A;">Fees Structure</h2>
+  <hr>
+  <h2>Delete Fees Structure</h2>
+
+  <p>Are you sure you want to delete <strong>{{ feesstructure }}</strong>?</p> 
+
+  {% if related_objects %}
+    <div class="alert alert-warning">
+      <p>This object cannot be deleted because it is referenced by the following related objects:</p>
+      <ul>
+        {% for obj in related_objects %}
+          <li>{{ obj }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    <a href="{% url 'fees-structure-list' %}" class="btn btn-secondary">Cancel</a>
+  {% else %}
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger">Confirm Delete</button>
+      <a href="{% url 'fees-structure-list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+  {% endif %}
+</div>
+
+{% endblock main %} 

@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
+{% endblock head %}
+
+{% block main %}
+<div class="row mx-2 mx-md-4 mx-lg-5 ms-4">
+  <!-- Enrollment Confirmation Section -->
+  <div class="row bg-white shadow-lg rounded-4 my-2 py-5 px-4 text-center">
+    <h3 class="mb-4 fst-italic text-success block text-wrap text-center">
+      <i class="fa-solid fa-thumbs-up"></i> 
+      "Congratulations! Your Enrollment Has Successfully Completed"
+    </h3>
+
+    <div class="row my-3">
+      <!-- Student Information Section -->
+      <div class="col-12 col-md-4 mb-3">
+        <p><strong>Student:</strong> {{ enrollment.student.first_name }} {{ enrollment.student.last_name }}</p>
+        <p><strong>Enrollment Date:</strong> {{ enrollment.enrollment_date }}</p>
+      </div>
+      <div class="col-12 col-md-4 mb-3">
+        <p><strong>Class:</strong> {{ enrollment.standard }}</p>
+      </div>
+      <div class="col-12 col-md-4 mb-3">
+        <p><strong>Academic Year:</strong> {{ enrollment.academic_year }}</p>
+        <p><strong>Total Fees:</strong> <i class="fa-solid fa-indian-rupee-sign"></i> {{ enrollment.fees_collection.total_fees|intcomma }}</p>
+      </div>
+    </div>
+
+    <div class="row text-center">
+      <!-- Action Buttons -->
+      <div class="col-12 col-md-4 mb-3">
+        <a href="{% url 'enrollment-list' %}">
+          <button class="btn btn-secondary w-75 py-2">
+            <i class="fa-solid fa-circle-left"></i> Back to Enrollment List
+          </button>
+        </a>
+      </div>
+      <div class="col-12 col-md-4 mb-3">
+        <a href="{% url 'enrollment_form' enrollment.id %}" target="_blank">
+          <button class="btn btn-success w-75 py-2">
+            <i class="fa-solid fa-download"></i> Download Enrollment Form
+          </button>
+        </a>
+      </div>
+      <div class="col-12 col-md-4 mb-3">
+        <a href="{% url 'admission_receipt' enrollment.id %}" target="_blank">
+          <button class="btn btn-success w-75 py-2">
+            <i class="fa-solid fa-download"></i> Download Admission Receipt
+          </button>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- User Credentials Section -->
+  <div class="row bg-white shadow-lg rounded-4 my-4 py-4 px-4 text-center">
+    <h2 class="text-success fw-bold">User Credentials</h2>
+    <p class="text-muted">Details of the user are displayed below</p>
+
+    <div class="row justify-content-center">
+      <!-- Username Section -->
+      <div class="col-12 col-md-5 mb-3">
+        <h5>Username: <span class="fs-5 text-secondary">{{ username }}</span></h5>
+      </div>
+      <!-- Password Section -->
+      <div class="col-12 col-md-5 mb-3">
+        <h5>Password: <span class="fs-5 text-secondary">{{ password }}</span></h5>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
+<script>
+  new DataTable('#myTable', {});
+</script>
+
+{% endblock main %}

@@ -1,0 +1,259 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %} 
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
+{% endblock head %}
+
+{% block main %}
+
+
+
+<div class="container">
+
+  <div class="d-flex justify-content-between align-items-center">
+    <!-- Heading on the left -->
+    <h2 class="fw-bold text-start" style="color:#1E3A8A;">Transport Fees List</h2>
+    
+    
+    <!-- Buttons on the right -->
+    <div class="d-flex">
+      <div class="my-3 ms-2 ms-md-3">
+        <a href="{% url 'student-list' %}">
+          <button type="button" id="filter-btn" class="btn btn-success bg-success">
+            <i class="fa-solid fa-file-excel"></i> Excel
+          </button>
+        </a>
+      </div>
+      
+      <div class="my-3 ms-2 ms-md-3">
+        <a href="{% url 'student-list' %}">
+          <button type="button" id="filter-btn" class="btn btn-danger bg-danger">
+            <i class="fa-solid fa-file-pdf"></i> PDF
+          </button>
+        </a>
+      </div>
+      <div class="my-3 ms-2 ms-md-3">
+          <button class="btn btn-primary bg-primary" data-bs-toggle="modal" data-bs-target="#addFeesStructureModal">
+            <i class="fa-solid fa-plus"></i> Add Transport Fees
+          </button>
+        </a>
+      </div>
+      
+
+    </div>
+  </div>
+
+  <hr>
+
+
+  {% if form.non_field_errors %}
+      
+  <div class="alert alert-danger mx-3 my-3 p-1" role="alert">
+        {{form.non_field_errors}}
+  </div>
+    {% endif %}
+
+  {% if messages %}
+    <div class="alert alert-dismissible fade show mt-3" role="alert">
+        {% for message in messages %}
+            <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+                <!-- Fourth Row -->
+                <div class="row">
+                                
+                  <div class="col my-2">
+                      <div class="table-responsive shadow" >
+      
+                          <div class="card border-0 rounded-4 shadow-lg">
+      
+                              <div class="card-body">
+                              <h4 style="color:#1E3A8A;" class="text-center"><i class="fa-solid fa-bus"></i> Transport Fees</h4>
+                              <hr class="" style="color:#1E3A8A;">
+                              
+                                  <div class="row border rounded-4 mx-2">
+                                  <div class="col-12">
+                                      <div class="table-responsive my-3">
+                                          <table id="feeStructureTable" class="table" style="width:100%">
+                                            <thead>
+                                                <tr class="text-center">
+                                                  <th class="text-center">#</th>
+                                                  <th class="text-center">Academic Year</th>
+                                                  <th class="text-center">Route</th>
+                                                  <th class="text-center">Fees</th>
+                                                  <th class="text-center">Students</th>
+                                                  <th class="text-center">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                              
+                                              
+                                              {% for route in busroutes %}
+                                                <tr>
+                                                    <td class="text-center">{{forloop.counter}}</td>
+                                                    <td class="text-center">{{route.academic_year}}</td>
+                                                    <td class="text-center">{{route.bus_route}}</td>
+                                                    <td class="text-center">{{route.transport_fee}}</td>
+                                                    <td class="text-center">{{route.fees_collection.all.count}}</td>
+
+                                                    <td class="text-center">
+                                                      {% comment %} {% if not feesstructure.fees_collection.exists %}
+                                                      <button 
+                                                          class="btn btn-danger btn-sm" 
+                                                          data-bs-toggle="modal" 
+                                                          data-bs-target="#deleteFeesStructureModal" 
+                                                          data-id="{{ feesstructure.id }}" 
+                                                          data-class="{{ feesstructure.class_name }}" 
+                                                          data-year="{{ feesstructure.academic_year }}">
+                                                          Remove
+                                                      </button>
+                                                      {% else %}
+                                                      <button class="btn btn-danger btn-sm" disabled>Remove</button>
+                                                      {% endif %} {% endcomment %}
+                                                      {% comment %} {% if feesstructure.fees_collection.exists %}
+                                                      <button class="btn btn-danger btn-sm" disabled >Remove</button>
+                                                      {% else %}
+                                                      <a href="{% url "fees_structure_delete" feesstructure.id %}">
+                                                        <button class="btn btn-danger btn-sm" >Remove</button>
+                                                      </a>
+                                                      {% endif %} {% endcomment %}                                                      
+                                                  </td>
+
+                                                  
+                                                </tr>
+                                              {% endfor %} 
+                                            </tbody>
+                                        
+                                          </table>
+                                        </div>
+              
+                                  </div>
+                                  </div>
+                              </div>
+                          </div>
+      
+                      </div>
+                  </div>
+              </div>
+        </div>
+
+
+
+
+
+
+
+  <!-- Modal for Add Fees Structure -->
+  <div class="modal fade" id="addFeesStructureModal" tabindex="-1" aria-labelledby="addFeesStructureModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addFeesStructureModalLabel">Add Fees Structure</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+
+
+
+        <div id="form-errors">
+
+        </div>
+        
+
+        <div class="modal-body">
+          <form method="POST" novalidate>
+            {% csrf_token %}
+            
+            <div class="mx-2">
+            {{form.bus_route.label}}            
+            {{form.bus_route}}
+            
+            {{form.bus_route.errors}}
+            </div>
+
+            <div class="mx-2">
+            {{form.transport_fee.label}}
+            {{form.transport_fee}}
+            
+            {{form.transport_fee.errors}}
+
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- End Modal for Add Fees Structure -->
+
+
+
+
+   <!-- Modal for Remove Fees Structure -->
+         <div class="modal fade" id="deleteFeesStructureModal" tabindex="-1" aria-labelledby="deleteFeesStructureModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="deleteFeesStructureModalLabel">Delete Fees Structure</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                      <p>Are you sure you want to delete the following Fees Structure?</p>
+                      <p><strong>Class:</strong> <span id="feesStructureClass"></span></p>
+                      <p><strong>Academic Year:</strong> <span id="feesStructureYear"></span></p>
+                      <form id="deleteFeesStructureForm" method="POST">
+                          {% csrf_token %}
+                          <input type="hidden" name="pk" id="feesStructureId">
+                      </form>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                      <button type="submit" form="deleteFeesStructureForm" class="btn btn-danger">Confirm</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+  <!-- Modal for Remove Fees Structure -->
+
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
+
+<script>
+  new DataTable('#feeStructureTable', {  
+
+});
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+      var deleteButtons = document.querySelectorAll('[data-bs-toggle="modal"]');
+      deleteButtons.forEach(function(button) {
+          button.addEventListener('click', function() {
+              var feesStructureId = button.getAttribute('data-id');
+              var feesStructureClass = button.getAttribute('data-class');
+              var feesStructureYear = button.getAttribute('data-year');
+              
+              document.getElementById('feesStructureId').value = feesStructureId;
+              document.getElementById('feesStructureClass').textContent = feesStructureClass;
+              document.getElementById('feesStructureYear').textContent = feesStructureYear;
+          });
+      });
+  });
+</script>
+
+{% endblock main %}
+

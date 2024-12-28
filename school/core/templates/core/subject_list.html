@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% load static %}
+{% block main %}
+{% block head %}
+<link rel="stylesheet" href="{% static "core/css/class_list.css" %}">
+{% endblock head %}
+
+<div class="container">
+
+        
+  <div class="d-flex justify-content-between align-items-center">          
+    <h2 class="fw-bold text-start" style="color:#1E3A8A;">Class List</h2>
+    
+    <!-- Buttons on the right -->
+    <div class="d-flex">
+      <div class="my-3 ms-2 ms-md-3">
+        {% comment %} <a href="{% url 'student-create' %}"> {% endcomment %}
+          <button type="button" id="filter-btn" class="btn btn-primary bg-primary" data-bs-toggle="modal" data-bs-target="#addClassModal">
+            <i class="fa-solid fa-user-plus"></i> New 
+          </button>
+        </a>
+      </div>
+      
+    </div>
+  </div>  
+<hr>
+
+
+
+
+{% if form.non_field_errors %}
+<div class="alert alert-danger" role="alert">
+  {{ form.non_field_errors }}
+</div>
+{% endif %}
+
+  <div class="container ">
+      <div class="row">
+{% comment %} 
+        {% for class in classes %}
+        <div class="col-md-3 col-sm-4 content-card">
+            <div class="card-big-shadow">
+                <div class="card card-just-text" >
+                  <div class="content py-4">
+                    <small class="text-primary">{% if class.alias %}{{class.alias|truncatechars:20}}{% else %}asdfasd{% endif %}</small>
+                    <h4 class="title mb-4">{{ class.name }} {% if class.section %}({{class.section}}){% endif %}</h4>
+                    <p class="description"><strong>Student's :</strong> {{class.enrollments__student}}<br></p>
+                    <p class="description">{% if class.user %}{{class.user.first_name}} {{class.class_teacher.last_name |truncatechars:10}}{% else %}Not Assign{% endif %}</p>
+                    <div class="d-flex  ms-2">
+                      <!-- Check Class Button -->
+                      <a href="{% url "class-detail" class.id %}" class="btn rounded-pill mt-2 me-2" style="background-color:#17B7B3; color:#fff">Detail</a>
+                      <!-- Update Class Button -->
+                      <a href="{% url "standard-update" class.id %}" class="btn rounded-pill mt-2" style="background-color:rgba(255, 183, 50, 0.788); color:#fff">Update</a> 
+                    </div>
+                  </div>
+                </div> <!-- end card -->
+            </div>
+        </div>
+        {% endfor %}       {% endcomment %}
+
+        {% for sub in subjects %}
+        <a href="{% url "subject-detail" sub.id %}">{{sub.name}}</a>
+        {{sub.code}} <br>    
+        {% endfor %}
+      </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Modal for Add Class -->
+  <div class="modal fade" id="addClassModal" tabindex="-1" aria-labelledby="addClassModelLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addClassModelLabel">Create New Class</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div id="form-errors">
+        </div>
+        <div class="modal-body">
+          <form method="POST" novalidate>
+            {% csrf_token %}
+            
+            {% comment %} <div class="mx-2">
+            {{form.start_date.label}}            
+            {{form.start_date}}            
+            <span class="text-danger">{{form.start_date.errors}}</span>
+            </div>
+            <div class="mx-2">
+            {{form.is_active.label}} <br>
+            {{form.is_active}}            
+            <span class="text-danger">{{form.is_active.errors}}</span>
+            </div> {% endcomment %}
+
+            {{ form.as_p }}
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- End Modal for Class -->
+
+
+      
+{% endblock main  %}

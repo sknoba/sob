@@ -1,0 +1,218 @@
+{% extends "base.html" %}
+{% load static %}
+{% load arithmetic %}
+{% block head %}
+<style>
+    body {
+        background-color: #f5f5f5;
+    }
+
+    /* Common Card Styling */
+    .card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    /* Periodic Test Styling */
+    .card-header-periodic {
+        background: linear-gradient(to right, #28a745, #2ecc71); /* Green Gradient */
+        color: white;
+        font-size: 1.2rem;
+        font-weight: bold;
+        border-radius: 10px 10px 0 0;
+        padding: 10px;
+        position: relative;
+    }
+
+    /* Term Examination Styling */
+    .card-header-term {
+        background: linear-gradient(to right, #ff5733, #ff6f61); /* Orange Gradient */
+        color: white;
+        font-size: 1.2rem;
+        font-weight: bold;
+        border-radius: 10px 10px 0 0;
+        padding: 10px;
+        position: relative;
+    }
+
+    /* Pencil Icon */
+    .icon-edit {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: white;
+        cursor: pointer;
+        font-size: 1.2rem;
+    }
+
+    /* Buttons */
+    .btn-custom {
+        border-radius: 20px;
+        font-weight: bold;
+        color: white;
+        padding: 5px 20px;
+    }
+
+    .btn-periodic {
+        background-color: #28a745;
+    }
+
+    .btn-term {
+        background-color: #ff5733;
+    }
+
+    .btn-custom:hover {
+        opacity: 0.8;
+    }
+
+    /* Filter Container */
+    .filter-container {
+        background-color: #ffffff;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    /* Filter Labels */
+    .filter-label {
+        font-weight: bold;
+        margin-right: 10px;
+    }
+
+    /* Responsive Filter Form */
+    .filter-form select,
+    .filter-form input {
+        width: 100%;
+        max-width: 250px;
+        margin-bottom: 15px;
+    }
+</style>
+{% endblock head %}
+
+{% block main %}
+<div class="container">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-start" style="color:#1E3A8A;">Exam Scoring</h2>
+    </div>
+    <hr>
+    <!-- Filter Section -->
+    <div class="filter-container shadow">
+        <form class="filter-form row">
+            <!-- Exam Type Filter -->
+            <div class="col-md-4 ">
+                <label for="examType" class="filter-label">Exam Type</label>
+                <select class="form-select" id="examType">
+                    <option value="">All Exams</option>
+                    <option value="Periodic Test 1">Periodic Test 1</option>
+                    <option value="Periodic Test 2">Periodic Test 2</option>
+                    <option value="Term Examination 1">Term Examination 1</option>
+                    <option value="Term Examination 2">Term Examination 2</option>
+                </select>
+            </div>
+            <!-- Class Filter -->
+            <div class="col-md-4">
+                <label for="classFilter" class="filter-label">Class</label>
+                <select class="form-select" id="classFilter">
+                    <option value="">All Classes</option>
+                    {% for class in classes %}
+                    <option value="{{class}}">{{class}}</option>
+                    {% endfor %}                    
+                </select>
+            </div>
+            <!-- Result Date Filter -->
+            <div class="col-md-4">
+                <label for="resultDateFilter" class="filter-label">Result Date</label>
+                <input type="date" class="form-control" id="resultDateFilter">
+            </div>
+        </form>
+    </div>
+
+    
+
+    <div class="container">
+        <div class="row" id="examList">
+            <!-- Periodic Test Card -->
+
+            
+
+            <!-- Term Exam Here -->
+            <div class="row">
+                {% for exam in exams %}
+                <div class="col-md-3 mb-4 exam-card "
+                     data-exam-type="{{ exam.get_exam_display|lower }}" 
+                     data-class="{{ exam.class_name|lower }}" 
+                     data-result-date="{{ exam.result_date|date:"Y-m-d" }}"> 
+                    <div class="card h-100 shadow">
+                        <div class="card-header-{% if exam.exam == 'p1' %}periodic{% elif exam.exam == 'p2' %}periodic{% elif exam.exam == 't1' %}term{% elif exam.exam == 't2' %}term{% endif %}">
+                            {{ exam.get_exam_display }}                            
+                            <span class="text-end"><i class="fa-solid fa-pencil"></i></span>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Class:</strong> {{ exam.class_name }}</p>                            
+                            <p><strong>Academic:</strong> {{ exam.academic_year }}</p>
+                            <p><strong>Start:</strong> {{ exam.start_date }}</p>
+                            <p><strong>End:</strong> {{ exam.end_date }}</p>
+                            <p><strong>Result:</strong> {{ exam.result_date }}</p>
+                        </div>
+                        <div class="card-footer bg-white border-0">
+                            <a href="{% url "academic-score-student-list" exam.id %}">
+                                <button class="btn btn-custom btn-{% if exam.exam == 'p1' %}periodic{% elif exam.exam == 'p2' %}periodic{% elif exam.exam == 't1' %}term{% elif exam.exam == 't2' %}term{% endif %} mb-2">Add Score</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+// Filter Functionality
+// Filter Functionality
+const filterExams = () => {
+    // Get the filter values
+    const examType = document.getElementById("examType").value.toLowerCase();
+    const classFilter = document.getElementById("classFilter").value.toLowerCase();
+    const resultDateFilter = document.getElementById("resultDateFilter").value;
+
+    // Get all the exam cards
+    const examCards = document.querySelectorAll('.exam-card');
+    
+    // Loop through each exam card and check if it matches the filters
+    examCards.forEach(card => {
+        // Get data attributes of each card
+        const examCardType = card.getAttribute('data-exam-type').toLowerCase();
+        const examCardClass = card.getAttribute('data-class').toLowerCase();
+        const examCardResultDate = card.getAttribute('data-result-date');
+
+        // Check if each filter matches
+        const typeMatches = examType === "" || examCardType === examType;
+        const classMatches = classFilter === "" || examCardClass === classFilter;
+        const resultDateMatches = resultDateFilter === "" || examCardResultDate.includes(resultDateFilter);
+
+        // If all filters match, show the card, otherwise hide it
+        if (typeMatches && classMatches && resultDateMatches) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+};
+
+// Event listeners for filtering
+document.getElementById("examType").addEventListener("change", filterExams);
+document.getElementById("classFilter").addEventListener("change", filterExams);
+document.getElementById("resultDateFilter").addEventListener("change", filterExams);
+
+// Initial filter call when the page loads
+filterExams();
+</script>
+
+{% endblock main %}

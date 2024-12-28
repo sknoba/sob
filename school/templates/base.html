@@ -21,9 +21,9 @@
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
-    <!-- Custom styles for this template-->
     <link href="{% static "school/css/school.css" %}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+
     {% block head %}
     {% endblock head %}
 
@@ -51,6 +51,7 @@
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
                     </button>
+
                     
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -309,5 +310,42 @@
     <!-- Custom scripts for all pages-->
     <script src="{% static "school/js/school.js" %}"></script>
 
+    <!-- Notification-->
+    <script src="{% url "vapid_config_js" %}"></script>
+
+    <script>
+        if ('serviceWorker' in navigator && 'PushManager' in window) {
+            navigator.serviceWorker.register('/static/serviceworker.js').then(function(registration) {
+                console.log('Service Worker registered:', registration);
+                const convertedVapidKey = urlBase64ToUint8Array(VAPID_PUBLIC_KEY);
+                registration.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: convertedVapidKey                    
+                }).then(function(subscription) {
+                    // Send subscription to the server
+                    fetch('/webpush/save_subscription/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        },
+                        body: JSON.stringify(subscription)
+                    });
+                });
+            }).catch(function(error) {
+                console.error('Service Worker registration failed:', error);
+            });
+        }    
+        function urlBase64ToUint8Array(base64String) {
+            const padding = '='.repeat((4 - base64String.length % 4) % 4);
+            const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+            const rawData = window.atob(base64);
+            const outputArray = new Uint8Array(rawData.length);
+            for (let i = 0; i < rawData.length; ++i) {
+                outputArray[i] = rawData.charCodeAt(i);
+            }
+            return outputArray;
+        }
+    </script>  
 </body>
 </html>

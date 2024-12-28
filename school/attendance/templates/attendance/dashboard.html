@@ -6,183 +6,157 @@
 {% endblock head %}
 
 {% block main %}
-<div class="container">
+
+<div class="container-fluid">
     <h2 class="fw-bold text-center text-lg-start" style="color:#1E3A8A;">Attendance Dashboard</h2>
-    <hr class="">
-    <div class="container">      
+    <hr class="">        
 
-        <!-- First Row -->
-        <div class="row mb-3">
-            <div class="col-3">
-                <div class="card mb-3 shadow" style="min-height: 180px; border-radius:1rem">
-                    <div class="card-body ">
-                        <!-- Icon and Title -->
-                        <div class="align-items-center text-center">
-                            <i class="fas fa-users text-primary mb-4 mt-3" style="font-size: 2rem;"></i>
-                            <h5 class="card-title text-black">Total Class</h5>
-                            <h3 class="card-text text-primary">20</h3>
-                        </div>
+    <!-- First Row -->
+    <div class="row mb-3">
+        <div class="col-12 col-sm-6 col-md-3">
+            <div class="card mb-3 shadow" style="min-height: 180px; border-radius:1rem">
+                <div class="card-body">
+                    <div class="align-items-center text-center">
+                        <i class="fas fa-users text-primary mb-4 mt-3" style="font-size: 2rem;"></i>
+                        <h5 class="card-title text-black">Total Class</h5>
+                        <h3 class="card-text text-primary">20</h3>
                     </div>
                 </div>
             </div>
-            <div class="col-3">
-                <div class="card mb-3 shadow" style="min-height: 180px; border-radius:1rem">
-                    <div class="card-body">
-                        <!-- Icon and Title -->
-                        <div class="align-items-center text-center">
-                            <i class="fas fa-check-circle text-success mb-4 mt-3" style="font-size: 2rem;"></i>
-                            <h5 class="card-title text-black">Attendance Clicks</h5>
-                            <h3 class="card-text text-success">13</h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-3">
-                <div class="card mb-3 shadow" style="min-height: 180px; border-radius:1rem">
-                    <div class="card-body">
-                        <!-- Icon and Title -->
-                        <div class="align-items-center text-center">
-                            <i class="fas fa-male text-success mb-3 mt-3" style="font-size: 2.5rem;"></i>
-                            <h5 class="card-title text-black">Boys Present</h5>
-                            <h3 class="card-text text-success">13</h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="card mb-3 shadow" style="min-height: 180px; border-radius:1rem">
-                    <div class="card-body">
-                        <!-- Icon and Title -->
-                        <div class="align-items-center text-center">
-                            <i class="fas fa-female text-danger mb-3 mt-3" style="font-size: 2.5rem;"></i>
-                            <!-- <i class="fas fa-check-circle text-success mb-4 mt-3" style="font-size: 2rem;"></i> -->
-                            <h5 class="card-title text-black">Girls Present</h5>
-                            <h3 class="card-text text-success">13</h3>
-                        </div>
-                    </div>
-                </div>
-            </div>                         
         </div>
 
-        <!-- Second Row -->
-        <div class="row mb-3">
-                                
-            <div class="col">
-                <div class="table-responsive shadow" >
+        <div class="col-12 col-sm-6 col-md-3">
+            <div class="card mb-3 shadow" style="min-height: 180px; border-radius:1rem">
+                <div class="card-body">
+                    <div class="align-items-center text-center">
+                        <i class="fas fa-check-circle text-success mb-4 mt-3" style="font-size: 2rem;"></i>
+                        <h5 class="card-title text-black">Attendance Clicks</h5>
+                        <h3 class="card-text text-success">13</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                    <div class="card border-0 rounded-4 shadow">
-                        <div class="card-body text-center">
+        <div class="col-12 col-sm-6 col-md-3">
+            <div class="card mb-3 shadow" style="min-height: 180px; border-radius:1rem">
+                <div class="card-body">
+                    <div class="align-items-center text-center">
+                        <i class="fas fa-male text-success mb-3 mt-3" style="font-size: 2.5rem;"></i>
+                        <h5 class="card-title text-black">Boys Present</h5>
+                        <h3 class="card-text text-success">13</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-md-3">
+            <div class="card mb-3 shadow" style="min-height: 180px; border-radius:1rem">
+                <div class="card-body">
+                    <div class="align-items-center text-center">
+                        <i class="fas fa-female text-danger mb-3 mt-3" style="font-size: 2.5rem;"></i>
+                        <h5 class="card-title text-black">Girls Present</h5>
+                        <h3 class="card-text text-success">13</h3>
+                    </div>
+                </div>
+            </div>
+        </div>                         
+    </div>
+
+    <!-- Second Row -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="table-responsive shadow">
+                <div class="card border-0 rounded-4 shadow">
+                    <div class="card-body text-center">
                         <h4 style="color:#1E3A8A;"><i class="fa-solid fa-indian-rupee-sign"></i> Attendance Taken</h4>
                         <hr class="" style="color:#1E3A8A;">
-                        
-                            <div class="row border rounded-4 mx-2">
+                        <div class="row border rounded-4 mx-2">
                             <div class="col-12">
                                 <div class="table-responsive" style="max-height: 190px; height: 190px; overflow-y: auto;">
-                                <table class="table">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Class Name</th>
-                                        <th scope="col">Attendance Status</th>
-                                        <th scope="col">Present Student</th>
-                                        <th scope="col">Attendance Taken by</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr style="background-color: #bdecb6; color: #181818;">
-                                        <th scope="row">1</th>
-                                        <td>Class 9B</td>
-                                        <td>Not Done</td>
-                                        <td>100%</td>
-                                        <td>Arya Kakade</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">2</th>
-                                        <td>Class 9B</td>
-                                        <td>Not Done</td>
-                                        <td>100%</td>
-                                        <td>Arya Kakade</td>
-                                    </tr>
-                                    <tr style="background-color: #f8caca; color: #181818;">
-                                        <th scope="row">3</th>
-                                        <td>Class 9B</td>
-                                        <td>Not Done</td>
-                                        <td>100%</td>
-                                        <td>Arya Kakade</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">4</th>
-                                        <td>Class 9B</td>
-                                        <td>Not Done</td>
-                                        <td>100%</td>
-                                        <td>Arya Kakade</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Class Name</th>
+                                                <th scope="col">Attendance Status</th>
+                                                <th scope="col">Present Student</th>
+                                                <th scope="col">Attendance Taken by</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr style="background-color: #bdecb6; color: #181818;">
+                                                <th scope="row">1</th>
+                                                <td>Class 9B</td>
+                                                <td>Not Done</td>
+                                                <td>100%</td>
+                                                <td>Arya Kakade</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">2</th>
+                                                <td>Class 9B</td>
+                                                <td>Not Done</td>
+                                                <td>100%</td>
+                                                <td>Arya Kakade</td>
+                                            </tr>
+                                            <tr style="background-color: #f8caca; color: #181818;">
+                                                <th scope="row">3</th>
+                                                <td>Class 9B</td>
+                                                <td>Not Done</td>
+                                                <td>100%</td>
+                                                <td>Arya Kakade</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">4</th>
+                                                <td>Class 9B</td>
+                                                <td>Not Done</td>
+                                                <td>100%</td>
+                                                <td>Arya Kakade</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
-        
-                            </div>
                             </div>
                         </div>
-    
                     </div>
-
-
                 </div>
             </div>
-        </div>
-
-        <!-- Third Row -->
-        <div class="row">
-            <!-- Parent Information Card -->
-            <div class="col-md-6 mb-4 ">
-            <div class="card border-0 rounded-4 shadow">
-                <div class="card-body text-center">
-                <h4 style="color:#1E3A8A;"><i class="fa-solid fa-clipboard-user"></i> Attendance</h4>
-                <hr class="mb-4" style="color:#1E3A8A;">
-                
-                
-                <div class="row">
-                    <div class="col" style="height: 45vh;">
-                        <canvas id="barChart"></canvas>
-                    </div>
-                    
-                </div>
-
-                
-                </div>
-            </div>
-            </div>
-
-            <!-- Fees Information Card -->
-            <div class="col-md-6 mb-4">
-            <div class="card border-0 rounded-4 shadow">
-                <div class="card-body text-center">
-                <h4 style="color:#1E3A8A;"><i class="fa-solid fa-indian-rupee-sign"></i> Fees</h4>
-                <hr class="mb-4" style="color:#1E3A8A;">
-                
-                <div class="row">
-                    <div class="col d-flex justify-content-center align-items-center" style="height: 45vh;">
-                        <canvas id="doughnutChart"></canvas>
-                    </div>
-                    
-                </div>
-
-                </div>
-
-
-
-            </div>
-            </div>
-        
         </div>
     </div>
 
+    <!-- Third Row -->
+    <div class="row">
+        <!-- Parent Information Card -->
+        <div class="col-12 col-md-6 mb-4">
+            <div class="card border-0 rounded-4 shadow">
+                <div class="card-body text-center">
+                    <h4 style="color:#1E3A8A;"><i class="fa-solid fa-clipboard-user"></i> Attendance</h4>
+                    <hr class="mb-4" style="color:#1E3A8A;">
+                    <div class="row">
+                        <div class="col" style="height: 45vh;">
+                            <canvas id="barChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-
-    
+        <!-- Fees Information Card -->
+        <div class="col-12 col-md-6 mb-4">
+            <div class="card border-0 rounded-4 shadow">
+                <div class="card-body text-center">
+                    <h4 style="color:#1E3A8A;"><i class="fa-solid fa-indian-rupee-sign"></i> Fees</h4>
+                    <hr class="mb-4" style="color:#1E3A8A;">
+                    <div class="row">
+                        <div class="col d-flex justify-content-center align-items-center" style="height: 45vh;">
+                            <canvas id="doughnutChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
 
 
 
@@ -231,10 +205,7 @@
                     }
                 }
             },
-
-
         });
-
 
          // Initialize Bar Chart
          const doughnutChart = new Chart(ctd, {
@@ -251,15 +222,7 @@
                 ],
                 hoverOffset: 4 // Slightly shifts the segment on hover
             }]},
-
         });
-
-
-
-        
-
-
-
 </script>
 
 

@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admission Form page1</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    @media print {
+        @page {
+            size: A4;
+            margin: 0;
+        }
+        body {
+          font-family: 'Arial', sans-serif;
+          background-color: #f4f7fc;
+          margin: 0;
+          padding: 0;
+          width: 800px;
+        }
+    }
+
+    .borderSection {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      border: 4px solid #000000;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      margin-bottom: 30px;
+    }
+
+
+    .header h1 {
+      color: #005149;
+      font-weight: 700;
+      font-size: 23px;
+      margin-top: 0.5rem;
+    }
+
+    .header h2 {
+      color: #00bfae;
+      font-weight: 600;
+      font-size: 0.7rem;      
+    }
+
+    .header p {
+      color: #666;
+      font-size: 1rem;
+    }
+
+    .section-heading {
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-bottom: 10px; 
+      border-bottom: 2px solid #0a0a0a;
+      padding-bottom: 5px;
+    }
+    .form-label {
+      font-weight: bold;
+      color: #333;
+    }
+    .form-data {
+      color: #555;
+      font-size: 0.95rem;
+    }
+    .bold-dark-hr {
+      border: 1px solid #000; /* Dark border */
+      border-width: 3px; /* Make it bold */
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="shadow-lg p-4">
+      <div class="borderSection">
+        <!-- Header Section -->
+        <div class="header text-center mb-4 border-2 border-bottom border-dark pb-3">
+          <div class="row align-items-center">
+            <div class="col-2">
+              <img src="{{school_logo_url}}" alt="Logo" class="img-fluid ms-3 mt-3" style="height: 90px; width: 110px;">
+            </div>
+            <div class="col-10">
+              <h2 class="text-primary">Shree Shivaji Bahuuddeshiy Vikas Sanstha's</h2>
+              <h1 class="text-dark">School of Brilliant English Medium School</h1>
+              <h2 class="text-secondary">Metikheda Road, Ralegaon, Dist. Yavatmal</h2>
+              <h2 class="text-secondary">CBSE School Affiliation No: 1130359</h2>
+            </div>
+          </div>
+        </div>        
+
+        <!-- Basic Information -->
+        <h4 class="text-center fw-bold text-primary ps-3">ADMISSION FORM</h4>
+          <div class="row mb-4 align-items-center">
+              <div class="col-3">
+                <p class="form-label">Admission No</p>
+                <p class="form-data">2024-01</p>
+              </div>
+              <div class="col-3">
+                <p class="form-label">Class</p>
+                <p class="form-data">8th Grade</p>
+              </div>
+              <div class="col-3">
+                <p class="form-label">Admission Date</p>
+                <p class="form-data">2024-12-8</p>
+              </div>
+              <div class="col-3 d-flex justify-content-center">
+                <img src="{{student_photo_url}}" alt="Student Photo" class="rounded" style="height: 120px; width: 100px;">                            
+              </div> 
+          </div>                
+        <!-- Student's Information -->
+        
+          <h4 class="text-primary fw-bold">Student's Information</h4>
+          <hr class="mb-2 mt-0 p-0">
+            <div class="row">
+              <div class="col-3">
+                <p class="form-label">First Name</p>
+                <p class="form-data">{{student.student.first_name}}</p>
+              </div>
+              <div class="col-3">
+                <p class="form-label">Middle Name</p>
+                <p class="form-data">Rajendra</p>
+              </div>
+              <div class="col-3">
+                <p class="form-label">Surname</p>
+                <p class="form-data">Kakade</p>
+              </div>
+              <div class="col-3">
+                <p class="form-label">Date of Birth</p>
+                <p class="form-data">15/06/2010</p>
+              </div>
+              
+              <div class="col-3">
+                <p class="form-label">Place of Birth</p>
+                <p class="form-data">Nagpur</p>
+              </div>
+              <div class="col-3">
+                <p class="form-label">Gender</p>
+                <p class="form-data">Male</p>
+              </div>
+              <div class="col-3">
+                <p class="form-label">Aadhaar No</p>
+                <p class="form-data">1234-5678-9101</p>
+              </div>              
+              <div class="col-3">
+                <p class="form-label">Board</p>
+                <p class="form-data">CBSC</p>
+              </div>
+              <div class="col-3">
+                <p class="form-label">Last Class Attended</p>
+                <p class="form-data">9th</p>
+              </div>              
+              <div class="col-3">
+                <p class="form-label">Last School</p>
+                <p class="form-data">Brilliant Kids Academy</p>
+              </div>
+            </div>
+                 
+
+        <!-- Additional Information -->                 
+        <h4 class="text-primary fw-bold">Additional Information</h4>
+          <hr class="mb-2 mt-0 p-0">
+          <div class="row">
+            <div class="col-3">
+              <p class="form-label">Nationality</p>
+              <p class="form-data">Indian</p>
+            </div>
+            <div class="col-3">
+              <p class="form-label">Religion</p>
+              <p class="form-data">Hindu</p>
+            </div>
+            <div class="col-3">
+              <p class="form-label">Languages Known</p>
+              <p class="form-data">English, Hindi, Marathi </p>
+            </div>
+            <div class="col-3">
+              <p class="form-label">Caste & Category</p>
+              <p class="form-data">OBC</p>
+            </div>
+          </div>
+
+        <!-- Address -->        
+        <h4 class="text-primary fw-bold">Address Details</h4>
+          <hr class="mb-2 mt-0 p-0">             
+          <div class="row">
+            <div class="col-5">
+              <p class="form-label">Permanant Address</p>
+              <p class="form-data">Ward no.3 Sane Guruji Nagar, Behind Nagar Panchayat, Maregaonsdk kfas</p>
+            </div>
+            <div class="col-2">
+              <p class="form-label">City</p>
+              <p class="form-data">Ralegaon</p>
+            </div>
+            <div class="col-2">
+              <p class="form-label">District</p>
+              <p class="form-data">Ralegaon</p>
+            </div>
+            <div class="col-2">
+              <p class="form-label">Pin Code</p>
+              <p class="form-data">445402</p>
+            </div>
+            <div class="col-5">
+              <p class="form-label">Permanant Address</p>
+              <p class="form-data">Ward no.3 Sane Guruji Nagar, Behind Nagar Panchayat, Maregaon</p>
+            </div>
+            <div class="col-2">
+              <p class="form-label">City</p>
+              <p class="form-data">Ralegaon</p>
+            </div>
+            <div class="col-2">
+              <p class="form-label">District</p>
+              <p class="form-data">Ralegaon</p>
+            </div>
+            <div class="col-2">
+              <p class="form-label">Pin Code</p>
+              <p class="form-data">445402</p>
+            </div>
+          </div>
+        
+
+        <!-- Local Guardian -->        
+        <h4 class="text-primary fw-bold">Local Guardian (If any)</h4>
+        <hr class="mb-2 mt-0 p-0">
+          <div class="row">
+            <div class="col-3">
+              <p class="form-label">Name:</p>
+              <p class="form-data">Pratik</p>
+            </div>
+            <div class="col-3">
+              <p class="form-label">Mobile:</p>
+              <p class="form-data">000000000</p>
+            </div>
+            <div class="col-3">
+              <p class="form-label">Address:</p>
+              <p class="form-data">Ralegoan</p>
+            </div>
+            <div class="col-3">
+              <p class="form-label">Health Problem if any:</p>
+              <p class="form-data">NO</p>
+            </div>
+          </div>
+      </div>          
+
+
+
+      <div class="shadow-lg py-4 mb-5" style="height: 62rem;">
+        <div class="borderSection">
+            <!-- Family Information -->            
+            <h4 class="text-primary fw-bold my-3">Family Information</h4>
+            <hr class="mb-2 mt-0 p-0">
+            <div>
+            
+            
+            <!-- Father's Information -->
+            <p class="fw-bold mt-3">Father's Details</p>            
+            <div class="row">
+              <div class="col-3">
+                  <p class="form-label">Full Name:</p>
+                  <p class="form-data">John Doe</p>
+              </div>
+              <div class="col-3">
+                  <p class="form-label">Age:</p>
+                  <p class="form-data">45</p>
+              </div>
+              <div class="col-3">
+                  <p class="form-label">Education:</p>
+                  <p class="form-data">MBA</p>
+              </div>
+              <div class="col-3">
+                  <p class="form-label">Occupation:</p>
+                  <p class="form-data">Businessman</p>
+              </div>
+          
+              <div class="col-3">
+                  <p class="form-label">Organization:</p>
+                  <p class="form-data">ABC Pvt Ltd</p>
+              </div>
+              <div class="col-3">
+                  <p class="form-label">Designation:</p>
+                  <p class="form-data">Director</p>
+              </div>
+              <div class="col-3">
+                  <p class="form-label">Languages Known:</p>
+                  <p class="form-data">English, Hindi</p>
+              </div>
+              <div class="col-3">
+                  <p class="form-label">Phone (R):</p>
+                  <p class="form-data">0123-456789</p>
+              </div>
+            
+              <div class="col-3">
+                  <p class="form-label">Phone (O):</p>
+                  <p class="form-data">9876-543210</p>
+              </div>
+              <div class="col-3">
+                  <p class="form-label">Mobile:</p>
+                  <p class="form-data">99999-99999</p>
+              </div>
+              <div class="col-3">
+                  <p class="form-label">E-mail:</p>
+                  <p class="form-data">john.doe@example.com</p>
+              </div>
+              <div class="col-3">
+                  <p class="form-label">Annual Income:</p>
+                  <p class="form-data">10,00,000</p>
+              </div>
+            </div>
+        
+            <!-- Mother's Information -->
+            <p class="fw-bold mt-3">Mother's Details</p>            
+            <div class="row">
+              <div class="col-3">
+                  <p class="form-label">Full Name:</p>
+                  <p class="form-data">Jane Doe</p>
+              </div>
+              <div class="col-3">
+                  <p class="form-label">Age:</p>
+                  <p class="form-data">40</p>
+              </div>
+              <div class="col-3">
+                  <p class="form-label">Education:</p>
+                  <p class="form-data">PhD</p>
+              </div>
+              <div class="col-3">
+                  <p class="form-label">Occupation:</p>
+                  <p class="form-data">Professor</p>
+              </div>
+
+              <div class="col-3">
+                  <p class="form-label">Organization:</p>
+                  <p class="form-data">XYZ University</p>
+              </div>
+              <div class="col-3">
+                  <p class="form-label">Designation:</p>
+                  <p class="form-data">HOD</p>
+              </div>
+              <div class="col-3">
+                  <p class="form-label">Languages Known:</p>
+                  <p class="form-data">English, Marathi</p>
+              </div>
+              <div class="col-3">
+                  <p class="form-label">Phone (R):</p>
+                  <p class="form-data">0111-223344</p>
+              </div>
+
+              <div class="col-3">
+                  <p class="form-label">Phone (O):</p>
+                  <p class="form-data">9998-765432</p>
+              </div>
+              <div class="col-3">
+                  <p class="form-label">Mobile:</p>
+                  <p class="form-data">88888-88888</p>
+              </div>
+              <div class="col-3">
+                  <p class="form-label">E-mail:</p>
+                  <p class="form-data">jane.doe@example.com</p>
+              </div>
+              <div class="col-3">
+                  <p class="form-label">Annual Income:</p>
+                  <p class="form-data">8,00,000</p>
+              </div>
+
+                          <!-- Declaration -->            
+            <h4 class="text-primary fw-bold text-center my-4">Declaration</h4>
+            <hr class="mb-2 mt-0 p-0">            
+            
+                <div class="col-12">
+                  <p class="px-4 my-4">                    
+                      We declare that the information furnished in the application form is true and correct to our knowledge we shall abide by the present school's standard norms or those introduced in future. We also undertake to meet all financial responsibilities in time regarding the study of our child in the school.                   
+                  </p>              
+                </div>  
+
+                <div class="row mx-4">
+                  <div class="col-4">
+                    <p class="form-label mb-3">Place:</p>
+                    <p class="form-data">.......................................</p>
+                  </div>
+                  <div class="col-4">
+                    <p class="form-label mb-3">Signature of Father:</p>                    
+                    <p class="form-data">.......................................</p>
+                  </div>
+                  <div class="col-3">
+                    <p class="form-label mb-3">Signature of Mother:</p>
+                    <p class="form-data">.......................................</p>
+                  </div>                  
+                    <div class="col-4 mt-2">
+                    <p class="form-label mb-3">Date:</p>
+                    <p class="form-data">.......................................</p>
+                  </div>
+                  <div class="col-4 mt-2">
+                    <p class="form-label  mb-3">Signature of Guardian:</p>
+                    <p class="form-data">.......................................</p>
+                  </div>                  
+                </div>
+
+            </div>
+               
+              
+            </div>
+
+
+
+            
+        </div>  
+      </div>
+
+      
+
+      <div class="shadow-lg py-4 mb-5 ">
+        <div class="borderSection">
+
+            <h4 class="text-primary fw-bold text-center mt-4">Terms and Conditions</h4>
+            <hr class="mb-2 mt-0 p-0">              
+              <div class="col">
+                <ul class="fs-2">                  
+                    <li>The admission form must be filled in carefully by the parents/guardian. Any changes in residential address, mobile numbers, etc., must be informed to the school in writing with a signature from the parents/guardian. Changes will not be accepted over the phone or via SMS.</li>
+                    <li>Original transfer certificate from the previous school and proof of the child’s education (photocopy of mark sheet/report card) must be submitted before the academic year begins.</li>
+                    <li>Any misbehavior or misconduct by the student, parent, or guardian will result in the rustication of the student without prior notice.</li>
+                    <li>If you wish to avail of school transport.Please enquire about the routes in opration at the time of admission. Requests for route diversion or modification of the existing routes may be considered bet the decision will be taken by transport in-charge.</li>                  
+                </ul>
+              </div> 
+
+
+
+
+            <!-- Enclosures -->            
+            <h4 class="text-primary fw-bold text-center mt-5">Enclosures</h4>
+            <hr class="mb-2 mt-0 p-0"> 
+            <div class="my-3">
+              <ul class="enclosure-list">
+                <li>Mark sheet of last class attended</li>
+                <li>Certified copy of child's birth certificate</li>
+                <li>Medical Fitness Certificate from a registered Medical Practitioner.</li>
+                <li>Certificate of SC/ST,etc (if applicable)</li>
+                <li>School Leaving Certificate/Transfer Certificate (after admission is confirmed)</li>
+              </ul>
+            </div>
+
+            <div class="row mt-5 mx-4">
+              <div class="col-4">
+                <p class="form-label">Concern Teacher:</p>
+                <p class="form-data">.......................................</p>
+              </div>
+              <div class="col-4">
+                  <p class="form-label">Mobile No:</p>
+                  <p class="form-data">.......................................</p>
+              </div>
+              <div class="col-4">
+                  <p class="form-label">Teacher's Signature:</p>
+                  <p class="form-data">.......................................</p>
+                </div>
+              <div class="col-4">
+                <p class="form-label">School Fees:</p>
+                <p class="form-data">.......................................</p>
+              </div>
+              <div class="col-4">
+                <p class="form-label">Bus Fees:</p>
+                <p class="form-data">.......................................</p>
+              </div>
+              <div class="col-4">
+                <p class="form-label">Parents Sign:</p>
+                <p class="form-data">.......................................</p>
+              </div>
+            </div>
+
+        </div>
+
+
+      
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

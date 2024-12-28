@@ -23,20 +23,21 @@
           </div>  
         </div>
         <div class="row">
-          {% for standard in standards %}
+          {% for class in classes %}
           <div class="col-md-3 col-sm-4 content-card">
               <div class="card-big-shadow">
                   <div class="card card-just-text" >
                     <div class="content py-4">
-                      <small class="text-primary">{% if standard.alias %}{{standard.alias|truncatechars:20}}{% else %}Alias Not Assign{% endif %}</small>
-                      <h4 class="title mb-4">{{ standard.name }} {% if standard.section %}({{standard.section}}){% endif %}</h4>
-                      <p class="description"><strong>Student's :</strong> {{standard.student_count}}<br></p>
-                      <p class="description">{% if standard.class_teacher %}{{standard.class_teacher.first_name}} {{standard.class_teacher.last_name |truncatechars:10}}{% else %}Not Assign{% endif %}</p>
+                      <small class="text-primary">{% if standard.alias %}{{class.alias|truncatechars:20}}{% else %}Alias Not Assign{% endif %}</small>
+                      <h4 class="title mb-4">{{ class.name }} {% if class.section %}({{class.section}}){% endif %}</h4>
+                      <p class="description"><strong>Student's :</strong> {{class.total_students}}<br></p>
+                      <p class="description">{% if class.class_teacher %}{{class.class_teacher.first_name}} {{class.class_teacher.last_name |truncatechars:10}}{% else %}Not Assign{% endif %}</p>
                       <div class="d-flex  ms-2">
                         <!-- Check Class Button -->
-                        <a href="{% url 'standard-detail' standard.pk %}" class="btn rounded-pill mt-2 me-2" style="background-color:#17B7B3; color:#fff">Detail</a>
+                        <a href="{% url "attendance-log" class.id %}" class="btn rounded-pill mt-2 me-2" style="background-color:#17B7B3; color:#fff">View </a>
                         <!-- Update Class Button -->
-                        <a href="{% url 'mark-attendance' standard.pk %}" class="btn rounded-pill mt-2" style="background-color:#1CBE57; color:#fff">Attendance</a> 
+                        {% comment %} <a href="{% url "stu-attendance-list" standard.id %}" class="btn rounded-pill mt-2" style="background-color:#1CBE57; color:#fff">Attendance</a>  {% endcomment %}
+                        <a href="{% url "class-attendance" class.id %}" class="btn rounded-pill mt-2" style="background-color:#1CBE57; color:#fff">Attendance</a> 
                       </div>
                     </div>
                   </div> <!-- end card -->
@@ -45,10 +46,6 @@
           {% endfor %}
         
         </div>
-
-
-
-
 
 
 

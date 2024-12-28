@@ -42,10 +42,15 @@ INSTALLED_APPS = [
     'widget_tweaks',
     "crispy_bootstrap5",
     'fontawesomefree',
+    'simple_history',
+    'webpush',
     'core',
-    'enrollment',
+    'accounts',
+    'student',
     'attendance',
-    'fees',
+    'school_fees',
+    'academics',   
+    
 ]
 
 MIDDLEWARE = [
@@ -56,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
 ROOT_URLCONF = 'school.urls'
@@ -114,7 +120,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
@@ -142,6 +148,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Custom Settings
 
+AUTH_USER_MODEL = 'accounts.User'
+
 # Auth Settings
 LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "dashboard"
@@ -153,3 +161,9 @@ LOGOUT_REDIRECT_URL = "login"
 # CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
+
+WEBPUSH_SETTINGS = {
+    "VAPID_PUBLIC_KEY": "BKqOOFkiMEjiFmCeGneWXiwhaq2E58355nnVHrVzASbzILXn5FhGQ-sc-ElSyMX9Iu67fnYj6p6C_aH_Nn0tIj0",
+    "VAPID_PRIVATE_KEY": "zpCJ1xY3hSBOdS59X_hSWhYQhIlkwhTgW7yDCbGuQUo",
+    "VAPID_ADMIN_EMAIL": "mail.akashkamble@gmail.com",
+}

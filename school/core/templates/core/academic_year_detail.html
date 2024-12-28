@@ -1,11 +1,122 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
+{% endblock head %}
+
+{% block main %}
 
 
-<div class="container mt-4">
-    <h2>Academic Year: {{ academic_year.name }}</h2>
-    <p><strong>Start Date:</strong> {{ academic_year.start_date }}</p>
-    <p><strong>End Date:</strong> {{ academic_year.end_date }}</p>
-    <p><strong>Status:</strong> {{ academic_year.is_active|yesno:"Active,Inactive" }}</p>
-    <a href="{% url 'academic-year-edit' academic_year.pk %}" class="btn btn-secondary">Edit</a>
-    <a href="{% url 'academic-year-delete' academic_year.pk %}" class="btn btn-danger">Delete</a>
+
+<div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">          
+          <h2 class="fw-bold text-start" style="color:#1E3A8A;">Academic Years Detail</h2>
+        </div>
+      
+      <hr>
+
+
+    
+
+      <div class="row">
+                                
+        {% comment %} <div class="col my-2">
+            <div class="table-responsive shadow" >
+
+                <div class="card border-0 rounded-4 shadow-lg">
+
+                    <div class="card-body">
+                    <h4 style="color:#1E3A8A;" class="text-center"><i class="fa-solid fa-calendar-days"></i> Academic Year</h4>
+                    <hr class="" style="color:#1E3A8A;">
+                    
+                        <div class="row border rounded-4 mx-2">
+                        <div class="col-12">
+                            <div class="table-responsive my-3">
+                                <table id="academicYearTable"class="table text-center" style="width:100%">
+                                  <thead>
+                                      <tr class="text-center">
+                                        <th class="text-center">#</th>
+                                        <th class="text-center">Academic Year</th>
+                                        <th class="text-center">Start Date</th>
+                                        <th class="text-center">End Date</th>
+                                        <th class="text-center">Is Active</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    
+                                    {% for year in academic_years %}
+                                    <tr>
+                                        <td class="text-center">{{forloop.counter}}</td>
+                                        <td>{{year.name}}</td>
+                                        <td>{{year.start_date}}</td>
+                                        <td>{{year.end_date}}</td>
+                                        <td>
+                                          {% if year.is_active %}
+                                            <i class="fa-solid fa-circle-check text-success"></i><br>
+                                            <small>{{student.enrollments.first.academic_year}}</small>
+                                          {% else %}
+                                            <i class="fa-solid fa-circle-xmark text-danger"> </i> 
+                                          {% endif %}
+                                        </td>
+                                        <td>
+                                          <a href="{% url "academic-year-detail" year.id %}">
+                                            <button class="btn btn-outline-primary px-3 py-1 rounded-3 font-size-16" type="button"> Detail </button>  
+                                          </a>
+                                        </td>
+                                      
+                                    </tr>
+                                  {% endfor %}
+                                  </tbody>
+                              
+                                </table>
+                              </div>
+    
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div> {% endcomment %}
+
+
+            
+                <h2>Academic Year: {{ academic_year.name }}</h2>
+                <p><strong>Start Date:</strong> {{ academic_year.start_date }}</p>
+                <p><strong>End Date:</strong> {{ academic_year.end_date }}</p>
+                <p><strong>Status:</strong> {{ academic_year.is_active|yesno:"Active,Inactive" }}</p>
+                <a href="{% url 'academic-year-edit' academic_year.pk %}" class="btn btn-secondary">Edit</a>
+                <a href="{% url 'academic-year-delete' academic_year.pk %}" class="btn btn-danger">Delete</a>
+            
+
+
+    </div>
+
 </div>
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
+
+<script>
+  new DataTable('#myTable', {  
+});
+
+new DataTable('#academicYearTable', {  
+});
+</script>
+
+
+
+{% endblock main %}
+
+
+
+
 

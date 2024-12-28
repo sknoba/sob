@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+{% load static %}
+{% load arithmetic %}
+{% block head %}
+
+{% endblock head %}
+
+{% block main %}
+<div class="container">
+
+    <div class="container">
+
+
+
+        <div class="row">
+            <div class="col">
+                <div class="shadow bg-white rounded-4 p-5 pt-4 pb-4">
+                    <div class="row">
+                        <h5 class="mb-0 text-secondary text-center mb-3">Class Details</h5>
+                        <hr>
+                        <div class="col-3 text-center">
+                            <strong>Class</strong> <br> 
+                            <p class="fs-3 m-0 p-0">{{standard}}</p>
+                        </div>
+                        <div class="col-3 text-center">
+                            <strong>Class Teacher</strong><br>
+                            <p class="fs-3 m-0 p-0">
+                                {{standard.class_teacher.first_name}} {{standard.class_teacher.last_name}}
+                            </p>
+                        </div>
+                        <div class="col-3 text-center">
+                            <strong>Class Alias</strong> <br>
+                            <p class="fs-3 m-0 p-0">
+                                {% if standard.alias %}{{standard.alias}}{% else %}---{% endif %}
+                            </p>
+                        </div>
+                        <div class="col-3 text-center">
+                            <strong>Today's Attendance</strong> <br>
+                            <p class="fs-3 m-0 p-0">
+                                {% if today_attendance %}
+                                <i class="fa-solid fa-circle-check text-success"></i>
+                                {% else %}
+                                <i class="fa-solid fa-circle-xmark text-danger"> </i>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row mt-3 mb-5">
+            <!-- Main Section -->
+            <div class="col col-md-12 col-12">
+              <div class="shadow p-4 pb-5 bg-white" style="border-radius: 1rem;">
+                <!-- Date Picker -->
+                <div class="row m-4">
+                    <div class="col-4">
+                        <h5 class="mb-0 text-secondary">Attendance Details</h5>
+                    </div>
+                    <div class="col-4">
+                        <h5 class="mb-0 text-info">Todays Attendance</h5>
+                    </div>
+                    <div class="col-4">
+                        <form action="" method="get">
+                             <div class="row">
+                                <div class="col-6">
+                                    <input name="date" type="date" class="form-control rounded-3 border border-secondary w-auto"/>    
+                                </div>
+                                <div class="col-6">
+                                    <div class="ms-5">
+                                        <button class="btn btn-primary rounded-3">Search</button>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                    </form>
+                    </div>
+                </div>
+                    
+                      <!-- Attendance Summary -->
+                      <div class="p-3 " style="border: 1px solid rgb(53, 52, 52); border-radius: 1rem;">
+                          
+                        <div class="row">
+                            
+                            <div class="col-3" >
+                                <div class="text-center my-auto py-3 shadow mx-2" style="border-radius: 2rem;">
+                                    <h5 class="text-center">Total</h5>
+                                    <h2 class="text-dark">{% if attendance %}{{ total_students }}{% else %}---{% endif %}</h2>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="text-center my-auto py-3 shadow mx-2" style="border-radius: 2rem;">
+                                    <h5 class="text-center">Present</h5>
+                                     {% comment %} <h2 class="text-success">{% if attendance %}{{attendance.present_boy|add:attendance.present_girl}}{% else %}---{% endif %}</h2> {% endcomment %}
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="text-center my-auto py-3 shadow mx-2 " style="border-radius: 2rem;">
+                                    <h5 class="text-center">Absent</h5>
+                                    {% calculate_absent total_students attendance.present_boy attendance.present_girl as absent_students %}
+                                    <h2 class="text-danger">{% if attendance %}{{ absent_students }}{% else %}---{% endif %}</h2>
+                                    
+                                    
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="text-center my-auto py-4 shadow mx-2 my-auto " style="border-radius: 2rem;">
+                                   
+                                   <a class="btn btn-primary text-white px-4 py-2 rounded-pill" 
+                                    data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                    View Details
+                                    </a>
+                                </div>
+                                </div>
+                            </div>
+                      </div>
+      
+                      <!-- Collapsible Table -->
+                      <div class="collapse mt-4" id="collapseExample">
+                          <div class="card card-body"  style="border: 1px solid rgb(53, 52, 52); border-radius: 1rem;">
+                          <table class="table table-hover table-bordered">
+                              <thead class="table-secondary">
+                              <tr>
+                                  <th scope="col">Roll No.</th>
+                                  <th scope="col">ID</th>
+                                  <th scope="col">Name</th>
+                                  <th scope="col">Gender</th>
+                                  <th class="text-center" scope="col">Statuss</th>
+                                  
+                              </tr>
+                              </thead>
+                              <tbody>
+                               
+                            
+                            {% for student in attendance.attendance.all  %}
+                            <tr>
+                                <th scope="row">{{forloop.counter}}</th>
+                                <td>{{student.student.student_id}}</td>
+                                <td>{{student.student.first_name}} {{student.student.last_name}}</td>
+                                <td>{{student.student.get_gender_display}}</td>
+                                <td class="text-center">{% if student.status %}<i class="fa-solid fa-circle-check text-success"></i>{% else %}<i class="fa-solid fa-circle-xmark text-danger">{% endif %}</i></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td class="text-center" colspan="6">No Data Available</td>
+                            </tr>
+                            {% endfor %} 
+                              </tbody>
+                          </table>
+                          </div>
+                      </div>
+              </div>
+            </div>                             
+
+
+            
+        </div>
+    </div>    
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+{% endblock main %}
+
+
+
+
+
+

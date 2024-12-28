@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %} 
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
+{% endblock head %}
+
+{% block main %}
+
+
+
+<div class="container">
+  <h2 class="fw-bold text-center text-lg-start" style="color:#1E3A8A;">Fees Collection List [2024-23]</h2>
+  <hr class="">
+
+
+<!-- Fourth Row -->
+<div class="row">
+  <div class="col my-2">
+    <div class="table-responsive shadow">
+      <div class="card border-0 rounded-4 shadow-lg">
+        <div class="card-body">
+          <!-- Heading and Filter Row -->
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <h4 class="text-center mb-0" style="color:#1E3A8A;">
+              <i class="fa-solid fa-indian-rupee-sign"></i> Fee Collection
+            </h4>
+            <form action="" method="get" class="d-flex">
+              <div class="me-2">
+                <select class="form-select" id="class-filter" name="ay">
+                  <option selected value="no-select">Year</option>
+                  {% for ay in academic_years %}
+                  <option value="{{ay}}">{{ay}}</option> 
+                  {% endfor %}
+                </select>
+              </div>
+              <button type="submit" id="filter-btn" class="btn btn-primary" style="background-color:#1E3A8A;">
+                <i class="fa-solid fa-filter"></i>
+              </button>
+            </form>
+          </div>
+
+          <hr>
+
+          <div class="row border rounded-4 mx-2">
+            <div class="col-12">
+              <div class="table-responsive my-3">
+                <table id="feesCollectionTable" class="table" style="width:100%">
+                  <thead>
+                    <tr>
+                      <th class="text-center">#</th>
+                      <th class="text-center">Student</th>
+                      <th class="text-center">Academic Year</th>
+                      <th class="text-center">Transport</th>
+                      <th class="text-center">Payment Status</th>
+                      <th class="text-center">Total Fees</th>
+                      <th class="text-center">Paid Fees</th>
+                      <th class="text-center">Remaining Fees</th>
+                      <th class="text-center">Invoice</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for fees in feescollection %}
+                    <tr>
+                      <td class="text-center">{{forloop.counter}}</td>
+                      <td class="text-center">
+                        <a href="{% url 'fees-detail' fees.id %}">
+                          {{fees.enrollment.student.get_full_name}}
+                        </a>
+                      </td>
+                      <td class="text-center">{{fees.enrollment.academic_year}}</td>
+                      <td class="text-center">
+                        {% if fees.transport %}
+                        <i class="fa-solid fa-circle-check text-success"></i>
+                        {% else %}
+                        <i class="fa-solid fa-circle-xmark text-danger"></i>
+                        {% endif %}
+                      </td>
+                      <td class="text-center">{{fees.get_payment_status_display}}</td>
+                      <td class="text-center"><i class="fa-solid fa-indian-rupee-sign"></i> {{fees.total_fees}}</td>
+                      <td class="text-center"><i class="fa-solid fa-indian-rupee-sign"></i> {{fees.total_paid_fees}}</td>
+                      <td class="text-center"><i class="fa-solid fa-indian-rupee-sign"></i> {{fees.remaning_amount}}</td>
+                      <td class="text-center">{{fees.invoice.count}}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
+
+<script>
+  new DataTable('#myTable', {  
+
+});
+
+new DataTable('#feesCollectionTable', {  
+
+});
+
+
+
+</script>
+
+{% endblock main %}
+

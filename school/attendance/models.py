@@ -1,49 +1,95 @@
 from django.db import models
-from django.core.exceptions import ValidationError
-from core.models import Student, UserProfile, Standard
-from django.utils import timezone
+from django.db.models import Q
+from accounts.models import User
+from student.models import Student
+from core.models import Class
+from simple_history.models import HistoricalRecords
+from django.db.models import Count
+from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.db.models.signals import post_save, post_delete
-from django.db.models import UniqueConstraint
-from django.db.models import F
+
+
+# class Attendance(models.Model):
+#     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='attendance_records')
+#     date =  models.DateTimeField(auto_now=True)
+#     status = models.CharField(
+#         max_length=10,
+#         choices=[('Present', 'Present'), ('Absent', 'Absent'), ('Late', 'Late')]
+#     )
+#     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_attendance')
+
+#     class Meta:
+#         unique_together = ('student', 'date')
+
+#     def __str__(self):
+#         return f"{self.student} - {self.date} - {self.status}"
+
+from django.utils.timezone import localdate
+from django.core.exceptions import ValidationError
 
 class Attendance(models.Model):
-    datetime = models.DateTimeField(auto_now=False)
-    teacher = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='attendance_teacher')
-    standard = models.ForeignKey(Standard, on_delete=models.CASCADE, related_name='attendance_standard')
-    present_boy = models.PositiveIntegerField(default=0, editable=False)
-    present_girl = models.PositiveIntegerField(default=0, editable=False)
+    class_name = models.ForeignKey(Class, on_delete=models.CASCADE, related_name='attendance', verbose_name='Class')
+    date =  models.DateTimeField()
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_attendance', limit_choices_to={'user_type__in': ['T','P']}, verbose_name="Created By")
+    present = models.IntegerField(default=0)
+    absent = models.IntegerField(default=0)
+    history = HistoricalRecords()
 
     class Meta:
-        constraints = [
-            UniqueConstraint(
-                fields=['standard', 'datetime'],
-                name='unique_attendance_per_day'
-            )
-        ]
+            constraints = [
+                models.UniqueConstraint(fields=['class_name', 'date'], name='unique_attendance_per_class_per_date')
+            ]
+
     def clean(self):
-        # Ensure no duplicates for the same day
-        if Attendance.objects.filter(
-            standard=self.standard, 
-            datetime__date=self.datetime.date()
-        ).exclude(id=self.id).exists():
-            raise ValidationError("Attendance for this teacher and standard already exists for today.")
+            # Check if an Attendance record for this class and date already exists
+        today = localdate(self.date)
+        if Attendance.objects.filter(class_name=self.class_name, date__date=today).exists():
+            raise ValidationError(f"Attendance for {self.class_name} on {today} already exists.")
+        super().clean()
 
     def __str__(self):
-        return f"{self.standard} - {self.datetime}: {self.teacher.first_name} {self.teacher.last_name}"
+        return f"{self.class_name} - {self.created_by} - {self.date.date().strftime('%d %b, %y')} - {self.date.time().strftime('%I:%M %p')}"
+
+
+class AttendaceRecord(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='attendance_records')
+    attendance = models.ForeignKey(Attendance, on_delete=models.CASCADE, related_name='attendance_records')
+    status = models.BooleanField()
+    history = HistoricalRecords()
+
+    class Meta:
+        unique_together = ('student', 'attendance')
+
+    def __str__(self):
+        return f"{self.attendance}- {self.student} - {self.status} "
     
 
-class MarkAttendance(models.Model):
-    attendance = models.ForeignKey(Attendance, on_delete=models.CASCADE, related_name='attendance')
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='student')
-    status = models.BooleanField(default=False)
 
-    class Meta:
-       constraints = [
-            UniqueConstraint(fields=['attendance', 'student'], name='unique_student_per_attendance')
-        ]
+# def update_attendance_counts(attendance):
+#     """
+#     Helper function to recalculate attendance counts for a specific class attendance.
+#     """
+#     total_present = attendance.attendance.filter(status='Present').count()
+#     total_absent = attendance.attendance.filter(status='Absent').count()
+
+#     attendance.present = total_present
+#     attendance.absent = total_absent
+#     attendance.save()
+
+# @receiver(post_save, sender=AttendaceRecord)
+# def handle_attendance_record_save(sender, instance, created, **kwargs):
+#     """
+#     Triggered when an attendance record is created or updated.
+#     """
+#     attendance = instance.attendance
+#     update_attendance_counts(attendance)
 
 
-    def __str__(self):
-        return f"{self.student.first_name} {self.student.last_name}  - {self.attendance.datetime} - {self.status}"
-   
+# def update_attendance_counts(attendance):
+#     counts = attendance.attendance.aggregate(
+#         total_present=Count('id', filter=Q(status='Present')),
+#         total_absent=Count('id', filter=Q(status='Absent'))
+#     )
+#     attendance.present = counts['total_present']
+#     attendance.absent = counts['total_absent']
+#     attendance.save()

@@ -26,59 +26,62 @@
         Mange School
     </div>
 
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#enrollment"
-            aria-expanded="true" aria-controls="enrollment">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Enrollment</span>
-        </a>
-        <div id="enrollment" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="{% url "enrollment-dashboard" %}">Dashboard</a>
-                <a class="collapse-item" href="{% url "enrollment-student-list" %}">New Enroll</a>
-                <a class="collapse-item" href="{% url "enrollment-list" %}">Enrollment's</a>
-                <a class="collapse-item" href="{% url "enrollment-cancel-list" %}">Cancelled Enroll</a>
-            </div>
-        </div>
+
+   <!-- Nav Item - Pages Collapse Menu -->
+   <li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+        aria-expanded="true" aria-controls="collapseTwo">
+        <i class="fas fa-fw fa-cog"></i>
+        <span>Student</span>
+    </a>
+    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+            {% comment %} 
+            <a class="collapse-item" href="{% url "student-list" %}">Student</a>
+            <a class="collapse-item" href="{% url "student-archive-list" %}">Archive Student</a>
+            {% endcomment %}
+            <a class="collapse-item" href="{% url "enroll_step1" %}">New Enrollment</a>
+            <a class="collapse-item" href="{% url "promote-list" %}">Promote</a>
+            <a class="collapse-item" href="{% url "enrollment-list" %}">Enrollment List</a>
+            <a class="collapse-item" href="{% url "student-list" %}">Student List</a>
+        </div> 
+    </div>
     </li>
 
-    <!-- Nav Item - Pages Collapse Menu -->
+    <!-- Nav Item - Utilities Collapse Menu -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-            aria-expanded="true" aria-controls="collapseTwo">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Student</span>
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAccounts"
+            aria-expanded="true" aria-controls="collapseAccounts">
+            <i class="fas fa-fw fa-wrench"></i>
+            <span>Accounts</span>
         </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="collapseAccounts" class="collapse" aria-labelledby="headingUtilities"
+            data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="{% url "student-list" %}">Student</a>
-                <a class="collapse-item" href="{% url "student-archive-list" %}">Archive Student</a>
+                <a class="collapse-item" href="{% url "manage-access" %}">Account Management</a>
+                <a class="collapse-item" href="{% url "access-user-teacher" %}">Teachers</a>
+                <a class="collapse-item" href="{% url "access-user-staff" %}">Staff</a>
+                <a class="collapse-item" href="{% url "access-group-list" %}">Groups</a>
             </div>
         </div>
-    </li>
-
+    </li>    
     <!-- Nav Item - Utilities Collapse Menu -->
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
             aria-expanded="true" aria-controls="collapseUtilities">
             <i class="fas fa-fw fa-wrench"></i>
-            <span>Management</span>
+            <span>School</span>
         </a>
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item" href="{% url "academic-year-list" %}">Academic Year</a>
-                <a class="collapse-item" href="{% url "standard-list" %}">Standards</a>
-                <a class="collapse-item" href="{% url "manage-access" %}">Account Management</a>
-                <a class="collapse-item" href="{% url "teacher-list" %}">Teacher</a>                
-                <a class="collapse-item" href="{% url "staff-list" %}">Staff Member</a>
-                
-                
-                
+                <a class="collapse-item" href="{% url "classes-list" %}">Class</a>
+                <a class="collapse-item" href="{% url "subject-list" %}">Subjects</a>                
             </div>
         </div>
     </li>
-
+  
     <!-- Divider -->
     <hr class="sidebar-divider">
 
@@ -102,7 +105,7 @@
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item" href="{% url "attendance-dashboard" %}">Dashbobard</a>
-                <a class="collapse-item" href="{% url "cls-att-list" %}">ClassRooms</a>
+                <a class="collapse-item" href="{% url "att-class-list" %}">ClassRooms</a>
             </div>
         </div>
     </li>
@@ -119,18 +122,34 @@
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item" href="{% url "fees-dashboard" %}">Dashbobard</a>
-                <a class="collapse-item" href="{% url "fees-list" %}">Fees</a>
+                <a class="collapse-item" href="{% url "fees-collection-list" %}">Fees Collection</a>
+                <a class="collapse-item" href="{% url "fees-structure-list" %}">Fees Structure</a>
+                <a class="collapse-item" href="{% url "fees-traport-list" %}">Transport Fees</a>
+                {% comment %} <a class="collapse-item" href="{% url "fees-list" %}">Fees</a> {% endcomment %} 
             </div>
         </div>
     </li>
 
 
-    <li class="nav-item">
-        <a class="nav-link disabled" href="#">
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>Performance</span>
-        </a>
-    </li>
+        <!-- Nav Item Attendance -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAcademics"
+                aria-expanded="true" aria-controls="collapseAcademics">
+                <i class="fa-regular fa-file-lines"></i>
+                <span>Academics</span>
+            </a>
+            <div id="collapseAcademics" class="collapse" aria-labelledby="headingUtilities"
+                data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="{% url "academic-dashboard" %}">Dashbobard</a>
+                    <a class="collapse-item" href="{% url "academic-exams" %}">Exams</a>
+                    <a class="collapse-item" href="">Test's</a>
+                    <a class="collapse-item" href="{% url "academic-score" %}">Add Score</a>
+                    <a class="collapse-item" href="{% url "academic-scorecard-students-list" %}">Score Card</a>
+                    
+                </div>
+            </div>
+        </li>
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">

@@ -1,0 +1,319 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %} 
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css">
+{% endblock head %}
+
+{% block main %}
+
+
+
+<div class="container">
+
+  <div class="d-flex justify-content-between align-items-center">
+    <!-- Heading on the left -->
+    <h2 class="fw-bold text-start" style="color:#1E3A8A;">Fees Structure List</h2>
+    
+    
+    <!-- Buttons on the right -->
+    <div class="d-flex">
+      <div class="my-3 ms-2 ms-md-3">
+        <a href="{% url 'student-list' %}">
+          <button type="button" id="filter-btn" class="btn btn-success bg-success">
+            <i class="fa-solid fa-file-excel"></i> Excel
+          </button>
+        </a>
+      </div>
+      
+      <div class="my-3 ms-2 ms-md-3">
+        <a href="{% url 'student-list' %}">
+          <button type="button" id="filter-btn" class="btn btn-danger bg-danger">
+            <i class="fa-solid fa-file-pdf"></i> PDF
+          </button>
+        </a>
+      </div>
+      <div class="my-3 ms-2 ms-md-3">
+          <button class="btn btn-primary bg-primary" data-bs-toggle="modal" data-bs-target="#addFeesStructureModal">
+            <i class="fa-solid fa-plus"></i> New Fee Structure
+          </button>
+        </a>
+      </div>
+      
+
+    </div>
+  </div>
+
+  
+  <hr class="">
+
+    
+  
+
+  
+
+
+  {% if form.non_field_errors %}
+      
+  <div class="alert alert-danger mx-3 my-3 p-1" role="alert">
+        {{form.non_field_errors}}
+  </div>
+    {% endif %}
+
+  {% if messages %}
+    <div class="alert alert-dismissible fade show mt-3" role="alert">
+        {% for message in messages %}
+            <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+{% comment %}         
+        <div class="row rounded my-2 px-1">
+          <div>
+
+            <div class="card shadow mb-4">
+              <div class="card-header py-3 mt-2">
+                  <h6 class="m-0 font-weight-bold text-primary">Fees ({{total_fees_collection}})</h6>
+              </div>
+                    <div class="card-body">
+                        <div class="table-responsive" style="max-height: 560px; height: 400px; overflow-y: auto;">
+                          <table id="" class="table text-center" style="width:100%; height: 300px;">
+                            <thead class="text-center">
+                                <tr>
+                                    <th class="text-center">#</th>
+                                    <th class="text-center">Student</th>
+                                    <th class="text-center">Academic Year</th>
+                                    <th class="text-center">Payment Statuss</th>
+                                    <th class="text-center">Total Fees</th>
+                                    <th class="text-center">Paid Fees</th>
+                                    <th class="text-center">Remaning Fees</th>
+                                    <th class="text-center">Invoince</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                        
+                              {% for fees in feescollection %}
+                                <tr>
+                                  <td class="text-center">{{forloop.counter}}</td>
+                                    <!-- <td>
+                                        {% if student.photo %}
+                                        <img src="{{student.photo.url}}" alt="" class="avatar-sm rounded-circle me-2" style="width: 50px; height: 50px;"/>
+                                        {% else %}
+                                        <img src="{% static "core/img/profile.png" %}" alt="" class="avatar-sm rounded-circle me-2" />
+                                        {% endif %}
+                                        <a href="" class="text-body">{{student.student_id}}</a>
+                                    </td> -->
+                                    <td>
+                                      <a href="{% url "fees-detail" fees.id %}" class="text-body">{{fees.enrollment.student.get_full_name}} - {{fees.enrollment.student.student_id}}</a>
+                                    </td>
+                                    <td class="text-center">{{fees.enrollment.academic_year}} </td>
+                                    <td><span class="badge text-bg-{% if fees.payment_status == 'paid' %}success{% elif fees.payment_status == 'partially_paid'%}warning{% else %}danger{% endif %}">{{fees.get_payment_status_display}}</span></td>
+                                    <td class="text-center">{{fees.total_fees|intcomma}}</td>
+                                    <td class="text-center text-success">{{fees.paid_fees|intcomma}}</td>
+                                    <td class="text-center text-danger">{{fees.remaining_fees|intcomma}}</td>
+                                    <td class="text-center">{{fees.invoices.all.count}}</td>                                        
+                                </tr>
+                              {% endfor %}
+                            </tbody>
+                        
+                        </table>
+                        </div>
+                    </div>
+            </div>
+
+          </div>
+        </div> {% endcomment %}
+
+
+                <!-- Fourth Row -->
+                <div class="row">
+                                
+                  <div class="col my-2">
+                      <div class="table-responsive shadow" >
+      
+                          <div class="card border-0 rounded-4 shadow-lg">
+      
+                              <div class="card-body">
+                              <h4 style="color:#1E3A8A;" class="text-center"><i class="fa-solid fa-indian-rupee-sign"></i> Fees Structure</h4>
+                              <hr class="" style="color:#1E3A8A;">
+                              
+                                  <div class="row border rounded-4 mx-2">
+                                  <div class="col-12">
+                                      <div class="table-responsive my-3">
+                                          <table id="feeStructureTable" class="table" style="width:100%">
+                                            <thead>
+                                                <tr class="text-center">
+                                                  <th class="text-center">#</th>
+                                                  <th class="text-center">Academic Year</th>
+                                                  <th class="text-center">Class</th>
+                                                  <th class="text-center">Fees</th>
+                                                  <th class="text-center">Enrollments</th>
+                                                  <th class="text-center">Remove</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                              
+                                              
+                                              {% for feesstructure in feesstructures %}
+                                                <tr>
+                                                    <td class="text-center">{{forloop.counter}}</td>
+                                                    <td class="text-center">{{feesstructure.academic_year}}</td>
+                                                    <td class="text-center">{{feesstructure.class_name}}</td>
+                                                    <td class="text-center">{{feesstructure.school_fee}}</td>
+                                                    <td class="text-center">{{feesstructure.fees_collection.all.count}}</td>
+                                                    <td class="text-center">
+                                                      {% comment %} {% if not feesstructure.fees_collection.exists %}
+                                                      <button 
+                                                          class="btn btn-danger btn-sm" 
+                                                          data-bs-toggle="modal" 
+                                                          data-bs-target="#deleteFeesStructureModal" 
+                                                          data-id="{{ feesstructure.id }}" 
+                                                          data-class="{{ feesstructure.class_name }}" 
+                                                          data-year="{{ feesstructure.academic_year }}">
+                                                          Remove
+                                                      </button>
+                                                      {% else %}
+                                                      <button class="btn btn-danger btn-sm" disabled>Remove</button>
+                                                      {% endif %} {% endcomment %}
+                                                      {% if feesstructure.fees_collection.exists %}
+                                                      <button class="btn btn-outline-danger px-3 py-1 rounded-3 font-size-16" type="button" disabled  > Delete </button>   
+                                                      {% else %}
+                                                      <a href="{% url "fees_structure_delete" feesstructure.id %}">
+                                                        <button class="btn btn-outline-danger px-3 py-1 rounded-3 font-size-16" type="button"> Delete </button>  
+                                                      </a>
+                                                      {% endif %}
+                                                  </td>                                                  
+                                                </tr>
+                                              {% endfor %} 
+                                            </tbody>
+                                          </table>
+                                        </div>
+              
+                                  </div>
+                                  </div>
+                              </div>
+                          </div>
+      
+                      </div>
+                  </div>
+              </div>
+        
+
+
+
+
+
+
+
+  <!-- Modal for Add Fees Structure -->
+  <div class="modal fade" id="addFeesStructureModal" tabindex="-1" aria-labelledby="addFeesStructureModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addFeesStructureModalLabel">Add Fees Structure</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+
+
+
+        <div id="form-errors">
+
+        </div>
+        
+
+        <div class="modal-body">
+          <form method="POST" novalidate>
+            {% csrf_token %}
+            
+            <div class="mx-2">
+            {{form.class_name.label}}            
+            {{form.class_name}}
+            
+            {{form.class_name.errors}}
+            </div>
+
+            <div class="mx-2">
+            {{form.school_fee.label}}
+            {{form.school_fee}}
+            
+            {{form.school_fee.errors}}
+
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- End Modal for Add Fees Structure -->
+
+
+
+
+   <!-- Modal for Remove Fees Structure -->
+         <div class="modal fade" id="deleteFeesStructureModal" tabindex="-1" aria-labelledby="deleteFeesStructureModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="deleteFeesStructureModalLabel">Delete Fees Structure</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                      <p>Are you sure you want to delete the following Fees Structure?</p>
+                      <p><strong>Class:</strong> <span id="feesStructureClass"></span></p>
+                      <p><strong>Academic Year:</strong> <span id="feesStructureYear"></span></p>
+                      <form id="deleteFeesStructureForm" method="POST">
+                          {% csrf_token %}
+                          <input type="hidden" name="pk" id="feesStructureId">
+                      </form>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                      <button type="submit" form="deleteFeesStructureForm" class="btn btn-danger">Confirm</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+  <!-- Modal for Remove Fees Structure -->
+
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
+
+<script>
+  new DataTable('#feeStructureTable', {  
+
+});
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+      var deleteButtons = document.querySelectorAll('[data-bs-toggle="modal"]');
+      deleteButtons.forEach(function(button) {
+          button.addEventListener('click', function() {
+              var feesStructureId = button.getAttribute('data-id');
+              var feesStructureClass = button.getAttribute('data-class');
+              var feesStructureYear = button.getAttribute('data-year');
+              
+              document.getElementById('feesStructureId').value = feesStructureId;
+              document.getElementById('feesStructureClass').textContent = feesStructureClass;
+              document.getElementById('feesStructureYear').textContent = feesStructureYear;
+          });
+      });
+  });
+</script>
+
+
+{% endblock main %}
+

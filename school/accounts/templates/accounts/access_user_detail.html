@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block main %}
+{% load static %}
+{% block head %}
+<link href="https://fonts.googleapis.com/css2?family=Cinzel&display=swap" rel="stylesheet">
+<style>
+.cinzel {
+    font-family: 'Cinzel', serif;
+    font-size: 20px;
+}
+</style>  
+{% endblock head %}
+
+
+
+
+<div id="main-content">
+    <div class="container">              
+      <div class="container mx-4 mt-4">
+  
+              <h2 class="fw-bold text-center text-lg-start mt-5" style="color:#1E3A8A;">User Detail</h2>
+              <hr class="">
+             <!-- Card Content -->
+        <div class="contaienr px-3">
+          <div class="col px-2">
+            <div class="row bg-white py-3 mb-2 rounded-4 shadow-lg mb-3">
+              <div class="col-md-3 d-flex justify-content-center align-items-center d-sm-flex ">
+                <img src="{% if user.profile.photo %}{{user.profile.photo.url}}{% else %}{% static "core/img/profile.png" %}{% endif %}" class="img-fluid rounded border border-3 px-2 py-2 border-secondary " alt="..." style="height: 220px; width:220px; object-fit: cover; ">
+              </div>
+              <div class="col-md-9 d-sm-flex d-sm-justify-content-center d-sm-align-items-center">
+                <div class="card-body">
+                  <h5 class="card-title mb-2 fs-1 fw-semibold mt-2 text-center" style="color:#1E3A8A;">{{user.first_name|capfirst}} {{user.last_name|capfirst}}</h5>
+                  <p class="card-text fs-5 text-center">ID: <span class="cinzel px-1 py-1 rounded-3" style="color: red; background-color: yellow;"><b>{{user.user_id}}</b></span></p>
+                  <hr class="mb-4 fw-bold fs-1" style="color:#1E3A8A;">
+                  <div class="row">
+                    <div class="col-4 border-end">
+                      <p><strong>First Name:</strong> {{user.first_name|capfirst}}</p>
+                      <p><strong>Gender:</strong> {{user.profile.get_gender_display}}</p>
+                      <p><strong>Date of Birth:</strong> {{user.profile.date_of_birth|default:"Not Available"}}</p>
+                    </div>
+                    <div class="col-4 border-end">
+                      <p><strong>Last Name:</strong> {{user.last_name|capfirst}}</p>
+                      <p><strong>Relation:</strong> <span class="badge text-bg-{% if user.profile.relation_status == "M" %}primary{% else %}secondary{% endif %}">{{user.profile.get_relation_status_display|default:"Not Available"}}</span></p>
+                      <p><strong>Contact No:</strong> +91 {{user.profile.contact_number|default:"Not Available"}}</p>                      
+                      
+                    </div>
+                    <div class="col-4">
+                      <p><strong>UIDAI:</strong> {{user.profile.adhar_number|default:"Not Available"}}</p>  
+                      <p><strong>Email:</strong> {{user.email|default:"Not Available"}}</p>
+                      <p><strong>WhatsApp:</strong>+91 {{user.profile.whatsapp_number}}</p>
+
+                      </div>
+                  </div>
+                </div>
+              </div>
+              
+             </div>
+          </div>
+          
+          <!-- Employment and Address Section -->
+          <div class="row">
+                    <!-- Parent Information Card -->
+                    <div class="col-md-6 mb-4">
+                      <div class="card border-0 rounded-4 shadow-lg">
+                        <div class="card-body">
+                          <h4 style="color:#1E3A8A;"><i class="fa-solid fa-graduation-cap"></i> Education & Experience</h4>
+                          <hr class="mb-4" style="color:#1E3A8A;">
+                          <div class="row">
+                            <div class="col-md-6 border-end">
+                              <p><strong>Education:</strong> {{user.profile.education}}</p>                              
+                              <p><strong>Experience:</strong> {{user.profile.experience}}</p>
+                              <p><strong>Years of Experience:</strong> {{user.profile.year_of_experience}}</p> 
+                              
+                            </div>
+                            <div class="col-md-6">
+                              <p><strong>Field of Study:</strong> {{user.profile.field_of_study}}</p>
+                              <p><strong>Certifications:</strong> {{user.profile.certificate}}</p>
+                              <p><strong>Achievements:</strong> {{user.profile.achivements}}</p>
+                              
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Address Information Card -->
+                    <div class="col-md-6 mb-4">
+                      <div class="card border-0 rounded-4 shadow-lg">
+                        <div class="card-body">
+                          <h4 style="color:#1E3A8A;"><i class="fa-regular fa-address-card"></i> Address</h4>
+                          <hr class="mb-4" style="color:#1E3A8A;">
+                          <div class="row">
+                            <div class="col-md-6 border-end">
+                              <p><strong>Address Line 1:</strong> {{user.profile.address_line_1}}</p>
+                              <p><strong>City:</strong> {{user.profile.city|capfirst}}</p>
+                              <p><strong>State:</strong> {{user.profile.get_state_display|default:"Not Available"}}</p>
+                            </div>
+                            <div class="col-md-6">
+                              <p><strong>Address Line 2:</strong> {{user.profile.address_line_2}}</p>
+                              <p><strong>District:</strong> {{user.profile.district|capfirst}}</p>
+                              <p><strong>PIN Code:</strong> {{user.profile.pin_code}}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+          
+          </div>
+
+          <!-- New Box for Additional Information -->
+          <div class="row mb-4">
+            <div class="col-12">
+                <div class="card border-0 rounded-4 shadow-lg">
+                    <div class="card-body">
+                      <h4 style="color:#1E3A8A;"><i class="fa-solid fa-briefcase"></i> Employment & Specializations</h4>
+                        <hr class="mb-4" style="color:#1E3A8A;">
+                        <div class="row">
+                          <div class="col-md-6 border-end">
+                            <p><strong>Employment Type:</strong> <span class="badge text-bg-{% if user.profile.employment_type == "PE"%}success{% else %}warning{% endif %}">{{user.profile.get_employment_type_display}}</span></p>
+                            <p><strong>Addon Access:</strong> [-] [-]</p>
+                            <p><strong>Class Teacher:</strong>
+                                {% for standard in staff.class_teacher_of.all %}
+                                [ {{standard}} ]
+                                {% empty %}
+                                Not Assigned
+                                {% endfor %}
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                          <p><strong>Joining Date:</strong> {{user.date_joined|date:"M d, Y"}}</p>
+                          <p><strong>Subjects :</strong> 
+                            {% for subject in user.profile.subjects.all %}
+                            {{subject}},
+                            {% endfor %}
+                          </p>                              
+                          <p><strong>Specializ In:</strong> {{user.profile.specializations}}</p>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>          
+
+          <!-- Action Buttons Section -->
+          <div class="d-flex justify-content-end gap-3 mt-4">
+            <a href="{% url 'access-user-access-update' user.id %}" class="btn btn-primary">User Log</a>
+            <a href="{% url 'access-user-access-update' user.id %}" class="btn btn-primary">Update Access</a>
+            <a href="{% url 'access-profile-update' user.profile.id %}" class="btn btn-secondary">Update Profile</a>
+            <a href="{% url 'access-user-delete' user.id %}" class="btn btn-danger">Remove User</a>
+          </div>
+      </div>             
+    </div>
+</div>
+
+{% endblock main %}

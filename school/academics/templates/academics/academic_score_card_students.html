@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+{% load static %}
+{% load arithmetic %}
+{% block head %}
+<style>
+    body {
+        background-color: #f5f5f5;
+    }
+
+    /* Common Card Styling */
+    .card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        height: 300px; /* Fixed height for consistency */
+    }
+
+    /* Student Card Header Styling */
+    .card-header-student {
+        background: linear-gradient(to right, #4CAF50, #8BC34A); /* Green Gradient */
+        color: white;
+        font-size: 1.2rem;
+        font-weight: bold;
+        border-radius: 10px 10px 0 0;
+        padding: 10px;
+        position: relative;
+    }
+
+    /* Student Image */
+    .student-img {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid #fff;
+        margin-top: 20px;
+    }
+
+    /* Buttons */
+    .btn-custom {
+        border-radius: 20px;
+        font-weight: bold;
+        color: white;
+        padding: 5px 20px;
+    }
+
+    .btn-student {
+        background-color: #007bff;
+    }
+
+    .btn-student:hover {
+        background-color: #0056b3;
+    }
+
+    /* Filter Container */
+    .filter-container {
+        background-color: #ffffff;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    /* Filter Labels */
+    .filter-label {
+        font-weight: bold;
+        margin-right: 10px;
+    }
+
+    /* Responsive Filter Form */
+    .filter-form select,
+    .filter-form input {
+        width: 100%;
+        max-width: 250px;
+        margin-bottom: 15px;
+    }
+</style>
+<style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .card {
+      text-align: center;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease-in-out;
+      height: 320px; /* Increased card height */
+    
+    }
+    .student-img {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+     
+      border: 4px solid #fff;
+      background-color: #fff;
+    }
+    .score-details span {
+      font-weight: bold;
+      color: #6c757d;
+      font-size: 1.1rem;
+    }
+    .btn-score {
+      background-color: #007bff;
+      color: white;
+      border-radius: 20px;
+      padding: 8px 16px;
+      font-size: 1rem;
+      transition: all 0.3s;
+      
+    }
+    .btn-score:hover {
+      background-color: #0056b3;
+      color: #fff;
+    }
+  </style>
+{% endblock head %}
+
+{% block main %}
+<div class="container">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-start" style="color:#1E3A8A;">Student Score Cards</h2>
+    </div>
+    <hr>
+    <!-- Filter Section -->
+    <div class="filter-container shadow">
+        <form class="filter-form row">
+            <!-- Name Filter -->
+            <div class="col-md-6">
+                <label for="nameFilter" class="filter-label">Name</label>
+                <input type="text" class="form-control" id="nameFilter" placeholder="Search by Name">
+            </div>
+            <!-- Roll Number Filter -->
+            <div class="col-md-6">
+                <label for="rollFilter" class="filter-label">Roll Number</label>
+                <input type="text" class="form-control" id="rollFilter" placeholder="Search by Roll Number">
+            </div>
+        </form>
+    </div>
+
+    <div class="container">
+        <div class="row" id="studentList">
+            <!-- Student Cards -->
+            <div class="row">
+                {% for student in students %}
+                <div class="col-md-3 col-sm-6 student-card" 
+                    data-name="{{ student.student.first_name|lower }} {{ student.student.last_name|lower }}" 
+                    data-roll="{{ student.student.roll_number }}">
+                    <div class="card p-3">
+                      <img src="{% if student.student.photo %}{{student.student.photo.url}}{% else %}{% static "core/img/profile.png" %}{% endif %}" alt="Student" class="student-img mx-auto">
+                      <h5 class="mt-3 mb-1">{{student.student.first_name|capfirst}} {{student.student.last_name|capfirst}}</h5>
+                      <p class="text-secondary mb-2">Roll No: 10</p>                    
+                      <div class="score-details">
+                        <span>Score:%</span>
+                      </div>
+                      <a href="{% url "academic-score-card" student.id %}">
+                        <button class="btn btn-score mt-4">View Scorecard</button>
+                      </a>
+                    </div>
+                  </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+// Filter Functionality
+const filterStudents = () => {
+    // Get the filter values
+    const nameFilter = document.getElementById("nameFilter").value.toLowerCase();
+    const rollFilter = document.getElementById("rollFilter").value.toLowerCase();
+
+    // Get all the student cards
+    const studentCards = document.querySelectorAll('.student-card');
+    
+    // Loop through each student card and check if it matches the filters
+    studentCards.forEach(card => {
+        // Get data attributes of each card
+        const studentCardName = card.getAttribute('data-name').toLowerCase();
+        const studentCardRoll = card.getAttribute('data-roll').toLowerCase();
+
+        // Check if each filter matches
+        const nameMatches = nameFilter === "" || studentCardName.includes(nameFilter);
+        const rollMatches = rollFilter === "" || studentCardRoll.includes(rollFilter);
+
+        // If both filters match, show the card, otherwise hide it
+        if (nameMatches && rollMatches) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+};
+
+// Event listeners for filtering
+document.getElementById("nameFilter").addEventListener("input", filterStudents);
+document.getElementById("rollFilter").addEventListener("input", filterStudents);
+
+// Initial filter call when the page loads
+filterStudents();
+</script>
+
+{% endblock main %}

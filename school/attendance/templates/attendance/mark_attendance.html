@@ -1,212 +1,175 @@
 {% extends "base.html" %}
 {% load static %}
-{% load arithmetic %}
+
 {% block head %}
 
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    h1 {
+        font-weight: 700;
+        color: #004085;
+    }
+    .table {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .table tbody tr {
+        transition: transform 0.2s, background-color 0.3s;
+    }
+    .table tbody tr:hover {
+        transform: translateY(-5px);
+        background-color: #e9ecef;
+    }
+    .table-success {
+        background-color: #d1e7dd !important;
+    }
+    .form-switch input {
+        width: 40px;
+        height: 20px;
+        position: relative;
+        appearance: none;
+        outline: none;
+        background-color: #ccc;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    .form-switch input:checked {
+        background-color: #28a745;
+    }
+    .form-switch input::after {
+        content: '';
+        width: 16px;
+        height: 16px;
+        background-color: #fff;
+        border-radius: 50%;
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        transition: transform 0.3s;
+    }
+    .form-switch input:checked::after {
+        transform: translateX(20px);
+    }
+</style>
 {% endblock head %}
 
 {% block main %}
-<div class="container">
 
-    <div class="container">
-
-
-
-        <div class="row">
-            <div class="col">
-                <div class="shadow bg-white rounded-4 p-5 pt-4 pb-4">
-                    <div class="row">
-                        <h5 class="mb-0 text-secondary text-center mb-3">Class Details</h5>
-                        <hr>
-                        <div class="col-3 text-center">
-                            <strong>Class</strong> <br> 
-                            <p class="fs-3 m-0 p-0">{{standard}}</p>
-                        </div>
-                        <div class="col-3 text-center">
-                            <strong>Class Teacher</strong><br>
-                            <p class="fs-3 m-0 p-0">
-                                {{standard.class_teacher.first_name}} {{standard.class_teacher.last_name}}
-                            </p>
-                        </div>
-                        <div class="col-3 text-center">
-                            <strong>Class Alias</strong> <br>
-                            <p class="fs-3 m-0 p-0">
-                                {% if standard.alias %}{{standard.alias}}{% else %}---{% endif %}
-                            </p>
-                        </div>
-                        <div class="col-3 text-center">
-                            <strong>Today's Attendance</strong> <br>
-                            <p class="fs-3 m-0 p-0">
-                                {% if today_attendance %}
-                                <i class="fa-solid fa-circle-check text-success"></i>
-                                {% else %}
-                                <i class="fa-solid fa-circle-xmark text-danger"> </i>
-                                {% endif %}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-{{attendance}}
-
-        <div class="row mt-3 mb-5">
-            <!-- Main Section -->
-            <div class="col-lg-9 col-md-12 col-12">
-              <div class="shadow p-4 pb-5 bg-white" style="border-radius: 1rem;">
-                <!-- Date Picker -->
-                <div class="row m-4">
-                    <div class="col-4">
-                        <h5 class="mb-0 text-secondary">Attendance Details</h5>
-                    </div>
-                    <div class="col-4">
-                        <h5 class="mb-0 text-info">Todays Attendance</h5>
-                    </div>
-                    <div class="col-4">
-                        <form action="" method="get">
-                             <div class="row">
-                                <div class="col-6">
-                                    <input name="date" type="date" class="form-control rounded-3 border border-secondary w-auto"/>    
-                                </div>
-                                <div class="col-6">
-                                    <div class="ms-5">
-                                        <button class="btn btn-primary rounded-3">Search</button>
-                                    </div>
-                                    
-                                </div>
-                            </div>
-                    </form>
-                    </div>
-                </div>
-                    
-                      <!-- Attendance Summary -->
-                      <div class="p-3 " style="border: 1px solid rgb(53, 52, 52); border-radius: 1rem;">
-                          
-                        <div class="row">
-                            
-                            <div class="col-3" >
-                                <div class="text-center my-auto py-3 shadow mx-2" style="border-radius: 2rem;">
-                                    <h5 class="text-center">Total</h5>
-                                    <h2 class="text-dark">{% if attendance %}{{ total_students }}{% else %}---{% endif %}</h2>
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <div class="text-center my-auto py-3 shadow mx-2" style="border-radius: 2rem;">
-                                    <h5 class="text-center">Present</h5>
-                                     <h2 class="text-success">{% if attendance %}{{attendance.present_boy|add:attendance.present_girl}}{% else %}---{% endif %}</h2>
-                                     ---
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <div class="text-center my-auto py-3 shadow mx-2 " style="border-radius: 2rem;">
-                                    <h5 class="text-center">Absent</h5>
-                                    {% calculate_absent total_students attendance.present_boy attendance.present_girl as absent_students %}
-                                    <h2 class="text-danger">{% if attendance %}{{ absent_students }}{% else %}---{% endif %}</h2>
-                                    
-                                    
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <div class="text-center my-auto py-4 shadow mx-2 my-auto " style="border-radius: 2rem;">
-                                   
-                                   <a class="btn btn-primary text-white px-4 py-2 rounded-pill" 
-                                    data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                    View Details
-                                    </a>
-                                </div>
-                                </div>
-                            </div>
-                      </div>
-      
-                      <!-- Collapsible Table -->
-                      <div class="collapse mt-4" id="collapseExample">
-                          <div class="card card-body"  style="border: 1px solid rgb(53, 52, 52); border-radius: 1rem;">
-                          <table class="table table-hover table-bordered">
-                              <thead class="table-secondary">
-                              <tr>
-                                  <th scope="col">Roll No.</th>
-                                  <th scope="col">ID</th>
-                                  <th scope="col">Name</th>
-                                  <th scope="col">Gender</th>
-                                  <th class="text-center" scope="col">Statuss</th>
-                                  
-                              </tr>
-                              </thead>
-                              <tbody>
-                               
-                            
-                            {% for student in attendance.attendance.all  %}
-                            <tr>
-                                <th scope="row">{{forloop.counter}}</th>
-                                <td>{{student.student.student_id}}</td>
-                                <td>{{student.student.first_name}} {{student.student.last_name}}</td>
-                                <td>{{student.student.get_gender_display}}</td>
-                                <td class="text-center">{% if student.status %}<i class="fa-solid fa-circle-check text-success"></i>{% else %}<i class="fa-solid fa-circle-xmark text-danger">{% endif %}</i></td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td class="text-center" colspan="6">No Data Available</td>
-                            </tr>
-                            {% endfor %} 
-                              </tbody>
-                          </table>
-                          </div>
-                      </div>
-              </div>
-            </div>                             
-
-
-            <!-- Buttons Section -->
-            <div class="col-lg-3 col-md-12 col-12">
-            
-              <div class="shadow p-3 bg-white text-center pt-4" style="border-radius: 1rem;"> 
-                <span> Attendance Taken By </span> <br>
-                <span> {{attendance.teacher.first_name}} - {{attendance.datetime.time}} </span> 
-                <hr class="m-1">
-                
-
-                {% if attendance %}     
-                attendance is available
-                    {% if attendance.datetime.date|date:"Y-m-d" == today|date:"Y-m-d" %}
-                        <button class="btn btn-outline-success mb-2 w-100 rounded-pill mt-3 disabled" style="padding-top:0.7rem;">Take Attendence</button> 
-                        <button class="btn btn-outline-warning mb-2 w-100 rounded-pill mt-3" style="padding-top:0.7rem;">Update Attendence</button>
-                        <form action="{% url "delete-attendance" attendance.id standard.id %}" method="post">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-outline-danger w-100 rounded-pill mb-2 mt-3" style="padding-top:0.7rem;">Delete Attendence</button>
-                        </form>
-                    {% else %}
-                        <button class="btn btn-outline-success mb-2 w-100 rounded-pill mt-3 disabled" style="padding-top:0.7rem;">Take Attendence</button>
-                        <button class="btn btn-outline-warning mb-2 w-100 rounded-pill mt-3 disabled" style="padding-top:0.7rem;">Update Attendence</button>
-                        <button class="btn btn-outline-danger w-100 rounded-pill mb-2 mt-3 disabled" style="padding-top:0.7rem;">Delete Attendence</button>
-                    {% endif %}
-                {% else %}
-                attendance is not  available
-                        {% if not request.GET.date %}
-                            <a href="{% url "stu-attendance-list" standard.id %}">
-                                <button class="btn btn-outline-success mb-2 w-100 rounded-pill mt-3" style="padding-top:0.7rem;">Take Attendence</button>
-                            </a>
-                            <button class="btn btn-outline-warning mb-2 w-100 rounded-pill mt-3 disabled" style="padding-top:0.7rem;">Update Attendence</button>
-                            <button class="btn btn-outline-danger w-100 rounded-pill mb-2 mt-3 disabled" style="padding-top:0.7rem;">Delete Attendence</button>
-                        {% else %}
-                            <button class="btn btn-outline-success mb-2 w-100 rounded-pill mt-3 disabled" style="padding-top:0.7rem;">Take Attendence</button>
-                            <button class="btn btn-outline-warning mb-2 w-100 rounded-pill mt-3 disabled" style="padding-top:0.7rem;">Update Attendence</button>
-                            <button class="btn btn-outline-danger w-100 rounded-pill mb-2 mt-3 disabled" style="padding-top:0.7rem;">Delete Attendence</button>
-                        {% endif %} 
-                {% endif %}
-              </div>
-            </div>
-            
-        </div>
+<form method="POST">
+    {% csrf_token %}
+<div class="container my-5">
+    <h1 class="text-center mb-0">Attendance - {{class}}</h1>
+    <div class="text-center mb-4">
+        <small class="text-success text-center" id="live-time">12 Dec 2023 12:45 pm</small>
     </div>    
+    <div class="table-responsive">
+        <table class="table table-bordered text-center">
+            <thead>
+                <tr>
+                    <th>R No.</th>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>Attendance</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr id="row{{forloop.counter}}">
+                    <td>{{forloop.counter}}</td>
+                    <td>{{student.student.first_name}}</td>
+                    <td>Female</td>
+                    <td>
+                        <label class="form-switch">
+                            <input type="checkbox" name="{{ student.student.id }}" onchange="toggleAttendance(this, {{forloop.counter}})">
+                        </label>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="text-end">
+        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#confirmationModal" onclick="showDetails()">Submit</button>
+    </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+<!-- Modal -->
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Confirmation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="details"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function showDetails() {
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        let total = checkboxes.length;
+        let present = 0;
+    
+        checkboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                present++;
+            }
+        });
+    
+        let absent = total - present;
+    
+        // Update the modal content
+        const details = document.getElementById('details');
+        details.innerHTML = `
+            Total Students: ${total}<br>
+            Present Students: ${present}<br>
+            Absent Students: ${absent}
+        `;
+    }
+    </script>
+
+
+<script type="text/javascript">
+    function updateTime() {
+        // Create a new Date object for the current time
+        const now = new Date();
+        
+        // Format the date and time in a readable format
+        let hours = now.getHours();
+        let minutes = now.getMinutes();
+        let seconds = now.getSeconds();
+        let ampm = hours >= 12 ? 'pm' : 'am';
+        
+        // Convert to 12-hour format
+        hours = hours % 12;
+        hours = hours ? hours : 12;  // The hour '0' should be '12'
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        seconds = seconds < 10 ? '0' + seconds : seconds;
+        
+        // Create the formatted time string
+        const formattedTime = `${now.toDateString()} ${hours}:${minutes}:${seconds} ${ampm}`;
+
+        // Update the HTML content with the new time
+        document.getElementById('live-time').textContent = formattedTime;
+    }
+
+    // Update the time every second (1000 milliseconds)
+    setInterval(updateTime, 1000);
+</script>
+    
 {% endblock main %}
-
-
-
-
-
-
